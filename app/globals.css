@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+:root {
+  /* Neutrals — premium SaaS, 90-95% white/light. Token names are kept
+     (navy/offwhite/slate/graphite) from earlier iterations to avoid
+     renaming every class across the codebase — read "navy-950" as
+     "surface" and "offwhite-50" as "default text," not literally. */
+  --color-navy-950: #ffffff;
+  --color-navy-900: #f9fafb;
+  --color-navy-800: #f9fafb;
+  --color-graphite-700: #e5e7eb;
+  --color-graphite-500: #d1d5db;
+  /* Muted body/lead text — verified ≥4.5:1 against white (#ffffff). */
+  --color-slate-400: #6b7280;
+  --color-charcoal-900: #111317;
+  --color-offwhite-50: #111827;
+  --color-offwhite-100: #374151;
+  --color-white: #ffffff;
+
+  /* Accent — the two real brand colors from the Claaps logo (orange/red
+     and blue/purple), used as strategic accents, not a dominant theme.
+     Token names (electric, cyan, purple-500) are carried over from an
+     earlier palette iteration; "electric" now means brand blue and
+     "cyan" now means brand orange. The 400/500 values are tuned for
+     buttons, icons, and borders (3:1 non-text contrast is enough there);
+     the 600/700 values are darker variants verified at 4.5:1+ for body
+     text and links directly on white. */
+  --color-electric-500: #4e56b8;
+  --color-electric-400: #6b72c7;
+  --color-electric-600: #3a4296;
+  --color-cyan-400: #f24a1d;
+  --color-cyan-700: #c23d17;
+  --color-purple-500: #6b4fbf;
+
+  /* Semantic */
+  --color-success-500: #2bb673;
+  --color-warning-500: #e0a82e;
+  --color-danger-500: #e54b4b;
+  --color-danger-700: #c13434;
+
+  /* Spacing — 8px grid */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-40: 160px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* Elevation — soft shadows tuned for a white surface (a dark-theme-strength
+     shadow reads as harsh once the background is light). */
+  --elevation-1: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --elevation-2: 0 8px 24px rgba(15, 23, 42, 0.1);
+  /* Two-tone glow matching the orange-to-blue-violet primary button gradient. */
+  --elevation-glow: 0 0 32px rgba(242, 74, 29, 0.14), 0 0 40px rgba(107, 79, 191, 0.18);
+
+  --background: var(--color-navy-950);
+  --foreground: var(--color-offwhite-50);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-navy-950: var(--color-navy-950);
+  --color-navy-900: var(--color-navy-900);
+  --color-navy-800: var(--color-navy-800);
+  --color-graphite-700: var(--color-graphite-700);
+  --color-graphite-500: var(--color-graphite-500);
+  --color-slate-400: var(--color-slate-400);
+  --color-charcoal-900: var(--color-charcoal-900);
+  --color-offwhite-50: var(--color-offwhite-50);
+  --color-offwhite-100: var(--color-offwhite-100);
+
+  --color-electric-500: var(--color-electric-500);
+  --color-electric-400: var(--color-electric-400);
+  --color-electric-600: var(--color-electric-600);
+  --color-cyan-400: var(--color-cyan-400);
+  --color-cyan-700: var(--color-cyan-700);
+  --color-purple-500: var(--color-purple-500);
+
+  --color-success-500: var(--color-success-500);
+  --color-warning-500: var(--color-warning-500);
+  --color-danger-500: var(--color-danger-500);
+  --color-danger-700: var(--color-danger-700);
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-mono-ibm);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-10: var(--space-10);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+  --spacing-20: var(--space-20);
+  --spacing-24: var(--space-24);
+  --spacing-32: var(--space-32);
+  --spacing-40: var(--space-40);
+
+  --shadow-elevation-1: var(--elevation-1);
+  --shadow-elevation-2: var(--elevation-2);
+  --shadow-elevation-glow: var(--elevation-glow);
+
+  --animate-first: moveVertical 30s ease infinite;
+  --animate-second: moveInCircle 20s reverse infinite;
+  --animate-third: moveInCircle 40s linear infinite;
+  --animate-fourth: moveHorizontal 40s ease infinite;
+  --animate-fifth: moveInCircle 20s ease infinite;
+}
+
+@keyframes moveHorizontal {
+  0% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+  50% {
+    transform: translateX(50%) translateY(10%);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-10%);
+  }
+}
+
+@keyframes moveInCircle {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes moveVertical {
+  0% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-graphite-700);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--color-electric-500);
+  color: white;
+  border-radius: 0 0 var(--radius-md) 0;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-electric-400);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.font-mono-data {
+  font-family: var(--font-mono-ibm), ui-monospace, monospace;
+}
