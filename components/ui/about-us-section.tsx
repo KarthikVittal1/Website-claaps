@@ -4,7 +4,6 @@ import type React from "react";
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   ShieldCheck,
   BarChart3,
@@ -186,7 +185,7 @@ export default function AboutUsSection() {
           ongoing support, in one accountable team.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
           {/* Left Column */}
           <div className="space-y-16">
             {services
@@ -203,76 +202,6 @@ export default function AboutUsSection() {
                   direction="left"
                 />
               ))}
-          </div>
-
-          {/* Center Image */}
-          <div className="flex justify-center items-center order-first md:order-none mb-8 md:mb-0">
-            <motion.div className="relative w-full max-w-xs" variants={itemVariants}>
-              <motion.div
-                className="rounded-md overflow-hidden shadow-elevation-2"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop"
-                  alt="Governance, risk, and compliance dashboard"
-                  width={480}
-                  height={600}
-                  className="w-full h-full object-cover"
-                />
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-offwhite-50/60 to-transparent flex items-end justify-center p-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.9 }}
-                >
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Link
-                      href="/contact"
-                      className="bg-white text-offwhite-50 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-medium"
-                    >
-                      Talk to Us <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-              <motion.div
-                className="absolute inset-0 border-4 border-electric-400 rounded-md -m-3 z-[-1]"
-                initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              />
-
-              {/* Floating accent elements */}
-              <motion.div
-                className="absolute -top-4 -right-8 w-16 h-16 rounded-full bg-cyan-700/10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.9 }}
-                style={{ y: y1 }}
-              />
-              <motion.div
-                className="absolute -bottom-6 -left-10 w-20 h-20 rounded-full bg-electric-400/15"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 1.1 }}
-                style={{ y: y2 }}
-              />
-
-              {/* Additional decorative elements */}
-              <motion.div
-                className="absolute -top-10 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-cyan-700"
-                animate={{ y: [0, -10, 0], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
-              <motion.div
-                className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-electric-400"
-                animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 0.5 }}
-              />
-            </motion.div>
           </div>
 
           {/* Right Column */}
