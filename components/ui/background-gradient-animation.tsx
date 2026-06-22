@@ -54,10 +54,10 @@ export const BackgroundGradientAnimation = ({
     return () => observer.disconnect();
   }, []);
 
-  const [curX, setCurX] = useState(0);
-  const [curY, setCurY] = useState(0);
-  const [tgX, setTgX] = useState(0);
-  const [tgY, setTgY] = useState(0);
+  // Pointer-follow state lives in refs, not useState, so chasing the cursor
+  // never re-renders this heavy full-screen component (see the rAF loop below).
+  const cur = useRef({ x: 0, y: 0 });
+  const tg = useRef({ x: 0, y: 0 });
   useEffect(() => {
     document.body.style.setProperty(
       "--gradient-background-start",
@@ -77,27 +77,33 @@ export const BackgroundGradientAnimation = ({
     document.body.style.setProperty("--blending-value", blendingValue);
   }, []);
 
+  // One rAF loop lerps the blob toward the cursor, reading/writing only refs and
+  // the DOM — zero React re-renders per frame. It stays parked while the hero is
+  // offscreen (`paused`), matching the CSS blobs, so it costs nothing off-screen.
   useEffect(() => {
-    function move() {
-      if (!interactiveRef.current) {
-        return;
+    if (paused) return;
+    let raf = 0;
+    const tick = () => {
+      const el = interactiveRef.current;
+      if (el) {
+        cur.current.x += (tg.current.x - cur.current.x) / 20;
+        cur.current.y += (tg.current.y - cur.current.y) / 20;
+        el.style.transform = `translate(${Math.round(cur.current.x)}px, ${Math.round(
+          cur.current.y
+        )}px)`;
       }
-      setCurX(curX + (tgX - curX) / 20);
-      setCurY(curY + (tgY - curY) / 20);
-      interactiveRef.current.style.transform = `translate(${Math.round(
-        curX
-      )}px, ${Math.round(curY)}px)`;
-    }
-
-    move();
-  }, [tgX, tgY]);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [paused]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (interactiveRef.current) {
-      const rect = interactiveRef.current.getBoundingClientRect();
-      setTgX(event.clientX - rect.left);
-      setTgY(event.clientY - rect.top);
-    }
+    const el = interactiveRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    tg.current.x = event.clientX - rect.left;
+    tg.current.y = event.clientY - rect.top;
   };
 
   const [isSafari, setIsSafari] = useState(false);
@@ -135,7 +141,7 @@ export const BackgroundGradientAnimation = ({
       <div
         className={cn(
           "gradients-container h-full w-full blur-lg",
-          isSafari ? "blur-2xl" : "[filter:url(#blurMe)_blur(40px)]"
+          isSafari ? "blur-2xl" : "[filter:url(#blurMe)_blur(20px)]"
         )}
       >
         <div

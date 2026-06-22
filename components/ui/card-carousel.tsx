@@ -29,6 +29,17 @@ export const CardCarousel: React.FC<CarouselProps> = ({
   showPagination = true,
   showNavigation = true,
 }) => {
+  // prefers-reduced-motion stops the CSS keyframes globally, but not Swiper's JS
+  // autoplay — honor it here so motion-sensitive users get a static carousel.
+  const [reduceMotion, setReduceMotion] = React.useState(false)
+  React.useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const update = () => setReduceMotion(mq.matches)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+
   const css = `
   .hero-card-swiper {
     width: 100%;
@@ -82,15 +93,20 @@ export const CardCarousel: React.FC<CarouselProps> = ({
       <Swiper
         className="hero-card-swiper"
         spaceBetween={50}
-        autoplay={{
-          delay: autoplayDelay,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }}
+        autoplay={
+          reduceMotion
+            ? false
+            : {
+                delay: autoplayDelay,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
+        }
         effect="coverflow"
         grabCursor
         centeredSlides
         loop
+        loopAdditionalSlides={2}
         slidesPerView="auto"
         coverflowEffect={{
           rotate: 0,
@@ -109,13 +125,14 @@ export const CardCarousel: React.FC<CarouselProps> = ({
         }
         modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
       >
-        {[...images, ...images].map((image, index) => (
+        {images.map((image, index) => (
           <SwiperSlide key={index}>
             <div className="size-full rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-2xl">
               <Image
                 src={image.src}
                 width={960}
                 height={640}
+                sizes="480px"
                 className="size-full rounded-2xl object-cover"
                 alt={image.alt}
                 draggable={false}

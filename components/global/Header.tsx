@@ -135,26 +135,18 @@ export function Header() {
               }
             }}
           >
-            {/* Translucent bar + soft radial glow behind the logo so the badge
-                stays legible over the dark hero. Both fade out once the header
-                picks up its own opaque background on scroll, and the glow
-                brightens on hover. */}
+            {/* The logo lockup uses dark brand colors (blue CLAAPS, orange
+                ORACLE, dark-grey "Partner"), so it needs a light backing to
+                stay legible over the dark homepage hero and the dark scrolled
+                header. A clean white chip reads well on every header state — it
+                blends into light inner-page headers and makes the mark pop on
+                dark ones. The hover shadow lifts it slightly. */}
             <span
               aria-hidden
-              className={cn(
-                "pointer-events-none absolute -inset-x-3 -inset-y-2 -z-10 rounded-full bg-white/5 ring-1 ring-white/10 backdrop-blur-[2px] transition-opacity duration-300",
-                isLightHero ? "opacity-100" : "opacity-0"
-              )}
-            />
-            <span
-              aria-hidden
-              className={cn(
-                "pointer-events-none absolute left-1/2 top-1/2 -z-10 h-10 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-electric-500/25 via-cyan-400/20 to-transparent blur-xl transition-opacity duration-300 group-hover:from-electric-500/40 group-hover:via-cyan-400/30",
-                isLightHero ? "opacity-100" : "opacity-0"
-              )}
+              className="pointer-events-none absolute -inset-x-3 -inset-y-1.5 -z-10 rounded-xl bg-white shadow-sm ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-md"
             />
             <Image
-              src="/claaps-oracle-logo.png"
+              src="/claaps-oracle-partner-badge.png"
               alt="Claaps - Oracle Partner"
               width={1440}
               height={226}
