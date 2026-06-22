@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageCircle, X, Send, Sparkles } from "lucide-react";
+import { X, Send, Sparkles } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
@@ -272,39 +273,61 @@ export function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Launcher (bottom-right) */}
-      <motion.button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close support chat" : "Open support chat"}
-        aria-expanded={open}
-        whileTap={{ scale: 0.92 }}
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-cyan-700 to-purple-500 text-white shadow-elevation-2 transition-transform hover:scale-105 motion-reduce:transform-none"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          {open ? (
-            <motion.span
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              <X className="h-6 w-6" aria-hidden />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="open"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              <MessageCircle className="h-6 w-6" aria-hidden />
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
+      {/* Launcher (bottom-right) — Claaps mark, ripple rings, 3D tilt on hover */}
+      <div className="fixed bottom-5 right-5 z-50 h-14 w-14">
+        {/* Ripple rings draw the eye while the chat is closed */}
+        {!open && (
+          <>
+            <span className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-cyan-700/30 motion-reduce:hidden" />
+            <span
+              style={{ animationDelay: "0.7s" }}
+              className="pointer-events-none absolute inset-0 animate-ping rounded-full bg-purple-500/25 motion-reduce:hidden"
+            />
+          </>
+        )}
+        <motion.button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close support chat" : "Open support chat"}
+          aria-expanded={open}
+          style={{ transformPerspective: 600 }}
+          whileHover={{ scale: 1.12, rotateX: -12, rotateY: 12 }}
+          whileTap={{ scale: 0.94, rotateX: 0, rotateY: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 18 }}
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-cyan-700 to-purple-500 text-white shadow-elevation-2 motion-reduce:transform-none"
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {open ? (
+              <motion.span
+                key="close"
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <X className="h-6 w-6" aria-hidden />
+              </motion.span>
+            ) : (
+              <motion.span
+                key="open"
+                initial={{ rotate: 90, opacity: 0, scale: 0.6 }}
+                animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                exit={{ rotate: -90, opacity: 0, scale: 0.6 }}
+                transition={{ duration: 0.15 }}
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm"
+              >
+                <Image
+                  src="/logo-mark.png"
+                  alt=""
+                  width={476}
+                  height={524}
+                  className="h-7 w-auto object-contain"
+                />
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
     </>
   );
 }
