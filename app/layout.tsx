@@ -5,6 +5,7 @@ import { SkipLink } from "@/components/global/SkipLink";
 import { Header } from "@/components/global/Header";
 import { Footer } from "@/components/global/Footer";
 import { PageTransition } from "@/components/motion/PageTransition";
+import { ChatWidget } from "@/components/chat/ChatWidget";
 import { organizationJsonLd } from "@/lib/schema/organization";
 
 const inter = Inter({
@@ -63,6 +64,7 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        <ChatWidget />
       </body>
     </html>
   );
