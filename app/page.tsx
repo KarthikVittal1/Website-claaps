@@ -4,13 +4,12 @@ import { SectionHeading } from "@/components/global/SectionHeading";
 import { Card } from "@/components/global/Card";
 import { Button } from "@/components/global/Button";
 import { GetInTouchSection } from "@/components/global/GetInTouchSection";
-import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { CardCarousel } from "@/components/ui/card-carousel";
+import { TheWorkSection } from "@/components/ui/the-work-section";
 import AboutUsSection from "@/components/ui/about-us-section";
 import LogosSection from "@/components/ui/logos-section";
 import WhyClaapsSection from "@/components/ui/why-claaps-section";
-import { services } from "@/lib/content/services";
 import { roles } from "@/lib/content/solutions";
 
 export default function Home() {
@@ -95,41 +94,7 @@ export default function Home() {
 
       <LogosSection />
 
-      <section className="border-b border-graphite-700 py-24 md:py-32">
-        <Container>
-          <SectionHeading
-            eyebrow="What we do"
-            title="Five services, one governance lifecycle"
-            lead="From regulatory interpretation through implementation to ongoing administration."
-          />
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, i) => (
-              <RevealOnScroll key={service.slug} delay={i * 0.05}>
-                <Card href={`/services/${service.slug}`}>
-                  <p className="text-xs font-medium uppercase tracking-[0.06em] text-cyan-700">
-                    {service.eyebrow}
-                  </p>
-                  <h3 className="mt-3 text-xl font-medium text-offwhite-50">
-                    {service.shortTitle}
-                  </h3>
-                  <p className="mt-3 text-sm leading-6 text-slate-400">
-                    {service.summary}
-                  </p>
-                  <span className="mt-auto flex items-center gap-1.5 pt-6 text-sm font-medium text-offwhite-50 transition-colors duration-150 group-hover:text-electric-600">
-                    Learn more
-                    <ArrowRight
-                      aria-hidden
-                      size={15}
-                      strokeWidth={2}
-                      className="transition-transform duration-150 group-hover:translate-x-0.5"
-                    />
-                  </span>
-                </Card>
-              </RevealOnScroll>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <TheWorkSection />
 
       <section className="border-b border-graphite-700 py-24 md:py-32">
         <Container>

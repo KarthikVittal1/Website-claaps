@@ -41,7 +41,7 @@ export function Footer() {
             <p className="text-sm font-semibold text-white">Company</p>
             <ul className="mt-4 flex flex-col gap-3 text-sm text-white/60">
               <li>
-                <Link href="/about" className="hover:text-cyan-400">
+                <Link href="/#about-section" className="hover:text-cyan-400">
                   About
                 </Link>
               </li>

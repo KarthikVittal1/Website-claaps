@@ -8,12 +8,6 @@ import { SectionHeading } from "@/components/global/SectionHeading";
 import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
 
-const stats = [
-  { value: "15+", label: "Oracle GRC / RMC Implementations" },
-  { value: "20+", label: "GRC Support Projects" },
-  { value: "24/7", label: "Support Infrastructure" },
-];
-
 const industries =
   "Energy & Utilities · Pharma & Life Sciences · Financial Services · Telecom · Semiconductors · Healthcare · Retail · Media & Entertainment · Education";
 
@@ -68,19 +62,6 @@ export default function LogosSection() {
           <p className="mx-auto mt-4 max-w-2xl text-center text-sm leading-6 text-slate-400">
             {industries}
           </p>
-        </RevealOnScroll>
-
-        <RevealOnScroll delay={0.05}>
-          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-3 divide-x divide-graphite-700 text-center">
-            {stats.map((stat) => (
-              <div key={stat.label} className="px-4">
-                <p className="text-2xl font-semibold tracking-[-0.01em] text-offwhite-50 md:text-3xl">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-xs leading-snug text-slate-400">{stat.label}</p>
-              </div>
-            ))}
-          </div>
         </RevealOnScroll>
       </Container>
 

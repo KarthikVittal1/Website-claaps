@@ -23,7 +23,7 @@ const navItems = [
     href: "/solutions",
     menu: roles.map((r) => ({ label: r.label, href: `/solutions#${r.slug}` })),
   },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/#about-section" },
 ];
  
 export function Header() {
@@ -160,8 +160,15 @@ export function Header() {
               const active = isItemActive(item.href);
               return item.menu ? (
                 <div key={item.label} className="relative">
+                  {/* Form-autofill / password-manager browser extensions inject
+                      an `fdprocessedid` attribute onto buttons before React
+                      hydrates, which trips a dev-only hydration mismatch warning.
+                      suppressHydrationWarning is the sanctioned escape hatch for
+                      unavoidable third-party DOM mutation — no runtime effect, and
+                      it never ships as a problem in production. */}
                   <button
                     type="button"
+                    suppressHydrationWarning
                     aria-expanded={openMenu === item.label}
                     aria-haspopup="true"
                     onClick={() =>
@@ -231,6 +238,7 @@ export function Header() {
  
           <button
             type="button"
+            suppressHydrationWarning
             className={cn(
               "lg:hidden rounded-md p-2",
               isLightHero ? "text-white/90" : "text-offwhite-50"

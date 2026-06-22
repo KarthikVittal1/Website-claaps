@@ -3,11 +3,11 @@
 import type React from "react";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
 import {
   ShieldCheck,
   BarChart3,
   FileCheck2,
+  BrainCircuit,
   Compass,
   LifeBuoy,
   Award,
@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Sparkles,
   Star,
-  ArrowRight,
   Zap,
 } from "lucide-react";
 import {
@@ -91,11 +90,11 @@ export default function AboutUsSection() {
       position: "left" as const,
     },
     {
-      icon: <Compass className="w-6 h-6" />,
+      icon: <BrainCircuit className="w-6 h-6" />,
       secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
-      title: "Risk Advisory",
+      title: "AI Solutions",
       description:
-        "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
+        "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
       position: "right" as const,
     },
     {
@@ -107,11 +106,11 @@ export default function AboutUsSection() {
       position: "right" as const,
     },
     {
-      icon: <Award className="w-6 h-6" />,
-      secondaryIcon: <Star className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
-      title: "Specialist Focus",
+      icon: <Compass className="w-6 h-6" />,
+      secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      title: "Risk Advisory",
       description:
-        "Claaps works exclusively in Oracle GRC and Risk Management Cloud — platform depth, not a side practice inside a broader IT consultancy.",
+        "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
       position: "right" as const,
     },
   ];
@@ -126,7 +125,7 @@ export default function AboutUsSection() {
     <section
       id="about-section"
       ref={sectionRef}
-      className="relative z-10 w-full overflow-hidden rounded-t-[2.5rem] px-4 py-24 text-offwhite-50 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.55)] md:rounded-t-[3.5rem] md:py-32"
+      className="relative z-10 w-full scroll-mt-20 overflow-hidden rounded-t-[2.5rem] px-4 py-24 text-offwhite-50 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.55)] md:rounded-t-[3.5rem] md:py-32"
     >
       <BackgroundGradientGlow />
 
@@ -241,27 +240,6 @@ export default function AboutUsSection() {
               delay={index * 0.1}
             />
           ))}
-        </motion.div>
-
-        {/* CTA Section */}
-        <motion.div
-          className="mt-20 bg-electric-600 text-white p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isStatsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <div className="flex-1">
-            <h3 className="text-2xl font-medium mb-2">Ready to strengthen your governance program?</h3>
-            <p className="text-white/80">Tell us about your Oracle GRC or risk management challenge.</p>
-          </div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Link
-              href="/contact"
-              className="bg-cyan-700 hover:bg-cyan-700/90 text-white px-6 py-3 rounded-lg flex items-center gap-2 font-medium transition-colors"
-            >
-              Request a Consultation <ArrowRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
         </motion.div>
       </motion.div>
     </section>
