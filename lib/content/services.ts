@@ -110,6 +110,66 @@ export const services: Service[] = [
     ],
     whoFor: ["CIO", "CISO", "Compliance Teams"],
   },
+  {
+    slug: "rpa-uipath",
+    shortTitle: "RPA — UiPath",
+    title: "Robotic Process Automation with UiPath",
+    eyebrow: "Automation",
+    summary:
+      "Design and deployment of UiPath automation bots to eliminate manual, repetitive tasks across finance, compliance, and operations.",
+    description: [
+      "Repetitive processes — reconciliations, access reviews, report generation — consume hours of skilled staff time that could be directed at higher-value work. UiPath automates these at scale.",
+      "Claaps designs, builds, and deploys UiPath bots aligned to your process map, with built-in exception handling and audit trails that satisfy compliance requirements.",
+    ],
+    included: [
+      "Process discovery and automation candidate assessment",
+      "UiPath bot design, development, and testing",
+      "Exception handling and escalation workflow configuration",
+      "Integration with ERP, GRC, and downstream systems",
+      "Hypercare support and handover to internal bot owners",
+    ],
+    whoFor: ["CIO", "Compliance Teams", "Risk Leaders"],
+  },
+  {
+    slug: "ai-agents",
+    shortTitle: "AI Agents",
+    title: "AI Agents",
+    eyebrow: "Artificial Intelligence",
+    summary:
+      "Autonomous AI agents that complete multi-step tasks, make contextual decisions, and integrate with your existing business systems.",
+    description: [
+      "AI agents go beyond chatbots — they reason across tools, retrieve live data, and execute tasks end-to-end without human hand-holding at each step.",
+      "Claaps designs and deploys agents scoped to specific business workflows: controls monitoring, evidence collection, regulatory change detection, and operational reporting.",
+    ],
+    included: [
+      "Agent scoping and use-case prioritisation workshop",
+      "Tool and data integration architecture",
+      "Agent prompt and workflow engineering",
+      "Testing, guardrails, and human-in-the-loop checkpoints",
+      "Monitoring, logging, and ongoing tuning",
+    ],
+    whoFor: ["CIO", "Risk Leaders", "Compliance Teams"],
+  },
+  {
+    slug: "ai-chatbots",
+    shortTitle: "AI Chatbots",
+    title: "AI Chatbots",
+    eyebrow: "Artificial Intelligence",
+    summary:
+      "Custom AI chatbots for internal helpdesk, compliance Q&A, and customer-facing support — trained on your policies and integrated with your systems.",
+    description: [
+      "Generic AI assistants aren't trained on your policies, your controls, or your risk taxonomy. Claaps builds chatbots grounded in your actual documentation.",
+      "Deployable across web, Teams, or Slack, with retrieval-augmented generation (RAG) ensuring answers are traceable to source documents rather than hallucinated.",
+    ],
+    included: [
+      "Use-case definition and channel selection",
+      "Knowledge base preparation and document ingestion",
+      "RAG pipeline design and LLM selection",
+      "Integration with Teams, Slack, or web embed",
+      "Testing, accuracy benchmarking, and feedback loop setup",
+    ],
+    whoFor: ["CIO", "Compliance Teams", "Audit Leaders"],
+  },
 ];
 
 export function getServiceBySlug(slug: string): Service | undefined {

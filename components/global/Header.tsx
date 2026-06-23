@@ -8,20 +8,66 @@ import { motion } from "framer-motion";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { Container } from "@/components/global/Container";
 import { Button } from "@/components/global/Button";
-import { services } from "@/lib/content/services";
 import { roles } from "@/lib/content/solutions";
 import { cn } from "@/lib/cn";
- 
-const navItems = [
+
+type SubItem = { label: string; href: string };
+type MenuSection = { heading: string; items: SubItem[] };
+
+const navItems: Array<{
+  label: string;
+  href: string;
+  sections?: MenuSection[];
+}> = [
   {
     label: "Services",
     href: "/services",
-    menu: services.map((s) => ({ label: s.shortTitle, href: `/services/${s.slug}` })),
+    sections: [
+      {
+        heading: "Oracle Cloud",
+        items: [
+          { label: "Risk Management Cloud", href: "/services/oracle-risk-management-cloud" },
+          { label: "GRC", href: "/services/oracle-grc" },
+        ],
+      },
+      {
+        heading: "RPA",
+        items: [
+          { label: "UiPath", href: "/services/rpa-uipath" },
+        ],
+      },
+      {
+        heading: "AI",
+        items: [
+          { label: "AI Agents", href: "/services/ai-agents" },
+          { label: "AI Chatbots", href: "/services/ai-chatbots" },
+        ],
+      },
+      {
+        heading: "Advisory",
+        items: [
+          { label: "Regulatory Compliance", href: "/services/regulatory-compliance-consulting" },
+          { label: "Risk Advisory", href: "/services/risk-advisory" },
+          { label: "Managed Support", href: "/services/managed-support" },
+        ],
+      },
+    ],
   },
   {
     label: "Solutions",
     href: "/solutions",
-    menu: roles.map((r) => ({ label: r.label, href: `/solutions#${r.slug}` })),
+    sections: [
+      {
+        heading: "By Role",
+        items: roles
+          .filter((r) => r.slug !== "products")
+          .map((r) => ({ label: r.label, href: `/solutions#${r.slug}` })),
+      },
+      {
+        heading: "Products",
+        items: [{ label: "Products", href: "/solutions#products" }],
+      },
+    ],
   },
   { label: "About", href: "/#about-section" },
 ];
@@ -158,7 +204,7 @@ export function Header() {
           <nav aria-label="Primary" className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => {
               const active = isItemActive(item.href);
-              return item.menu ? (
+              return item.sections ? (
                 <div key={item.label} className="relative">
                   {/* Form-autofill / password-manager browser extensions inject
                       an `fdprocessedid` attribute onto buttons before React
@@ -189,25 +235,34 @@ export function Header() {
                   {openMenu === item.label ? (
                     <div
                       role="menu"
-                      className="absolute left-0 top-full mt-2 w-72 rounded-lg border border-graphite-700 bg-navy-900 p-2 shadow-elevation-2"
+                      className="absolute left-0 top-full mt-2 w-64 rounded-lg border border-graphite-700 bg-navy-900 py-2 shadow-elevation-2"
                     >
-                      {item.menu.map((sub) => (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          role="menuitem"
-                          className="block rounded-md px-3 py-2 text-sm text-offwhite-50 hover:bg-navy-800 hover:text-electric-600 transition-colors duration-150"
-                        >
-                          {sub.label}
-                        </Link>
+                      {item.sections.map((section, si) => (
+                        <div key={section.heading} className={si > 0 ? "mt-1 border-t border-graphite-700/60 pt-1" : ""}>
+                          <p className="px-3 pb-0.5 pt-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                            {section.heading}
+                          </p>
+                          {section.items.map((sub) => (
+                            <Link
+                              key={sub.href}
+                              href={sub.href}
+                              role="menuitem"
+                              className="block rounded-md px-3 py-1.5 text-sm text-offwhite-50 hover:bg-navy-800 hover:text-electric-600 transition-colors duration-150"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
                       ))}
-                      <Link
-                        href={item.href}
-                        role="menuitem"
-                        className="block rounded-md px-3 py-2 text-sm text-cyan-700 hover:bg-navy-800 transition-colors duration-150"
-                      >
-                        View all {item.label.toLowerCase()} →
-                      </Link>
+                      <div className="mt-1 border-t border-graphite-700/60 px-2 pt-1">
+                        <Link
+                          href={item.href}
+                          role="menuitem"
+                          className="block rounded-md px-2 py-1.5 text-sm text-cyan-700 hover:bg-navy-800 transition-colors duration-150"
+                        >
+                          View all {item.label.toLowerCase()} →
+                        </Link>
+                      </div>
                     </div>
                   ) : null}
                 </div>
@@ -271,16 +326,23 @@ export function Header() {
                 >
                   {item.label}
                 </Link>
-                {item.menu ? (
-                  <div className="flex flex-col gap-1 pl-3">
-                    {item.menu.map((sub) => (
-                      <Link
-                        key={sub.href}
-                        href={sub.href}
-                        className="py-2 text-sm text-slate-400 hover:text-electric-600"
-                      >
-                        {sub.label}
-                      </Link>
+                {item.sections ? (
+                  <div className="flex flex-col pl-3">
+                    {item.sections.map((section) => (
+                      <div key={section.heading} className="mt-1">
+                        <p className="pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                          {section.heading}
+                        </p>
+                        {section.items.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className="block py-1.5 text-sm text-slate-400 hover:text-electric-600"
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 ) : null}

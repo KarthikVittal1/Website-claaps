@@ -12,10 +12,8 @@ import {
   LifeBuoy,
   Award,
   ClipboardCheck,
-  CheckCircle,
-  Sparkles,
-  Star,
   Zap,
+  ArrowUpRight,
 } from "lucide-react";
 import {
   motion,
@@ -66,52 +64,46 @@ export default function AboutUsSection() {
 
   const services = [
     {
-      icon: <ShieldCheck className="w-6 h-6" />,
-      secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <ShieldCheck className="w-5 h-5" />,
       title: "Oracle GRC",
       description:
         "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud — built around how your organization actually governs itself, not a generic template.",
-      position: "left" as const,
+      href: "/services/oracle-grc",
     },
     {
-      icon: <BarChart3 className="w-6 h-6" />,
-      secondaryIcon: <CheckCircle className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <BarChart3 className="w-5 h-5" />,
       title: "Risk Management Cloud",
       description:
         "Continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems.",
-      position: "left" as const,
+      href: "/services/oracle-risk-management-cloud",
     },
     {
-      icon: <FileCheck2 className="w-6 h-6" />,
-      secondaryIcon: <Star className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <FileCheck2 className="w-5 h-5" />,
       title: "Regulatory Compliance",
       description:
         "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need to satisfy.",
-      position: "left" as const,
+      href: "/services/regulatory-compliance-consulting",
     },
     {
-      icon: <BrainCircuit className="w-6 h-6" />,
-      secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <BrainCircuit className="w-5 h-5" />,
       title: "AI Solutions",
       description:
         "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
-      position: "right" as const,
+      href: "/services",
     },
     {
-      icon: <LifeBuoy className="w-6 h-6" />,
-      secondaryIcon: <CheckCircle className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <LifeBuoy className="w-5 h-5" />,
       title: "Managed Support",
       description:
         "Ongoing administration and rule tuning after go-live, from the same team that designed the controls in the first place.",
-      position: "right" as const,
+      href: "/services/managed-support",
     },
     {
-      icon: <Compass className="w-6 h-6" />,
-      secondaryIcon: <Sparkles className="w-4 h-4 absolute -top-1 -right-1 text-electric-400" />,
+      icon: <Compass className="w-5 h-5" />,
       title: "Risk Advisory",
       description:
         "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
-      position: "right" as const,
+      href: "/services/risk-advisory",
     },
   ];
 
@@ -176,7 +168,7 @@ export default function AboutUsSection() {
           />
         </motion.div>
 
-        <motion.p className="text-center max-w-2xl mx-auto mb-16 text-lg leading-7 text-slate-400" variants={itemVariants}>
+        <motion.p className="text-center max-w-2xl mx-auto mb-16 text-lg leading-7 text-slate-600" variants={itemVariants}>
           Claaps Technology Services exists to help organizations manage risk
           and compliance challenges effectively. As a specialist provider of
           risk management solutions, we focus exclusively on Oracle GRC and
@@ -184,43 +176,36 @@ export default function AboutUsSection() {
           ongoing support, in one accountable team.
         </motion.p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
-          {/* Left Column */}
-          <div className="space-y-16">
-            {services
-              .filter((service) => service.position === "left")
-              .map((service, index) => (
-                <ServiceItem
-                  key={`left-${index}`}
-                  icon={service.icon}
-                  secondaryIcon={service.secondaryIcon}
-                  title={service.title}
-                  description={service.description}
-                  variants={itemVariants}
-                  delay={index * 0.2}
-                  direction="left"
-                />
-              ))}
+        <motion.div variants={itemVariants}>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service, index) => (
+              <motion.a
+                key={service.title}
+                href={service.href}
+                className="group flex flex-col gap-4 rounded-2xl border-2 border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-600 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-cyan-700 transition-all duration-300 group-hover:border-cyan-600/40 group-hover:bg-cyan-50 group-hover:text-cyan-600">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-base font-bold tracking-tight text-slate-800 transition-colors duration-300 group-hover:text-cyan-700">
+                    {service.title}
+                  </h3>
+                </div>
+                <p className="flex-1 text-sm leading-6 text-slate-600">
+                  {service.description}
+                </p>
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 transition-colors duration-300 group-hover:text-cyan-600">
+                  Explore service
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </span>
+              </motion.a>
+            ))}
           </div>
-
-          {/* Right Column */}
-          <div className="space-y-16">
-            {services
-              .filter((service) => service.position === "right")
-              .map((service, index) => (
-                <ServiceItem
-                  key={`right-${index}`}
-                  icon={service.icon}
-                  secondaryIcon={service.secondaryIcon}
-                  title={service.title}
-                  description={service.description}
-                  variants={itemVariants}
-                  delay={index * 0.2}
-                  direction="right"
-                />
-              ))}
-          </div>
-        </div>
+        </motion.div>
 
         {/* Stats Section */}
         <motion.div
@@ -243,53 +228,6 @@ export default function AboutUsSection() {
         </motion.div>
       </motion.div>
     </section>
-  );
-}
-
-interface ServiceItemProps {
-  icon: React.ReactNode;
-  secondaryIcon?: React.ReactNode;
-  title: string;
-  description: string;
-  variants: Variants;
-  delay: number;
-  direction: "left" | "right";
-}
-
-function ServiceItem({ icon, secondaryIcon, title, description, variants, delay, direction }: ServiceItemProps) {
-  return (
-    <motion.div
-      className="flex flex-col group"
-      variants={variants}
-      transition={{ delay }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-    >
-      <motion.div
-        className="flex items-center gap-3 mb-3"
-        initial={{ x: direction === "left" ? -20 : 20, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: delay + 0.2 }}
-      >
-        <motion.div
-          className="text-cyan-700 bg-cyan-700/10 p-3 rounded-lg transition-colors duration-300 group-hover:bg-cyan-700/20 relative"
-          whileHover={{ rotate: [0, -10, 10, -5, 0], transition: { duration: 0.5 } }}
-        >
-          {icon}
-          {secondaryIcon}
-        </motion.div>
-        <h3 className="text-xl font-medium text-offwhite-50 group-hover:text-cyan-700 transition-colors duration-300">
-          {title}
-        </h3>
-      </motion.div>
-      <motion.p
-        className="text-sm text-slate-400 leading-relaxed pl-12"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: delay + 0.4 }}
-      >
-        {description}
-      </motion.p>
-    </motion.div>
   );
 }
 

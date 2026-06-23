@@ -21,14 +21,16 @@ interface CarouselProps {
   autoplayDelay?: number
   showPagination?: boolean
   showNavigation?: boolean
+  onActiveIndexChange?: (index: number) => void
 }
 
-export const CardCarousel: React.FC<CarouselProps> = ({
+export const CardCarousel = React.memo(function CardCarousel({
   images,
   autoplayDelay = 1500,
   showPagination = true,
   showNavigation = true,
-}) => {
+  onActiveIndexChange,
+}: CarouselProps) {
   // prefers-reduced-motion stops the CSS keyframes globally, but not Swiper's JS
   // autoplay — honor it here so motion-sensitive users get a static carousel.
   const [reduceMotion, setReduceMotion] = React.useState(false)
@@ -124,6 +126,7 @@ export const CardCarousel: React.FC<CarouselProps> = ({
             : false
         }
         modules={[EffectCoverflow, Autoplay, Pagination, Navigation]}
+        onRealIndexChange={(swiper) => onActiveIndexChange?.(swiper.realIndex)}
       >
         {images.map((image, index) => (
           <SwiperSlide key={index}>
@@ -143,4 +146,4 @@ export const CardCarousel: React.FC<CarouselProps> = ({
       </Swiper>
     </div>
   )
-}
+})

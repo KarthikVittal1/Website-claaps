@@ -62,6 +62,17 @@ export const roles: Role[] = [
     relatedServiceSlugs: ["risk-advisory", "oracle-risk-management-cloud", "regulatory-compliance-consulting"],
     ctaLabel: "Talk to us about enterprise risk programs",
   },
+  {
+    slug: "products",
+    label: "Products",
+    risks: [
+      "Teams need purpose-built tools, not generic platforms adapted for GRC and compliance",
+      "Off-the-shelf products don't reflect how your organization actually governs risk",
+      "Implementation complexity delays time-to-value on software investments",
+    ],
+    relatedServiceSlugs: ["rpa-uipath", "ai-agents", "ai-chatbots"],
+    ctaLabel: "Explore our products",
+  },
 ];
 
 export function getRoleBySlug(slug: string): Role | undefined {
