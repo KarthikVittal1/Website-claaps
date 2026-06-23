@@ -23,7 +23,8 @@ const engagementTypes: Record<string, string> = {
 
 export default function SolutionsPage() {
   return (
-    <>
+    <div className="relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(242,74,29,0.07),_transparent_50%),radial-gradient(circle_at_80%_70%,_rgba(78,86,184,0.10),_transparent_50%)]" />
       <section className="border-b border-graphite-700 py-20 md:py-28">
         <Container>
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Solutions" }]} />
@@ -85,6 +86,6 @@ export default function SolutionsPage() {
         title="Talk to us about your role-specific risk program"
         lead="Tell us your role and the problem you're solving — we'll point you to the right service."
       />
-    </>
+    </div>
   );
 }

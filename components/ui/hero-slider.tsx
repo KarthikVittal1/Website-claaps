@@ -1,12 +1,12 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useEffect, useState } from "react"
+import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion"
 
 import { Button } from "@/components/global/Button"
 import { Container } from "@/components/global/Container"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
-import { CardCarousel } from "@/components/ui/card-carousel"
 
 const slides = [
   {
@@ -43,13 +43,6 @@ const slides = [
   },
 ] as const
 
-const images = [
-  { src: "/images/carousel-slides/slide-1.jpg", alt: "Oracle EBS & Fusion Applications" },
-  { src: "/images/carousel-slides/slide-2.jpg", alt: "Oracle Risk Management & Cloud Security" },
-  { src: "/images/carousel-slides/slide-3.jpg", alt: "UiPath Intelligent Automation" },
-  { src: "/images/carousel-slides/slide-4.jpg", alt: "AI Solutions" },
-]
-
 const contentVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.07, delayChildren: 0.04 } },
@@ -65,7 +58,14 @@ export function HeroSlider() {
   const [activeIndex, setActiveIndex] = useState(0)
   const reduceMotion = useReducedMotion()
   const activeSlide = slides[activeIndex]
-  const handleSlideChange = useCallback((index: number) => setActiveIndex(index), [])
+
+  useEffect(() => {
+    if (reduceMotion) return
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % slides.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [reduceMotion])
 
   return (
     <section className="sticky top-0 isolate z-0 flex min-h-screen items-center">
@@ -143,15 +143,27 @@ export function HeroSlider() {
           </AnimatePresence>
         </div>
 
-        <div className="hidden lg:block">
-          <CardCarousel
-            images={images}
-            autoplayDelay={5000}
-            showPagination
-            showNavigation
-            onActiveIndexChange={handleSlideChange}
-          />
-        </div>
+        <motion.div
+          className="relative hidden lg:block"
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <motion.div
+            animate={reduceMotion ? {} : { y: [0, -12, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="hero-showcase"
+          >
+            <Image
+              src="/images/hero-office-2.png"
+              alt="Claaps Technology Services team at work"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="hero-showcase-reflection" />
+          </motion.div>
+        </motion.div>
       </Container>
     </section>
   )

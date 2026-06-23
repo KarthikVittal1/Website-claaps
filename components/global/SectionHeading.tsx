@@ -19,13 +19,13 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "max-w-2xl",
+        "max-w-3xl",
         align === "center" && "mx-auto text-center",
         className
       )}
     >
       {eyebrow ? (
-        <p className="mb-3 text-xs font-medium uppercase tracking-[0.08em] text-cyan-700">
+        <p className="mb-3 text-sm font-medium uppercase tracking-[0.08em] text-cyan-700">
           {eyebrow}
         </p>
       ) : null}
@@ -33,7 +33,7 @@ export function SectionHeading({
         className={cn(
           as === "h1"
             ? "text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.02em] leading-[1.05]"
-            : "text-3xl font-semibold tracking-[-0.02em] leading-[1.15]"
+            : "text-4xl font-semibold tracking-[-0.02em] leading-[1.1] md:text-5xl"
         )}
       >
         {title}

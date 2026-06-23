@@ -80,7 +80,7 @@ export function GetInTouchSection() {
             </ul>
           </div>
 
-          <div className="flex-1 rounded-lg border border-graphite-700 bg-navy-800 p-8 md:p-10">
+          <div className="flex-1 rounded-2xl border border-graphite-500 bg-gradient-to-br from-white via-slate-50 to-slate-100 p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06),0_1px_4px_rgba(0,0,0,0.04)] md:p-10">
             <ConsultationForm />
           </div>
         </div>

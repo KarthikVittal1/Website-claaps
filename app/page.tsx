@@ -27,13 +27,14 @@ export default function Home() {
 
         <LogosSection />
 
-        <TheWorkSection />
+        
 
         <section className="relative border-b border-graphite-700 py-24 md:py-32">
           <Container>
             <SectionHeading
               eyebrow="Solutions by role"
               title="Find the path that matches your responsibility"
+              align="center"
             />
             <div className="mt-12 grid gap-4 md:grid-cols-5">
               {roles.map((role) => (

@@ -35,7 +35,8 @@ export default async function ServiceDetailPage({
   if (!service) notFound();
 
   return (
-    <>
+    <div className="relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(242,74,29,0.07),_transparent_50%),radial-gradient(circle_at_80%_70%,_rgba(78,86,184,0.10),_transparent_50%)]" />
       <section className="border-b border-graphite-700 py-20 md:py-28">
         <Container size="default" className="max-w-3xl">
           <Breadcrumb
@@ -90,6 +91,6 @@ export default async function ServiceDetailPage({
         secondaryLabel="Back to all services"
         secondaryHref="/services"
       />
-    </>
+    </div>
   );
 }

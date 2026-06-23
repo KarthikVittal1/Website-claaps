@@ -67,7 +67,7 @@ export default function AboutUsSection() {
       icon: <ShieldCheck className="w-5 h-5" />,
       title: "Oracle GRC",
       description:
-        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud — built around how your organization actually governs itself, not a generic template.",
+        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud built around how your organization actually governs itself, not a generic template.",
       href: "/services/oracle-grc",
     },
     {
@@ -149,7 +149,7 @@ export default function AboutUsSection() {
       >
         <motion.div className="flex flex-col items-center mb-6" variants={itemVariants}>
           <motion.span
-            className="text-cyan-700 font-medium mb-2 flex items-center gap-2 text-xs uppercase tracking-[0.08em]"
+            className="text-cyan-700 font-medium mb-2 flex items-center gap-2 text-sm uppercase tracking-[0.08em]"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -172,7 +172,7 @@ export default function AboutUsSection() {
           Claaps Technology Services exists to help organizations manage risk
           and compliance challenges effectively. As a specialist provider of
           risk management solutions, we focus exclusively on Oracle GRC and
-          Oracle Risk Management Cloud — implementation, advisory, and
+          Oracle Risk Management Cloud implementation, advisory, and
           ongoing support, in one accountable team.
         </motion.p>
 

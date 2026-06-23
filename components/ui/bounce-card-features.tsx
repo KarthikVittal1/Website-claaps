@@ -8,7 +8,7 @@ const features = [
   {
     title: "Oracle GRC",
     description:
-      "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud — built around how your organization actually governs itself.",
+      "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud built around how your organization actually governs itself.",
     gradient: "from-cyan-500 to-teal-500",
     textColor: "text-cyan-50",
     icon: ShieldCheck,

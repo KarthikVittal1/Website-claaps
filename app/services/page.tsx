@@ -17,7 +17,8 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <>
+    <div className="relative overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(242,74,29,0.07),_transparent_50%),radial-gradient(circle_at_80%_70%,_rgba(78,86,184,0.10),_transparent_50%)]" />
       <section className="border-b border-graphite-700 py-20 md:py-28">
         <Container>
           <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Services" }]} />
@@ -114,6 +115,6 @@ export default function ServicesPage() {
       </section>
 
       <CTASection title="Not sure which service applies?" lead="Describe the problem you're solving and we'll point you to the right starting point." />
-    </>
+    </div>
   );
 }

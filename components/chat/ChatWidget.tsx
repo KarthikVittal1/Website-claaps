@@ -41,7 +41,7 @@ const KNOWLEDGE: Intent[] = [
   {
     keywords: ["risk management cloud", "rmc", "continuous monitoring", "segregation", "access certification"],
     answer:
-      "Oracle Risk Management Cloud — implementation for continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems, tuned to reduce false positives so the platform stays trusted and used.",
+      "Oracle Risk Management Cloud implementation for continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems, tuned to reduce false positives so the platform stays trusted and used.",
   },
   {
     keywords: ["regulatory", "compliance", "regulation", "sox", "gdpr", "hipaa", "audit"],
