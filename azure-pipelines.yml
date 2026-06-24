@@ -14,27 +14,21 @@ steps:
     versionSpec: '22.x'
 
 - script: |
-    npm install
+    npm ci --omit=dev
     npm run build
   displayName: 'Build Next.js App'
 
-- script: |
-    mkdir -p deploy
-    cp -r .next deploy/
-    cp -r public deploy/
-    cp package.json deploy/
-    cp package-lock.json deploy/
-    cp next.config.ts deploy/
-    cd deploy && npm install --omit=dev
-  displayName: 'Prepare deploy folder'
-
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: 'deploy'
+    rootFolderOrFile: '.'
     includeRootFolder: false
     archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
     replaceExistingArchive: true
+    excludePatterns: |
+      node_modules/**
+      .git/**
+      .next/cache/**
 
 - task: AzureWebApp@1
   inputs:
@@ -42,5 +36,5 @@ steps:
     appType: 'webAppLinux'
     appName: 'claapswebsite'
     package: '$(Build.ArtifactStagingDirectory)/site.zip'
-    appSettings: '-SCM_DO_BUILD_DURING_DEPLOYMENT false -WEBSITE_RUN_FROM_PACKAGE 0 -NODE_ENV production'
-    startUpCommand: 'node_modules/.bin/next start'
+    appSettings: '-SCM_DO_BUILD_DURING_DEPLOYMENT true -NODE_ENV production'
+    startUpCommand: 'npm start'
