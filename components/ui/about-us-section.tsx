@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   ShieldCheck,
   BarChart3,
@@ -19,16 +19,11 @@ import {
   motion,
   useScroll,
   useTransform,
-  useInView,
-  useSpring,
-  type Variants,
 } from "framer-motion";
 import { BackgroundGradientGlow } from "@/components/ui/background-gradient-glow";
 
 export default function AboutUsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const isStatsInView = useInView(statsRef, { once: false, amount: 0.3 });
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -39,17 +34,6 @@ export default function AboutUsSection() {
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
   const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 20]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -20]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
 
   const services = [
     {
@@ -118,6 +102,16 @@ export default function AboutUsSection() {
         className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-electric-400/5 blur-3xl"
         style={{ y: y2, rotate: rotate2 }}
       />
+      <motion.div
+        className="absolute top-1/2 left-1/4 w-4 h-4 rounded-full bg-cyan-700/30"
+        animate={{ y: [0, -15, 0], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-1/3 right-1/4 w-6 h-6 rounded-full bg-electric-400/30"
+        animate={{ y: [0, 20, 0], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
+      />
 
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="flex flex-col items-center mb-6">
@@ -140,7 +134,7 @@ export default function AboutUsSection() {
         </p>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <a
               key={service.title}
               href={service.href}
@@ -165,18 +159,14 @@ export default function AboutUsSection() {
           ))}
         </div>
 
-        <div
-          ref={statsRef}
-          className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8"
-        >
-          {stats.map((stat, index) => (
+        <div className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {stats.map((stat) => (
             <StatCounter
-              key={index}
+              key={stat.label}
               icon={stat.icon}
               value={stat.value}
               label={stat.label}
               suffix={stat.suffix}
-              delay={index * 0.1}
             />
           ))}
         </div>
@@ -190,39 +180,26 @@ interface StatCounterProps {
   value: number;
   label: string;
   suffix: string;
-  delay: number;
 }
 
-function StatCounter({ icon, value, label, suffix, delay }: StatCounterProps) {
-  const countRef = useRef(null);
-  const isInView = useInView(countRef, { once: false });
-  const hasAnimatedRef = useRef(false);
-
-  const springValue = useSpring(0, { stiffness: 50, damping: 10 });
-
-  useEffect(() => {
-    if (isInView && !hasAnimatedRef.current) {
-      springValue.set(value);
-      hasAnimatedRef.current = true;
-    } else if (!isInView && hasAnimatedRef.current) {
-      springValue.set(0);
-      hasAnimatedRef.current = false;
-    }
-  }, [isInView, value, springValue]);
-
-  const displayValue = useTransform(springValue, (latest) => Math.floor(latest));
-
+function StatCounter({ icon, value, label, suffix }: StatCounterProps) {
   return (
-    <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl flex flex-col items-center text-center group hover:bg-white transition-colors duration-300 border border-graphite-700">
-      <div className="w-14 h-14 rounded-full bg-offwhite-50/5 flex items-center justify-center mb-4 text-cyan-700 group-hover:bg-cyan-700/10 transition-colors duration-300">
+    <motion.div
+      className="bg-white/70 backdrop-blur-sm p-6 rounded-xl flex flex-col items-center text-center group hover:bg-white transition-colors duration-300 border border-graphite-700"
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+    >
+      <motion.div
+        className="w-14 h-14 rounded-full bg-offwhite-50/5 flex items-center justify-center mb-4 text-cyan-700 group-hover:bg-cyan-700/10 transition-colors duration-300"
+        whileHover={{ rotate: 360, transition: { duration: 0.8 } }}
+      >
         {icon}
-      </div>
-      <div ref={countRef} className="text-3xl font-bold text-offwhite-50 flex items-center">
-        <motion.span>{displayValue}</motion.span>
+      </motion.div>
+      <div className="text-3xl font-bold text-offwhite-50 flex items-center">
+        <span>{value}</span>
         <span>{suffix}</span>
       </div>
       <p className="text-slate-400 text-sm mt-1">{label}</p>
-      <div className="w-10 h-0.5 bg-cyan-700 mt-3 group-hover:w-16 transition-all duration-300" />
-    </div>
+      <motion.div className="w-10 h-0.5 bg-cyan-700 mt-3 group-hover:w-16 transition-all duration-300" />
+    </motion.div>
   );
 }
