@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   ShieldCheck,
   BarChart3,
@@ -14,96 +15,68 @@ import {
   ClipboardCheck,
   Zap,
   ArrowUpRight,
+  type LucideIcon,
 } from "lucide-react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useInView,
-  useSpring,
-  type Variants,
-} from "framer-motion";
+import { useInView, useSpring, useTransform, motion } from "framer-motion";
 import { BackgroundGradientGlow } from "@/components/ui/background-gradient-glow";
 
+type ServiceCard = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+};
+
 export default function AboutUsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: false, amount: 0.1 });
-  const isStatsInView = useInView(statsRef, { once: false, amount: 0.3 });
-
-  // Parallax effect for decorative elements
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 20]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -20]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const services = [
+  const services: ServiceCard[] = [
     {
-      icon: <ShieldCheck className="w-5 h-5" />,
+      icon: ShieldCheck,
       title: "Oracle GRC",
       description:
-        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud built around how your organization actually governs itself, not a generic template.",
+        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud, built around how your organization actually governs itself.",
       href: "/services/oracle-grc",
+      image: "/images/services/oracle-grc.png",
     },
     {
-      icon: <BarChart3 className="w-5 h-5" />,
+      icon: BarChart3,
       title: "Risk Management Cloud",
       description:
         "Continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems.",
       href: "/services/oracle-risk-management-cloud",
+      image: "/images/services/risk-management-cloud.png",
     },
     {
-      icon: <FileCheck2 className="w-5 h-5" />,
+      icon: FileCheck2,
       title: "Regulatory Compliance",
       description:
-        "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need to satisfy.",
+        "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need.",
       href: "/services/regulatory-compliance-consulting",
+      image: "/images/services/regulatory-compliance.png",
     },
     {
-      icon: <BrainCircuit className="w-5 h-5" />,
+      icon: BrainCircuit,
       title: "AI Solutions",
       description:
-        "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
+        "Autonomous agents, RPA, and chatbots that automate processes, analyze data, and drive smarter decisions across your business.",
       href: "/services",
+      image: "/images/services/ai-solutions.png",
     },
     {
-      icon: <LifeBuoy className="w-5 h-5" />,
+      icon: LifeBuoy,
       title: "Managed Support",
       description:
         "Ongoing administration and rule tuning after go-live, from the same team that designed the controls in the first place.",
       href: "/services/managed-support",
+      image: "/images/services/managed-support.png",
     },
     {
-      icon: <Compass className="w-5 h-5" />,
+      icon: Compass,
       title: "Risk Advisory",
       description:
         "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
       href: "/services/risk-advisory",
+      image: "/images/services/risk-advisory.png",
     },
   ];
 
@@ -116,105 +89,70 @@ export default function AboutUsSection() {
   return (
     <section
       id="about-section"
-      ref={sectionRef}
       className="relative z-10 w-full scroll-mt-20 overflow-hidden rounded-t-[2.5rem] px-4 py-24 text-offwhite-50 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.55)] md:rounded-t-[3.5rem] md:py-32"
     >
       <BackgroundGradientGlow />
 
-      {/* Decorative background elements */}
-      <motion.div
-        className="absolute top-20 left-10 w-64 h-64 rounded-full bg-cyan-700/5 blur-3xl"
-        style={{ y: y1, rotate: rotate1 }}
-      />
-      <motion.div
-        className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-electric-400/5 blur-3xl"
-        style={{ y: y2, rotate: rotate2 }}
-      />
-      <motion.div
-        className="absolute top-1/2 left-1/4 w-4 h-4 rounded-full bg-cyan-700/30"
-        animate={{ y: [0, -15, 0], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-1/3 right-1/4 w-6 h-6 rounded-full bg-electric-400/30"
-        animate={{ y: [0, 20, 0], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
-      />
-
-      <motion.div
-        className="container mx-auto max-w-6xl relative z-10"
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        variants={containerVariants}
-      >
-        <motion.div className="flex flex-col items-center mb-6" variants={itemVariants}>
-          <motion.span
-            className="text-cyan-700 font-medium mb-2 flex items-center gap-2 text-sm uppercase tracking-[0.08em]"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Zap className="w-4 h-4" />
+      <div className="container relative z-10 mx-auto max-w-6xl">
+        <div className="mb-6 flex flex-col items-center">
+          <span className="mb-2 flex items-center gap-2 text-sm font-medium uppercase tracking-[0.08em] text-cyan-700">
+            <Zap className="h-4 w-4" />
             Who we are
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl font-semibold tracking-[-0.02em] mb-4 text-center">
+          </span>
+          <h2 className="mb-4 text-center text-4xl font-semibold tracking-[-0.02em] md:text-5xl">
             About Claaps Technology Services
           </h2>
-          <motion.div
-            className="w-24 h-1 bg-cyan-700"
-            initial={{ width: 0 }}
-            animate={{ width: 96 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          />
-        </motion.div>
+          <div className="h-1 w-24 bg-cyan-700" />
+        </div>
 
-        <motion.p className="text-center max-w-2xl mx-auto mb-16 text-lg leading-7 text-slate-600" variants={itemVariants}>
-          Claaps Technology Services exists to help organizations manage risk
-          and compliance challenges effectively. As a specialist provider of
-          risk management solutions, we focus exclusively on Oracle GRC and
-          Oracle Risk Management Cloud implementation, advisory, and
-          ongoing support, in one accountable team.
-        </motion.p>
+        <p className="mx-auto mb-16 max-w-2xl text-center text-lg leading-7 text-slate-600">
+          Claaps Technology Services exists to help organizations manage risk and
+          compliance challenges effectively. As a specialist provider of risk
+          management solutions, we focus exclusively on Oracle GRC and Oracle Risk
+          Management Cloud implementation, advisory, and ongoing support — in one
+          accountable team.
+        </p>
 
-        <motion.div variants={itemVariants}>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => (
-              <motion.a
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => {
+            const Icon = service.icon;
+            return (
+              <a
                 key={service.title}
                 href={service.href}
-                className="group flex flex-col gap-4 rounded-2xl border-2 border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-cyan-600 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
+                className="group flex flex-col overflow-hidden rounded-3xl border border-graphite-700 bg-white shadow-elevation-1 transition-all duration-300 hover:-translate-y-1.5 hover:border-electric-500/40 hover:shadow-elevation-2"
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-cyan-700 transition-all duration-300 group-hover:border-cyan-600/40 group-hover:bg-cyan-50 group-hover:text-cyan-600">
-                    {service.icon}
+                <div className="relative aspect-[16/10] overflow-hidden bg-navy-900">
+                  <Image
+                    src={service.image}
+                    alt={`${service.title} dashboard illustration`}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/10 to-transparent" />
+                  <div className="absolute left-4 top-4 flex h-11 w-11 items-center justify-center rounded-2xl border border-graphite-700 bg-white/95 text-electric-600 shadow-elevation-1 backdrop-blur-sm transition-colors duration-300 group-hover:text-cyan-700">
+                    <Icon className="h-5 w-5" strokeWidth={2} />
                   </div>
-                  <h3 className="text-base font-bold tracking-tight text-slate-800 transition-colors duration-300 group-hover:text-cyan-700">
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-6">
+                  <h3 className="text-xl font-semibold tracking-tight text-offwhite-50 transition-colors duration-300 group-hover:text-electric-600">
                     {service.title}
                   </h3>
+                  <p className="flex-1 text-sm leading-6 text-slate-600">
+                    {service.description}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-700 transition-colors duration-300 group-hover:text-electric-600">
+                    Learn more
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </span>
                 </div>
-                <p className="flex-1 text-sm leading-6 text-slate-600">
-                  {service.description}
-                </p>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 transition-colors duration-300 group-hover:text-cyan-600">
-                  Explore service
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </span>
-              </motion.a>
-            ))}
-          </div>
-        </motion.div>
+              </a>
+            );
+          })}
+        </div>
 
-        {/* Stats Section */}
-        <motion.div
-          ref={statsRef}
-          className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8"
-          initial="hidden"
-          animate={isStatsInView ? "visible" : "hidden"}
-          variants={containerVariants}
-        >
+        <div className="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-3">
           {stats.map((stat, index) => (
             <StatCounter
               key={index}
@@ -222,11 +160,10 @@ export default function AboutUsSection() {
               value={stat.value}
               label={stat.label}
               suffix={stat.suffix}
-              delay={index * 0.1}
             />
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -236,54 +173,31 @@ interface StatCounterProps {
   value: number;
   label: string;
   suffix: string;
-  delay: number;
 }
 
-function StatCounter({ icon, value, label, suffix, delay }: StatCounterProps) {
+function StatCounter({ icon, value, label, suffix }: StatCounterProps) {
   const countRef = useRef(null);
-  const isInView = useInView(countRef, { once: false });
-  // Just gates the spring trigger below — doesn't drive any render, so a
-  // ref avoids the cascading-setState-in-effect lint rule a useState would.
-  const hasAnimatedRef = useRef(false);
+  const isInView = useInView(countRef, { once: true });
 
-  const springValue = useSpring(0, {
-    stiffness: 50,
-    damping: 10,
-  });
+  const springValue = useSpring(0, { stiffness: 50, damping: 10 });
 
   useEffect(() => {
-    if (isInView && !hasAnimatedRef.current) {
-      springValue.set(value);
-      hasAnimatedRef.current = true;
-    } else if (!isInView && hasAnimatedRef.current) {
-      springValue.set(0);
-      hasAnimatedRef.current = false;
-    }
+    if (isInView) springValue.set(value);
   }, [isInView, value, springValue]);
 
   const displayValue = useTransform(springValue, (latest) => Math.floor(latest));
 
   return (
-    <motion.div
-      className="bg-white/70 backdrop-blur-sm p-6 rounded-xl flex flex-col items-center text-center group hover:bg-white transition-colors duration-300 border border-graphite-700"
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay } },
-      }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
-    >
-      <motion.div
-        className="w-14 h-14 rounded-full bg-offwhite-50/5 flex items-center justify-center mb-4 text-cyan-700 group-hover:bg-cyan-700/10 transition-colors duration-300"
-        whileHover={{ rotate: 360, transition: { duration: 0.8 } }}
-      >
+    <div className="group flex flex-col items-center rounded-2xl border border-graphite-700 bg-white/70 p-6 text-center backdrop-blur-sm transition-colors duration-300 hover:bg-white">
+      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-offwhite-50/5 text-cyan-700 transition-colors duration-300 group-hover:bg-cyan-700/10">
         {icon}
-      </motion.div>
-      <motion.div ref={countRef} className="text-3xl font-bold text-offwhite-50 flex items-center">
+      </div>
+      <div ref={countRef} className="flex items-center text-3xl font-bold text-offwhite-50">
         <motion.span>{displayValue}</motion.span>
         <span>{suffix}</span>
-      </motion.div>
-      <p className="text-slate-400 text-sm mt-1">{label}</p>
-      <motion.div className="w-10 h-0.5 bg-cyan-700 mt-3 group-hover:w-16 transition-all duration-300" />
-    </motion.div>
+      </div>
+      <p className="mt-1 text-sm text-slate-400">{label}</p>
+      <div className="mt-3 h-0.5 w-10 bg-cyan-700 transition-all duration-300 group-hover:w-16" />
+    </div>
   );
 }
