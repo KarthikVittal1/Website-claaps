@@ -42,3 +42,5 @@ steps:
     appType: 'webAppLinux'
     appName: 'claapswebsite'
     package: '$(Build.ArtifactStagingDirectory)/site.zip'
+    appSettings: '-SCM_DO_BUILD_DURING_DEPLOYMENT false -WEBSITE_RUN_FROM_PACKAGE 0 -NODE_ENV production'
+    startUpCommand: 'node_modules/.bin/next start'
