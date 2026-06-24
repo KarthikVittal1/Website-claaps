@@ -14,8 +14,9 @@ steps:
     versionSpec: '22.x'
 
 - script: |
-    npm ci
-  displayName: 'Install Dependencies'
+    npm install
+    npm run build
+  displayName: 'Build Next.js App'
 
 - task: ArchiveFiles@2
   inputs:
