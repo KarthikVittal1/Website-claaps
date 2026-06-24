@@ -16,19 +16,17 @@ steps:
 - script: |
     npm install
     npm run build
+    cp -r .next/static .next/standalone/.next/static
+    cp -r public .next/standalone/public
   displayName: 'Build Next.js App'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '.'
+    rootFolderOrFile: '.next/standalone'
     includeRootFolder: false
     archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
     replaceExistingArchive: true
-    excludePatterns: |
-      node_modules/**
-      .git/**
-      .next/cache/**
 
 - task: AzureWebApp@1
   inputs:
@@ -36,5 +34,5 @@ steps:
     appType: 'webAppLinux'
     appName: 'claapswebsite'
     package: '$(Build.ArtifactStagingDirectory)/site.zip'
-    appSettings: '-SCM_DO_BUILD_DURING_DEPLOYMENT true -NODE_ENV production'
-    startUpCommand: 'npm start'
+    appSettings: '-SCM_DO_BUILD_DURING_DEPLOYMENT false -NODE_ENV production -PORT 8080'
+    startUpCommand: 'node server.js'
