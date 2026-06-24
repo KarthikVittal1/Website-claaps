@@ -18,9 +18,14 @@ steps:
     npm run build
   displayName: 'Build Next.js App'
 
+- script: |
+    cp package.json .next/
+    cp package-lock.json .next/
+  displayName: 'Copy package files to .next'
+
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '.'
+    rootFolderOrFile: '.next'
     includeRootFolder: false
     archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
