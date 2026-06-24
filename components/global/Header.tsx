@@ -73,28 +73,17 @@ const navItems: Array<{
 ];
  
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
- 
-  // Reset menu state when the route changes. Adjusting state during render
-  // (rather than in an effect) avoids an extra render and matches React's
-  // recommended pattern for resetting state in response to a prop change.
+
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
     setOpenMenu(null);
     setMobileOpen(false);
   }
- 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
  
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
@@ -113,62 +102,37 @@ export function Header() {
     };
   }, []);
  
-  // The homepage hero is a dark animated gradient that now shows through the
-  // transparent header (see app/page.tsx) — nav text/logo tuned for a white
-  // backdrop need to flip to light colors until the header picks up its own
-  // (opaque) background on scroll.
-  const isLightHero = pathname === "/" && !scrolled;
- 
   const isItemActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
- 
-  // Shared layoutId lets framer-motion slide this "lamp" glow between nav
-  // items on navigation instead of just popping in on the new active one —
-  // adapted from the tubelight-navbar pattern onto the existing nav items
-  // rather than swapping in its standalone floating-pill layout.
+
   const renderLamp = () => (
     <motion.div
       layoutId="nav-lamp"
-      className={cn(
-        "absolute inset-0 -z-10 rounded-full",
-        isLightHero ? "bg-white/10" : "bg-electric-500/5"
-      )}
+      className="absolute inset-0 -z-10 rounded-full bg-electric-500/5"
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
     >
-      <div
-        className={cn(
-          "absolute -top-2 left-1/2 h-1 w-8 -translate-x-1/2 rounded-t-full",
-          isLightHero ? "bg-cyan-400" : "bg-electric-500"
-        )}
-      >
-        <div
-          className={cn(
-            "absolute -top-2 -left-2 h-6 w-12 rounded-full blur-md",
-            isLightHero ? "bg-cyan-400/30" : "bg-electric-500/20"
-          )}
-        />
+      <div className="absolute -top-2 left-1/2 h-1 w-8 -translate-x-1/2 rounded-t-full bg-electric-500">
+        <div className="absolute -top-2 -left-2 h-6 w-12 rounded-full blur-md bg-electric-500/20" />
       </div>
     </motion.div>
   );
  
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-colors duration-200",
-        scrolled
-          ? "bg-navy-950/85 backdrop-blur-[12px] border-b border-graphite-700"
-          : "bg-transparent border-b border-transparent"
-      )}
-    >
-      <Container>
-        <div className="flex h-18 items-center justify-between" ref={navRef}>
+    <header className="sticky top-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">
+      {/* Floating pill */}
+      <div
+        ref={navRef}
+        className={cn(
+          "pointer-events-auto w-full max-w-7xl rounded-2xl transition-all duration-300",
+          "bg-white/95 backdrop-blur-md shadow-lg ring-1 ring-black/8"
+        )}
+      >
+        <div className="flex h-14 items-center justify-between px-3 sm:px-4">
+          {/* Logo — merged inside the pill */}
           <Link
             href="/"
-            className="group relative flex items-center"
+            className="group flex items-center shrink-0"
             onClick={(e) => {
-              // When already on the homepage, Next.js skips its scroll reset
-              // because the route is unchanged — so clicking the badge would
-              // appear to do nothing. Scroll back up to the intro/hero instead.
               if (pathname === "/") {
                 e.preventDefault();
                 window.scrollTo({
@@ -181,37 +145,22 @@ export function Header() {
               }
             }}
           >
-            {/* The logo lockup uses dark brand colors (blue CLAAPS, orange
-                ORACLE, dark-grey "Partner"), so it needs a light backing to
-                stay legible over the dark homepage hero and the dark scrolled
-                header. A clean white chip reads well on every header state — it
-                blends into light inner-page headers and makes the mark pop on
-                dark ones. The hover shadow lifts it slightly. */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-3 -inset-y-1.5 -z-10 rounded-xl bg-white shadow-sm ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-md"
-            />
             <Image
               src="/claaps-oracle-partner-badge.png"
               alt="Claaps - Oracle Partner"
               width={1440}
               height={226}
               priority
-              className="h-9 w-auto sm:h-10 transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transform-none"
+              className="h-8 w-auto sm:h-9 transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transform-none"
             />
           </Link>
- 
+
+          {/* Desktop nav */}
           <nav aria-label="Primary" className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => {
               const active = isItemActive(item.href);
               return item.sections ? (
                 <div key={item.label} className="relative">
-                  {/* Form-autofill / password-manager browser extensions inject
-                      an `fdprocessedid` attribute onto buttons before React
-                      hydrates, which trips a dev-only hydration mismatch warning.
-                      suppressHydrationWarning is the sanctioned escape hatch for
-                      unavoidable third-party DOM mutation — no runtime effect, and
-                      it never ships as a problem in production. */}
                   <button
                     type="button"
                     suppressHydrationWarning
@@ -221,11 +170,8 @@ export function Header() {
                       setOpenMenu((curr) => (curr === item.label ? null : item.label))
                     }
                     className={cn(
-                      "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm transition-colors duration-150",
-                      isLightHero
-                        ? "text-white/90 hover:text-white"
-                        : "text-offwhite-50 hover:text-electric-600",
-                      active && (isLightHero ? "text-white" : "font-medium text-electric-600")
+                      "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
+                      active ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
                     )}
                   >
                     {item.label}
@@ -235,11 +181,11 @@ export function Header() {
                   {openMenu === item.label ? (
                     <div
                       role="menu"
-                      className="absolute left-0 top-full mt-2 w-64 rounded-lg border border-graphite-700 bg-navy-900 py-2 shadow-elevation-2"
+                      className="absolute left-0 top-full mt-2 w-64 rounded-xl border border-slate-200 bg-white py-2 shadow-xl"
                     >
                       {item.sections.map((section, si) => (
-                        <div key={section.heading} className={si > 0 ? "mt-1 border-t border-graphite-700/60 pt-1" : ""}>
-                          <p className="px-3 pb-0.5 pt-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                        <div key={section.heading} className={si > 0 ? "mt-1 border-t border-slate-100 pt-1" : ""}>
+                          <p className="px-3 pb-0.5 pt-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                             {section.heading}
                           </p>
                           {section.items.map((sub) => (
@@ -247,18 +193,18 @@ export function Header() {
                               key={sub.href}
                               href={sub.href}
                               role="menuitem"
-                              className="block rounded-md px-3 py-1.5 text-sm text-offwhite-50 hover:bg-navy-800 hover:text-electric-600 transition-colors duration-150"
+                              className="block rounded-md px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-electric-600 transition-colors duration-150"
                             >
                               {sub.label}
                             </Link>
                           ))}
                         </div>
                       ))}
-                      <div className="mt-1 border-t border-graphite-700/60 px-2 pt-1">
+                      <div className="mt-1 border-t border-slate-100 px-2 pt-1">
                         <Link
                           href={item.href}
                           role="menuitem"
-                          className="block rounded-md px-2 py-1.5 text-sm text-cyan-700 hover:bg-navy-800 transition-colors duration-150"
+                          className="block rounded-md px-2 py-1.5 text-sm text-electric-600 hover:bg-slate-50 transition-colors duration-150"
                         >
                           View all {item.label.toLowerCase()} →
                         </Link>
@@ -271,11 +217,8 @@ export function Header() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    "relative rounded-full px-4 py-2 text-sm transition-colors duration-150",
-                    isLightHero
-                      ? "text-white/90 hover:text-white"
-                      : "text-offwhite-50 hover:text-electric-600",
-                    active && (isLightHero ? "text-white" : "font-medium text-electric-600")
+                    "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
+                    active ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
                   )}
                 >
                   {item.label}
@@ -284,76 +227,73 @@ export function Header() {
               );
             })}
           </nav>
- 
-          <div className="hidden lg:block">
-            <Button href="/contact" size="sm">
+
+          {/* CTA + mobile hamburger */}
+          <div className="flex items-center gap-2">
+            <div className="hidden lg:block">
+              <Button href="/contact" size="sm">
+                Request a Consultation
+              </Button>
+            </div>
+            <button
+              type="button"
+              suppressHydrationWarning
+              className="lg:hidden rounded-full p-2 text-slate-700 hover:bg-slate-100 transition-colors"
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-menu"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? (
+                <X aria-hidden size={22} strokeWidth={1.5} />
+              ) : (
+                <Menu aria-hidden size={22} strokeWidth={1.5} />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile menu — expands inside the pill */}
+        {mobileOpen ? (
+          <div id="mobile-menu" className="border-t border-slate-100 px-4 pb-4 pt-3">
+            <nav aria-label="Mobile" className="flex flex-col gap-1">
+              {navItems.map((item) => (
+                <div key={item.label} className="border-b border-slate-100 py-2">
+                  <Link
+                    href={item.href}
+                    className="block py-2 text-base font-medium text-slate-800"
+                  >
+                    {item.label}
+                  </Link>
+                  {item.sections ? (
+                    <div className="flex flex-col pl-3">
+                      {item.sections.map((section) => (
+                        <div key={section.heading} className="mt-1">
+                          <p className="pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                            {section.heading}
+                          </p>
+                          {section.items.map((sub) => (
+                            <Link
+                              key={sub.href}
+                              href={sub.href}
+                              className="block py-1.5 text-sm text-slate-600 hover:text-electric-600"
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </nav>
+            <Button href="/contact" className="mt-4 w-full">
               Request a Consultation
             </Button>
           </div>
- 
-          <button
-            type="button"
-            suppressHydrationWarning
-            className={cn(
-              "lg:hidden rounded-md p-2",
-              isLightHero ? "text-white/90" : "text-offwhite-50"
-            )}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-menu"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMobileOpen((v) => !v)}
-          >
-            {mobileOpen ? (
-              <X aria-hidden size={22} strokeWidth={1.5} />
-            ) : (
-              <Menu aria-hidden size={22} strokeWidth={1.5} />
-            )}
-          </button>
-        </div>
-      </Container>
- 
-      {mobileOpen ? (
-        <div
-          id="mobile-menu"
-          className="lg:hidden border-t border-graphite-700 bg-navy-950 px-6 py-6"
-        >
-          <nav aria-label="Mobile" className="flex flex-col gap-1">
-            {navItems.map((item) => (
-              <div key={item.label} className="border-b border-graphite-700/60 py-2">
-                <Link
-                  href={item.href}
-                  className="block py-2 text-base font-medium text-offwhite-50"
-                >
-                  {item.label}
-                </Link>
-                {item.sections ? (
-                  <div className="flex flex-col pl-3">
-                    {item.sections.map((section) => (
-                      <div key={section.heading} className="mt-1">
-                        <p className="pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                          {section.heading}
-                        </p>
-                        {section.items.map((sub) => (
-                          <Link
-                            key={sub.href}
-                            href={sub.href}
-                            className="block py-1.5 text-sm text-slate-400 hover:text-electric-600"
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </nav>
-          <Button href="/contact" className="mt-6 w-full">
-            Request a Consultation
-          </Button>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </header>
   );
 }

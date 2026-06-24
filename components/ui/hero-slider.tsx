@@ -133,12 +133,6 @@ export function HeroSlider() {
                 ))}
               </motion.div>
 
-              <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button href="/services" size="lg">Explore Solutions</Button>
-                <Button href="/contact" variant="secondary" size="lg" className="!border-white/30 !text-white hover:!border-white/50">
-                  Talk to Experts
-                </Button>
-              </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -164,6 +158,13 @@ export function HeroSlider() {
             <div className="hero-showcase-reflection" />
           </motion.div>
         </motion.div>
+
+        <div className="col-span-full flex justify-center gap-3 pb-4 -mt-20">
+          <Button href="/services" size="lg">Explore Solutions</Button>
+          <Button href="/contact" size="lg">
+            Talk to Experts
+          </Button>
+        </div>
       </Container>
     </section>
   )

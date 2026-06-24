@@ -12,19 +12,19 @@ import "swiper/css/pagination";
 
 const slides = [
   {
-    src: "/images/carousel-slides/slide-1.png",
+    src: "/images/carousel-slides/img-1.png",
     alt: "Oracle GRC & Risk Management",
   },
   {
-    src: "/images/carousel-slides/slide-2.png",
+    src: "/images/carousel-slides/img-2.png",
     alt: "Cloud Security & Compliance",
   },
   {
-    src: "/images/carousel-slides/slide-3.png",
+    src: "/images/carousel-slides/img-3.png",
     alt: "AI & Intelligent Automation",
   },
   {
-    src: "/images/carousel-slides/slide-4.png",
+    src: "/images/carousel-slides/img-4.png",
     alt: "Digital Transformation",
   },
   {
