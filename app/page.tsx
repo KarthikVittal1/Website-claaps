@@ -36,7 +36,7 @@ export default function Home() {
               title="Find the path that matches your responsibility"
               align="center"
             />
-            <div className="mt-12 grid gap-4 md:grid-cols-5">
+            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
               {roles.map((role) => (
                 <Card key={role.slug} href={`/solutions#${role.slug}`} className="items-center text-center">
                   <p className="text-lg font-medium text-offwhite-50">{role.label}</p>
