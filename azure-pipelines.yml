@@ -14,7 +14,7 @@ steps:
     versionSpec: '22.x'
 
 - script: |
-    npm ci --omit=dev
+    npm install
     npm run build
   displayName: 'Build Next.js App'
 
