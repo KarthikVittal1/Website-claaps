@@ -19,13 +19,18 @@ steps:
   displayName: 'Build Next.js App'
 
 - script: |
-    cp package.json .next/
-    cp package-lock.json .next/
-  displayName: 'Copy package files to .next'
+    mkdir -p deploy
+    cp -r .next deploy/
+    cp -r public deploy/
+    cp package.json deploy/
+    cp package-lock.json deploy/
+    cp next.config.ts deploy/
+    cd deploy && npm install --omit=dev
+  displayName: 'Prepare deploy folder'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '.next'
+    rootFolderOrFile: 'deploy'
     includeRootFolder: false
     archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
