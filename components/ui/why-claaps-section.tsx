@@ -78,7 +78,7 @@ export default function WhyClaapsSection() {
         }}
       />
 
-      <div className="relative mx-auto max-w-6xl px-6 md:px-8">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-8">
         <p className="text-center text-xs font-medium uppercase tracking-[0.08em] text-white/70">
           Why Claaps
         </p>

@@ -64,7 +64,7 @@ export default function AboutUsSection() {
         style={{ y: y2, rotate: rotate2 }}
       />
 
-      <div className="container mx-auto max-w-6xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10">
         <div className="flex flex-col items-center mb-6">
           <span className="text-cyan-700 font-medium mb-2 flex items-center gap-2 text-sm uppercase tracking-[0.08em]">
             <Zap className="w-4 h-4" />

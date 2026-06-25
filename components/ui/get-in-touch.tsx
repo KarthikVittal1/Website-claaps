@@ -71,7 +71,7 @@ export const ProfessionalConnect = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center px-6 py-24 md:py-28">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6 py-24 md:py-28">
         {/* Header */}
         <div className={`mb-14 text-center transition-all duration-1000 ${entrance}`}>
           <div className="mb-4 inline-block rounded-full border border-cyan-700/20 bg-cyan-700/5 px-4 py-1.5">
