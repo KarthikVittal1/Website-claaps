@@ -2,104 +2,100 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Send, Sparkles } from "lucide-react";
+import { X, Send, Sparkles, ChevronRight, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { services } from "@/lib/content/services";
+import { submitConsultationRequest, type ConsultationFormState } from "@/app/contact/actions";
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+// ---------------------------------------------------------------------------
+// Guided, button-driven assistant (mgmotor-style). No API and no key: every
+// reply is deterministic. Free text is mapped to a "topic" by keyword scoring;
+// tapping a chip jumps straight to a topic. Service cards and the lead-capture
+// flow are driven from real site data so the bot can never drift out of sync.
+// ---------------------------------------------------------------------------
+
+type Chip = { label: string; topic: string };
+type CardItem = { title: string; subtitle: string; href: string };
+type LinkItem = { label: string; href: string; icon: "mail" | "page" };
+
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  chips?: Chip[];
+  cards?: CardItem[];
+  links?: LinkItem[];
+};
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const GREETING =
-  "Hi! I'm Aria, the Claaps assistant. I can tell you about our company, our services (Oracle GRC, Risk Management Cloud, Regulatory Compliance, Risk Advisory, Managed Support, AI Solutions), the industries we serve, or how to get in touch. What would you like to know?";
+  "Hi! I'm the Claaps assistant. 👋 I can walk you through our services, who we help, the company, or set up a consultation. What would you like to do?";
 
 const FALLBACK =
-  "I can help with: About Claaps, our Services, a specific service (Oracle GRC, Risk Management Cloud, Regulatory Compliance, Risk Advisory, Managed Support, AI Solutions), the Industries we serve, or Contact details. Which would you like? For anything specific, email info@claaps.com.";
+  "I'm not sure I caught that - but I can help you with any of these. Pick one, or email info@claaps.com for anything specific.";
 
-const SUGGESTIONS = ["About Claaps", "Our services", "AI Solutions", "Oracle GRC", "Contact us"];
-
-// Predefined, static knowledge base — no API, no key, fully offline and
-// deterministic. Each intent is matched by whole-word keywords; the best match
-// wins, otherwise FALLBACK is returned. Specific topics are listed before the
-// generic "greeting" so a tie resolves to the more useful answer.
-type Intent = { keywords: string[]; answer: string };
-
-const KNOWLEDGE: Intent[] = [
-  {
-    keywords: ["who are you", "who is claaps", "about claaps", "about the company", "your company", "what is claaps"],
-    answer:
-      "Claaps Technology Services is a specialist provider focused exclusively on Oracle Governance, Risk & Compliance (GRC) and Oracle Risk Management Cloud. We deliver implementation, advisory, and ongoing support in one accountable team — platform depth, not a side practice inside a broader IT consultancy.",
-  },
-  {
-    keywords: ["service", "services", "what do you do", "what do you offer", "offering", "offerings", "help with"],
-    answer:
-      "Claaps offers six core services:\n• Oracle GRC\n• Oracle Risk Management Cloud\n• Regulatory Compliance Consulting\n• Risk Advisory\n• Managed Support\n• AI Solutions\n\nAsk me about any one for more detail.",
-  },
-  {
-    keywords: ["oracle grc", "grc", "governance"],
-    answer:
-      "Oracle GRC — end-to-end design, implementation, and optimization of Oracle Governance, Risk & Compliance, so controls, risks, and policies live in one governed system instead of spreadsheets, built around how your organization actually governs itself.",
-  },
-  {
-    keywords: ["risk management cloud", "rmc", "continuous monitoring", "segregation", "access certification"],
-    answer:
-      "Oracle Risk Management Cloud implementation for continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems, tuned to reduce false positives so the platform stays trusted and used.",
-  },
-  {
-    keywords: ["regulatory", "compliance", "regulation", "sox", "gdpr", "hipaa", "audit"],
-    answer:
-      "Regulatory Compliance Consulting — independent advisory that interprets your regulatory requirements and translates them into testable control design and evidence. Note: this is advisory work; Claaps does not certify or guarantee compliance on your behalf.",
-  },
-  {
-    keywords: ["risk advisory", "advisory", "taxonomy", "appetite", "board"],
-    answer:
-      "Risk Advisory — risk taxonomy design, risk appetite framing, and executive and board-level risk reporting, helping risk leaders rationalize a fast-growing register.",
-  },
-  {
-    keywords: ["managed support", "support", "maintenance", "administration", "go-live"],
-    answer:
-      "Managed Support — ongoing administration, rule tuning, and release management for Oracle GRC and Risk Management Cloud after go-live, from the same specialists who designed your controls.",
-  },
-  {
-    keywords: ["ai", "ai solutions", "artificial intelligence", "automation", "machine learning", "intelligent"],
-    answer:
-      "AI Solutions — we help you leverage AI to automate processes, analyze data, and make smarter, faster decisions. We design and implement scalable AI solutions tailored to your business goals, and we can apply them to risk and compliance work — automating routine controls tasks and turning your governance data into clearer insight. Email info@claaps.com to talk through a use case.",
-  },
-  {
-    keywords: ["industry", "industries", "sector", "sectors"],
-    answer:
-      "We work with teams across regulated industries: Energy & Utilities, Pharma & Life Sciences, Financial Services, Telecom, Semiconductors, Healthcare, Retail, Media & Entertainment, and Education.",
-  },
-  {
-    keywords: ["pricing", "price", "cost", "how much", "fees", "budget", "quote"],
-    answer:
-      "Engagements are scoped to your environment and goals, so pricing is tailored rather than fixed. Share your needs at info@claaps.com or via the Contact page and we'll put together the right scope.",
-  },
-  {
-    keywords: ["consultation", "demo", "talk to", "speak to", "meeting", "get in touch"],
-    answer:
-      "Glad to help — submit the Request a Consultation form on our Contact page, or email info@claaps.com, and our team will follow up.",
-  },
-  {
-    keywords: ["contact", "email", "phone", "call", "reach", "address", "office", "location"],
-    answer:
-      "You can reach us at info@claaps.com, or use the Request a Consultation form on our Contact page. We have teams in the USA and India.",
-  },
-  {
-    keywords: ["thank", "thanks", "thx", "appreciate"],
-    answer:
-      "You're welcome! If there's anything else about our Oracle GRC or risk services, just ask — or reach us at info@claaps.com.",
-  },
-  {
-    keywords: ["hi", "hello", "hey", "greetings", "good morning", "good evening"],
-    answer:
-      "Hi there! I can tell you about Claaps, our services, specific offerings like Oracle GRC or Risk Management Cloud, the industries we serve, or how to get in touch. What would you like to know?",
-  },
+const MENU_CHIPS: Chip[] = [
+  { label: "Our services", topic: "services" },
+  { label: "Who we help", topic: "industries" },
+  { label: "About Claaps", topic: "about" },
+  { label: "Book a consultation", topic: "consult" },
+  { label: "Contact", topic: "contact" },
 ];
 
-function getAnswer(text: string): string {
+// Extra keyword aliases per service so natural phrasing maps to the right page.
+const SERVICE_ALIASES: Record<string, string[]> = {
+  "oracle-grc": ["oracle grc", "grc", "governance"],
+  "oracle-risk-management-cloud": [
+    "risk management cloud",
+    "rmc",
+    "continuous monitoring",
+    "segregation of duties",
+    "segregation",
+    "access certification",
+    "sod",
+  ],
+  "regulatory-compliance-consulting": ["regulatory", "compliance", "regulation", "sox", "gdpr", "hipaa"],
+  "risk-advisory": ["risk advisory", "advisory", "risk taxonomy", "taxonomy", "risk appetite", "appetite", "board reporting"],
+  "managed-support": ["managed support", "support", "maintenance", "administration", "go-live", "go live"],
+  "rpa-uipath": ["rpa", "uipath", "robotic process", "robotic process automation", "bots", "automation"],
+  "ai-agents": ["ai agent", "ai agents", "autonomous agent", "agentic"],
+  "ai-chatbots": ["ai chatbot", "ai chatbots", "chatbot", "chatbots", "rag", "helpdesk", "virtual assistant"],
+};
+
+type Intent = { topic: string; keywords: string[] };
+
+function serviceKeywords(slug: string, shortTitle: string): string[] {
+  return Array.from(
+    new Set([shortTitle.toLowerCase(), slug.replace(/-/g, " "), ...(SERVICE_ALIASES[slug] ?? [])])
+  );
+}
+
+// Order matters: more specific intents come first so they win keyword ties.
+const INTENTS: Intent[] = [
+  {
+    topic: "consult",
+    keywords: ["consultation", "consult", "demo", "book", "booking", "meeting", "talk to", "speak to", "get in touch", "appointment"],
+  },
+  ...services.map((s) => ({ topic: `service:${s.slug}`, keywords: serviceKeywords(s.slug, s.shortTitle) })),
+  {
+    topic: "services",
+    keywords: ["service", "services", "what do you do", "what do you offer", "offering", "offerings", "help with", "capabilities", "products", "product", "ai", "artificial intelligence"],
+  },
+  { topic: "industries", keywords: ["industry", "industries", "sector", "sectors", "solutions", "who do you help", "clients", "customers"] },
+  { topic: "about", keywords: ["who are you", "who is claaps", "about claaps", "about the company", "your company", "what is claaps", "tell me about"] },
+  { topic: "contact", keywords: ["contact", "email", "phone", "call", "reach", "address", "office", "location"] },
+  { topic: "pricing", keywords: ["pricing", "price", "cost", "how much", "fees", "budget", "quote"] },
+  { topic: "greeting", keywords: ["hi", "hello", "hey", "greetings", "good morning", "good evening"] },
+  { topic: "thanks", keywords: ["thank", "thanks", "thx", "appreciate"] },
+];
+
+function matchTopic(text: string): string {
   const t = text.toLowerCase();
-  let best: Intent | null = null;
+  let best = "";
   let bestScore = 0;
-  for (const intent of KNOWLEDGE) {
+  for (const intent of INTENTS) {
     let score = 0;
     for (const kw of intent.keywords) {
       const re = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
@@ -107,17 +103,128 @@ function getAnswer(text: string): string {
     }
     if (score > bestScore) {
       bestScore = score;
-      best = intent;
+      best = intent.topic;
     }
   }
-  return best ? best.answer : FALLBACK;
+  return best;
 }
+
+// Returns the assistant reply for a topic id (everything except the role).
+function nodeFor(topic: string): Omit<ChatMessage, "role"> {
+  if (topic.startsWith("service:")) {
+    const slug = topic.slice("service:".length);
+    const s = services.find((x) => x.slug === slug);
+    if (s) {
+      return {
+        content: `${s.title}\n\n${s.summary}`,
+        links: [{ label: `Open ${s.shortTitle} page`, href: `/services/${s.slug}`, icon: "page" }],
+        chips: [
+          { label: "Other services", topic: "services" },
+          { label: "Book a consultation", topic: "consult" },
+          { label: "Back to menu", topic: "menu" },
+        ],
+      };
+    }
+  }
+
+  switch (topic) {
+    case "menu":
+      return { content: "What can I help you with?", chips: MENU_CHIPS };
+
+    case "greeting":
+      return {
+        content: "Hi there! I can tell you about Claaps, our services, the industries we serve, or set up a consultation. What would you like to do?",
+        chips: MENU_CHIPS,
+      };
+
+    case "services":
+      return {
+        content: "Here's what we do - tap any service to open its page:",
+        cards: services.map((s) => ({ title: s.shortTitle, subtitle: s.summary, href: `/services/${s.slug}` })),
+        chips: [
+          { label: "Book a consultation", topic: "consult" },
+          { label: "Back to menu", topic: "menu" },
+        ],
+      };
+
+    case "about":
+      return {
+        content:
+          "Claaps Technology Services is a specialist provider focused exclusively on Oracle Governance, Risk & Compliance (GRC) and Oracle Risk Management Cloud - implementation, advisory, and ongoing support in one accountable team. Platform depth, not a side practice inside a broader IT consultancy.",
+        chips: [
+          { label: "Our services", topic: "services" },
+          { label: "Who we help", topic: "industries" },
+          { label: "Book a consultation", topic: "consult" },
+        ],
+      };
+
+    case "industries":
+      return {
+        content:
+          "We work with risk, compliance, and IT leaders across regulated industries - Energy & Utilities, Pharma & Life Sciences, Financial Services, Telecom, Semiconductors, Healthcare, Retail, Media & Entertainment, and Education.",
+        links: [{ label: "See who we help", href: "/solutions", icon: "page" }],
+        chips: [
+          { label: "Our services", topic: "services" },
+          { label: "Book a consultation", topic: "consult" },
+          { label: "Back to menu", topic: "menu" },
+        ],
+      };
+
+    case "contact":
+      return {
+        content: "Reach the Claaps team any time - we have teams in the USA and India.",
+        links: [
+          { label: "info@claaps.com", href: "mailto:info@claaps.com", icon: "mail" },
+          { label: "Open contact page", href: "/contact", icon: "page" },
+        ],
+        chips: [
+          { label: "Book a consultation", topic: "consult" },
+          { label: "Back to menu", topic: "menu" },
+        ],
+      };
+
+    case "pricing":
+      return {
+        content:
+          "Engagements are scoped to your environment and goals, so pricing is tailored rather than fixed. The quickest path is a short consultation - want me to set one up?",
+        chips: [
+          { label: "Book a consultation", topic: "consult" },
+          { label: "Our services", topic: "services" },
+          { label: "Back to menu", topic: "menu" },
+        ],
+      };
+
+    case "thanks":
+      return { content: "Anytime! Is there anything else I can help you with?", chips: MENU_CHIPS };
+
+    default:
+      return { content: FALLBACK, chips: MENU_CHIPS };
+  }
+}
+
+// Lead-capture mini state machine ------------------------------------------------
+type LeadStep = "name" | "email" | "company" | "message";
+type LeadData = { name?: string; email?: string; company?: string; message?: string };
+type Lead = { step: LeadStep; data: LeadData };
+
+const CANCEL_WORDS = ["cancel", "stop", "never mind", "nevermind", "back", "menu"];
+const cancelChip: Chip[] = [{ label: "Cancel", topic: "menu" }];
+
+const LEAD_PLACEHOLDER: Record<LeadStep, string> = {
+  name: "Type your name…",
+  email: "you@company.com",
+  company: "Your company…",
+  message: "What do you need help with?",
+};
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([{ role: "assistant", content: GREETING }]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: "assistant", content: GREETING, chips: MENU_CHIPS },
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lead, setLead] = useState<Lead | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -139,17 +246,136 @@ export function ChatWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  function pushUser(content: string) {
+    setMessages((prev) => [...prev, { role: "user", content }]);
+  }
+
+  // Push an assistant reply after a short, natural delay (shows typing dots).
+  function botSay(msg: Omit<ChatMessage, "role">, delay = 350) {
+    setLoading(true);
+    window.setTimeout(() => {
+      setMessages((prev) => [...prev, { role: "assistant", ...msg }]);
+      setLoading(false);
+    }, delay);
+  }
+
+  function startLead() {
+    setLead({ step: "name", data: {} });
+    botSay({ content: "Love it - let's set up a consultation. First up, what's your name?", chips: cancelChip });
+  }
+
+  async function submitLead(data: LeadData) {
+    setLoading(true);
+    try {
+      const parts = (data.name ?? "").trim().split(/\s+/);
+      const firstName = parts[0] ?? "";
+      const lastName = parts.slice(1).join(" ") || "-";
+
+      const fd = new FormData();
+      fd.set("firstName", firstName);
+      fd.set("lastName", lastName);
+      fd.set("email", data.email ?? "");
+      fd.set("company", data.company ?? "");
+      fd.set("message", data.message ?? "");
+
+      const initial: ConsultationFormState = { status: "idle" };
+      const res = await submitConsultationRequest(initial, fd);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content:
+            res.message ??
+            (res.status === "success"
+              ? "Thanks - your request has been received. A member of the Claaps team will follow up."
+              : "Something went wrong. Please email info@claaps.com."),
+          chips: MENU_CHIPS,
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: "Sorry - I couldn't submit that just now. Please email info@claaps.com and we'll jump right on it.",
+          chips: MENU_CHIPS,
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleLeadInput(text: string) {
+    if (!lead) return;
+
+    if (CANCEL_WORDS.includes(text.toLowerCase().trim())) {
+      setLead(null);
+      botSay({ content: "No problem - I've cancelled that. What else can I help with?", chips: MENU_CHIPS });
+      return;
+    }
+
+    const { step, data } = lead;
+
+    if (step === "name") {
+      const firstName = text.trim().split(/\s+/)[0];
+      setLead({ step: "email", data: { ...data, name: text.trim() } });
+      botSay({ content: `Thanks, ${firstName}! What's the best email to reach you?`, chips: cancelChip });
+      return;
+    }
+
+    if (step === "email") {
+      if (!EMAIL_PATTERN.test(text.trim())) {
+        botSay({ content: "Hmm, that doesn't look like a valid email. Mind trying again?", chips: cancelChip });
+        return;
+      }
+      setLead({ step: "company", data: { ...data, email: text.trim() } });
+      botSay({ content: "Got it. Which company are you with?", chips: cancelChip });
+      return;
+    }
+
+    if (step === "company") {
+      setLead({ step: "message", data: { ...data, company: text.trim() } });
+      botSay({ content: "Last one - briefly, what would you like help with?", chips: cancelChip });
+      return;
+    }
+
+    // step === "message"
+    const finalData = { ...data, message: text.trim() };
+    setLead(null);
+    void submitLead(finalData);
+  }
+
   function respondTo(text: string) {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
-    setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
+
+    pushUser(trimmed);
     setInput("");
-    setLoading(true);
-    // Small delay so the predefined reply feels natural rather than instant.
-    window.setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "assistant", content: getAnswer(trimmed) }]);
-      setLoading(false);
-    }, 350);
+
+    if (lead) {
+      handleLeadInput(trimmed);
+      return;
+    }
+
+    const topic = matchTopic(trimmed);
+    if (topic === "consult") {
+      startLead();
+      return;
+    }
+    botSay(nodeFor(topic || "fallback"));
+  }
+
+  function goToTopic(topic: string, label: string) {
+    if (loading) return;
+    if (lead) setLead(null);
+    pushUser(label);
+    if (topic === "consult") {
+      startLead();
+      return;
+    }
+    botSay(nodeFor(topic));
   }
 
   function onInputKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -158,6 +384,8 @@ export function ChatWidget() {
       respondTo(input);
     }
   }
+
+  const placeholder = lead ? LEAD_PLACEHOLDER[lead.step] : "Ask about our services…";
 
   return (
     <>
@@ -180,7 +408,7 @@ export function ChatWidget() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold leading-tight">Claaps Assistant</p>
-                <p className="text-xs text-white/80">Aria · ask us anything</p>
+                <p className="text-xs text-white/80">Ask us anything</p>
               </div>
               <button
                 type="button"
@@ -193,28 +421,98 @@ export function ChatWidget() {
             </div>
 
             {/* Messages */}
-            <div
-              ref={scrollRef}
-              aria-live="polite"
-              className="flex-1 space-y-3 overflow-y-auto bg-navy-900 p-4"
-            >
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}
-                >
+            <div ref={scrollRef} aria-live="polite" className="flex-1 space-y-3 overflow-y-auto bg-navy-900 p-4">
+              {messages.map((m, i) => {
+                const isLast = i === messages.length - 1;
+                return (
                   <div
-                    className={cn(
-                      "max-w-[82%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
-                      m.role === "user"
-                        ? "bg-electric-600 text-white"
-                        : "border border-graphite-700 bg-navy-950 text-offwhite-50"
-                    )}
+                    key={i}
+                    className={cn("flex w-full flex-col", m.role === "user" ? "items-end" : "items-start")}
                   >
-                    {m.content}
+                    {/* Bubble */}
+                    <div
+                      className={cn(
+                        "max-w-[82%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                        m.role === "user"
+                          ? "bg-electric-600 text-white"
+                          : "border border-graphite-700 bg-navy-950 text-offwhite-50"
+                      )}
+                    >
+                      {m.content}
+                    </div>
+
+                    {/* Service cards */}
+                    {m.role === "assistant" && m.cards && m.cards.length > 0 && (
+                      <div className="mt-2 flex w-full flex-col gap-2">
+                        {m.cards.map((card) => (
+                          <Link
+                            key={card.href}
+                            href={card.href}
+                            onClick={() => setOpen(false)}
+                            className="group flex items-center gap-3 rounded-xl border border-graphite-700 bg-navy-950 px-3.5 py-3 text-left transition-colors hover:border-electric-400"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-semibold text-offwhite-50">{card.title}</p>
+                              <p className="mt-0.5 line-clamp-2 text-xs leading-snug text-slate-400">
+                                {card.subtitle}
+                              </p>
+                            </div>
+                            <ChevronRight
+                              className="h-4 w-4 shrink-0 text-slate-400 transition-colors group-hover:text-electric-400"
+                              aria-hidden
+                            />
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* CTA links */}
+                    {m.role === "assistant" && m.links && m.links.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {m.links.map((l) => {
+                          const inner = (
+                            <>
+                              {l.icon === "mail" ? (
+                                <Mail className="h-3.5 w-3.5" aria-hidden />
+                              ) : (
+                                <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+                              )}
+                              {l.label}
+                            </>
+                          );
+                          const cls =
+                            "inline-flex items-center gap-1.5 rounded-full border border-electric-400/40 bg-electric-600/10 px-3 py-1.5 text-xs font-medium text-electric-400 transition-colors hover:bg-electric-600/20";
+                          return l.href.startsWith("/") ? (
+                            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className={cls}>
+                              {inner}
+                            </Link>
+                          ) : (
+                            <a key={l.href} href={l.href} className={cls}>
+                              {inner}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Quick-reply chips - only on the latest reply */}
+                    {m.role === "assistant" && isLast && !loading && m.chips && m.chips.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {m.chips.map((c) => (
+                          <button
+                            key={c.label}
+                            type="button"
+                            onClick={() => goToTopic(c.topic, c.label)}
+                            className="rounded-full border border-graphite-700 px-2.5 py-1 text-xs text-slate-400 transition-colors hover:border-electric-400 hover:text-electric-600"
+                          >
+                            {c.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {loading && (
                 <div className="flex justify-start">
@@ -227,21 +525,6 @@ export function ChatWidget() {
               )}
             </div>
 
-            {/* Quick-reply suggestions */}
-            <div className="flex flex-wrap gap-1.5 bg-navy-900 px-3 pb-2">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => respondTo(s)}
-                  disabled={loading}
-                  className="rounded-full border border-graphite-700 px-2.5 py-1 text-xs text-slate-400 transition-colors hover:border-electric-400 hover:text-electric-600 disabled:opacity-40"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-
             {/* Input */}
             <div className="border-t border-graphite-700 bg-navy-950 p-3">
               <div className="flex items-end gap-2">
@@ -251,7 +534,7 @@ export function ChatWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onInputKeyDown}
-                  placeholder="Ask about our services…"
+                  placeholder={placeholder}
                   aria-label="Type your message"
                   className="max-h-28 flex-1 resize-none rounded-lg border border-graphite-700 bg-navy-900 px-3 py-2 text-sm text-offwhite-50 outline-none placeholder:text-slate-400 focus:border-electric-400"
                 />
@@ -273,7 +556,7 @@ export function ChatWidget() {
         )}
       </AnimatePresence>
 
-      {/* Launcher (bottom-right) — Claaps mark, ripple rings, 3D tilt on hover */}
+      {/* Launcher (bottom-right) - Claaps mark, ripple rings, 3D tilt on hover */}
       <div className="fixed bottom-5 right-5 z-50 h-14 w-14">
         {/* Ripple rings draw the eye while the chat is closed */}
         {!open && (
