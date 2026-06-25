@@ -50,7 +50,7 @@ export default function LogosSection() {
   }, [api]);
 
   return (
-    <section className="border-b border-graphite-700 py-24 md:py-32">
+    <section className="py-10 md:py-12">
       <Container>
         <RevealOnScroll>
           <SectionHeading

@@ -29,7 +29,7 @@ export default function Home() {
 
         
 
-        <section className="relative border-b border-graphite-700 py-24 md:py-32">
+        <section className="relative border-b border-graphite-700 py-8 md:py-10">
           <Container>
             <SectionHeading
               eyebrow="Solutions by role"

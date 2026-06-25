@@ -133,13 +133,11 @@ export default function AboutUsSection() {
           <div className="w-24 h-1 bg-cyan-700" />
         </div>
 
-        <p className="text-center max-w-2xl mx-auto mb-16 text-lg leading-7 text-slate-600">
-          Claaps Technology Services exists to help organizations manage risk
-          and compliance challenges effectively. As a specialist provider of
-          risk management solutions, we focus exclusively on Oracle GRC and
-          Oracle Risk Management Cloud implementation, advisory, and
-          ongoing support, in one accountable team.
-        </p>
+        <div className="mb-16 space-y-4 text-base leading-7 text-slate-600">
+          <p>Welcome to Claaps Technology Services, where industry-leading subject matter experts are dedicated to helping organizations manage risks and compliance challenges effectively. As a leading provider of risk management solutions, we specialize in Oracle GRC/Risk Management Cloud implementation and support, as well as regulatory compliance consulting services.</p>
+          <p>Our team of experts has extensive experience and knowledge in designing and implementing customized solutions that meet the specific needs of our clients. We work closely with our clients to understand their unique challenges and deliver tailored solutions that align with their strategic objectives.</p>
+          <p>At Claaps Technology Services, we are committed to delivering the best value to our clients by providing high-quality services that meet their expectations. Contact us today to learn more about how we can help your organization manage risks and compliance challenges effectively.</p>
+        </div>
 
         <FeatureShaderCards features={services} />
 
@@ -173,18 +171,13 @@ interface StatCounterProps {
 
 function StatCounter({ icon, value, label, suffix, delay }: StatCounterProps) {
   const countRef = useRef(null);
-  const isInView = useInView(countRef, { once: false });
-  const hasAnimatedRef = useRef(false);
+  const isInView = useInView(countRef, { once: true });
 
   const springValue = useSpring(0, { stiffness: 50, damping: 10 });
 
   useEffect(() => {
-    if (isInView && !hasAnimatedRef.current) {
+    if (isInView) {
       springValue.set(value);
-      hasAnimatedRef.current = true;
-    } else if (!isInView && hasAnimatedRef.current) {
-      springValue.set(0);
-      hasAnimatedRef.current = false;
     }
   }, [isInView, value, springValue]);
 

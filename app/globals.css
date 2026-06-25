@@ -136,6 +136,7 @@
   overflow: hidden;
   width: 100%;
   aspect-ratio: 16 / 10;
+  max-height: 260px;
   border-radius: 48px 120px 48px 120px / 48px 80px 48px 80px;
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.45),

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion, type Variants } from "framer-motion"
+import { ChevronDown } from "lucide-react"
 
 import { Button } from "@/components/global/Button"
 import { Container } from "@/components/global/Container"
@@ -68,7 +69,7 @@ export function HeroSlider() {
   }, [reduceMotion])
 
   return (
-    <section className="sticky top-0 isolate z-0 flex min-h-screen items-center">
+    <section className="sticky top-0 isolate z-0 flex min-h-screen items-start pt-20">
       <div className="absolute inset-x-0 -top-24 bottom-0">
         <BackgroundGradientAnimation
           containerClassName="absolute inset-0"
@@ -83,88 +84,104 @@ export function HeroSlider() {
         />
       </div>
 
-      <Container className="relative grid w-full items-center gap-10 py-24 lg:grid-cols-2 lg:gap-12">
-        <div className="relative min-h-[34rem] sm:min-h-[31rem] lg:min-h-[35rem]">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={activeIndex}
-              variants={reduceMotion ? undefined : contentVariants}
-              initial={reduceMotion ? false : "hidden"}
-              animate="visible"
-              exit={reduceMotion ? undefined : "exit"}
-              className="absolute inset-x-0 top-1/2 -translate-y-1/2"
-            >
-              <motion.div variants={reduceMotion ? undefined : itemVariants}>
-                <span className="inline-flex rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:text-xs">
-                  {activeSlide.label}
-                </span>
-              </motion.div>
+      <Container className="relative flex min-h-[calc(100vh-10rem)] w-full flex-col pt-0 pb-4">
+        {/* Two-column content grid */}
+        <div className="grid items-start gap-x-12 gap-y-3 lg:grid-cols-2">
+          <div className="relative min-h-[18rem]">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeIndex}
+                variants={reduceMotion ? undefined : contentVariants}
+                initial={reduceMotion ? false : "hidden"}
+                animate="visible"
+                exit={reduceMotion ? undefined : "exit"}
+                className="absolute inset-x-0 top-0"
+              >
+                <motion.div variants={reduceMotion ? undefined : itemVariants}>
+                  <span className="inline-flex rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:text-xs">
+                    {activeSlide.label}
+                  </span>
+                </motion.div>
 
-              <div className="relative mt-5">
-                <div aria-hidden className={`absolute -inset-6 -z-10 rounded-full ${activeSlide.glow} blur-3xl transition-colors duration-700`} />
-                <h1 className="max-w-3xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl md:text-6xl lg:text-7xl">
-                  {activeSlide.title.split(" ").map((word, index) => (
+                <div className="relative mt-3">
+                  <div aria-hidden className={`absolute -inset-6 -z-10 rounded-full ${activeSlide.glow} blur-3xl transition-colors duration-700`} />
+                  <h1 className="max-w-3xl text-3xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-4xl md:text-4xl lg:text-5xl">
+                    {activeSlide.title.split(" ").map((word, index) => (
+                      <motion.span
+                        key={`${word}-${index}`}
+                        variants={reduceMotion ? undefined : itemVariants}
+                        className={`mr-[0.24em] inline-block bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent will-change-transform`}
+                      >
+                        {word}
+                      </motion.span>
+                    ))}
+                  </h1>
+                </div>
+
+                <motion.p variants={reduceMotion ? undefined : itemVariants} className="mt-2 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
+                  {activeSlide.description}
+                </motion.p>
+
+                <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-2 flex flex-wrap gap-x-3 text-sm font-semibold sm:text-base">
+                  {activeSlide.keywords.map((keyword, index) => (
                     <motion.span
-                      key={`${word}-${index}`}
-                      variants={reduceMotion ? undefined : itemVariants}
-                      className={`mr-[0.24em] inline-block bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent will-change-transform`}
+                      key={keyword}
+                      initial={reduceMotion ? false : { opacity: 0, y: 10, filter: "blur(5px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ delay: reduceMotion ? 0 : 0.38 + index * 0.1, duration: 0.42 }}
+                      className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]`}
                     >
-                      {word}
+                      {keyword}
                     </motion.span>
                   ))}
-                </h1>
-              </div>
+                </motion.div>
 
-              <motion.p variants={reduceMotion ? undefined : itemVariants} className="mt-6 max-w-xl text-base leading-7 text-white/70 sm:text-lg">
-                {activeSlide.description}
-              </motion.p>
-
-              <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-5 flex flex-wrap gap-x-3 text-lg font-semibold sm:text-xl">
-                {activeSlide.keywords.map((keyword, index) => (
-                  <motion.span
-                    key={keyword}
-                    initial={reduceMotion ? false : { opacity: 0, y: 10, filter: "blur(5px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ delay: reduceMotion ? 0 : 0.38 + index * 0.1, duration: 0.42 }}
-                    className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]`}
-                  >
-                    {keyword}
-                  </motion.span>
-                ))}
               </motion.div>
+            </AnimatePresence>
+          </div>
 
+          <motion.div
+            className="relative hidden lg:block"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <motion.div
+              animate={reduceMotion ? {} : { y: [0, -10, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="hero-showcase"
+            >
+              <Image
+                src="/images/hero-office-2.webp"
+                alt="Claaps Technology Services team at work"
+                fill
+                sizes="(min-width: 1024px) 640px, 1px"
+                className="object-cover"
+                priority
+              />
+              <div className="hero-showcase-reflection" />
             </motion.div>
-          </AnimatePresence>
+          </motion.div>
         </div>
 
-        <motion.div
-          className="relative hidden lg:block"
-          initial={{ opacity: 0, scale: 0.97 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.div
-            animate={reduceMotion ? {} : { y: [0, -12, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="hero-showcase"
-          >
-            <Image
-              src="/images/hero-office-2.webp"
-              alt="Claaps Technology Services team at work"
-              fill
-              sizes="(min-width: 1024px) 640px, 1px"
-              className="object-cover"
-              priority
-            />
-            <div className="hero-showcase-reflection" />
-          </motion.div>
-        </motion.div>
+        {/* Buttons */}
+        <div className="mt-6 flex justify-center gap-3">
+          <Button href="/services" size="lg">Explore Services</Button>
+          <Button href="/contact" size="lg">Talk to Experts</Button>
+        </div>
 
-        <div className="col-span-full flex justify-center gap-3 pb-4 -mt-20">
-          <Button href="/services" size="lg">Explore Solutions</Button>
-          <Button href="/contact" size="lg">
-            Talk to Experts
-          </Button>
+        {/* Scroll indicator pinned to viewport bottom */}
+        <div className="mt-auto flex flex-col items-center gap-1 pt-4">
+          <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/30">Scroll</span>
+          <motion.button
+            aria-label="Scroll to About section"
+            onClick={() => document.getElementById("about-section")?.scrollIntoView({ behavior: "smooth" })}
+            animate={reduceMotion ? {} : { y: [0, 5, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="text-white/30 hover:text-white/60 transition-colors duration-200 cursor-pointer"
+          >
+            <ChevronDown size={18} strokeWidth={1.5} />
+          </motion.button>
         </div>
       </Container>
     </section>
