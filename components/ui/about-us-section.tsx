@@ -3,17 +3,7 @@
 import type React from "react";
 
 import { useEffect, useRef } from "react";
-import {
-  ShieldCheck,
-  BarChart3,
-  FileCheck2,
-  BrainCircuit,
-  Compass,
-  LifeBuoy,
-  Award,
-  ClipboardCheck,
-  Zap,
-} from "lucide-react";
+import { LifeBuoy, Award, ClipboardCheck, Zap } from "lucide-react";
 import {
   motion,
   useScroll,
@@ -23,9 +13,7 @@ import {
   type Variants,
 } from "framer-motion";
 import { BackgroundGradientGlow } from "@/components/ui/background-gradient-glow";
-import FeatureShaderCards, {
-  type ShaderFeature,
-} from "@/components/ui/feature-shader-cards";
+import { ServicesGrid } from "@/components/ui/services-grid";
 
 export default function AboutUsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -52,51 +40,6 @@ export default function AboutUsSection() {
       },
     },
   };
-
-  const services: ShaderFeature[] = [
-    {
-      icon: <ShieldCheck className="h-6 w-6" />,
-      title: "Oracle GRC",
-      description:
-        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud built around how your organization actually governs itself, not a generic template.",
-      href: "/services/oracle-grc",
-    },
-    {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: "Risk Management Cloud",
-      description:
-        "Continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems.",
-      href: "/services/oracle-risk-management-cloud",
-    },
-    {
-      icon: <FileCheck2 className="h-6 w-6" />,
-      title: "Regulatory Compliance",
-      description:
-        "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need to satisfy.",
-      href: "/services/regulatory-compliance-consulting",
-    },
-    {
-      icon: <BrainCircuit className="h-6 w-6" />,
-      title: "AI Solutions",
-      description:
-        "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
-      href: "/services",
-    },
-    {
-      icon: <LifeBuoy className="h-6 w-6" />,
-      title: "Managed Support",
-      description:
-        "Ongoing administration and rule tuning after go-live, from the same team that designed the controls in the first place.",
-      href: "/services/managed-support",
-    },
-    {
-      icon: <Compass className="h-6 w-6" />,
-      title: "Risk Advisory",
-      description:
-        "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
-      href: "/services/risk-advisory",
-    },
-  ];
 
   const stats = [
     { icon: <Award />, value: 15, label: "Oracle GRC / RMC Implementations", suffix: "+" },
@@ -139,7 +82,7 @@ export default function AboutUsSection() {
           <p>At Claaps Technology Services, we are committed to delivering the best value to our clients by providing high-quality services that meet their expectations. Contact us today to learn more about how we can help your organization manage risks and compliance challenges effectively.</p>
         </div>
 
-        <FeatureShaderCards features={services} />
+        <ServicesGrid />
 
         <div
           ref={statsRef}

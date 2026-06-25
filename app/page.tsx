@@ -2,12 +2,12 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/global/Container";
 import { SectionHeading } from "@/components/global/SectionHeading";
 import { Card } from "@/components/global/Card";
-import { GetInTouchSection } from "@/components/global/GetInTouchSection";
 import { HeroSlider } from "@/components/ui/hero-slider";
 import { TheWorkSection } from "@/components/ui/the-work-section";
 import AboutUsSection from "@/components/ui/about-us-section";
 import LogosSection from "@/components/ui/logos-section";
 import WhyClaapsSection from "@/components/ui/why-claaps-section";
+import { ProfessionalConnect } from "@/components/ui/get-in-touch";
 import { roles } from "@/lib/content/solutions";
 
 export default function Home() {
@@ -58,7 +58,7 @@ export default function Home() {
 
       <WhyClaapsSection />
 
-      <GetInTouchSection />
+      <ProfessionalConnect />
     </>
   );
 }
