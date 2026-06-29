@@ -105,7 +105,7 @@ export function HeroSlider() {
 
                 <div className="relative mt-3">
                   <div aria-hidden className={`absolute -inset-6 -z-10 rounded-full ${activeSlide.glow} blur-3xl transition-colors duration-700`} />
-                  <h1 className="max-w-3xl text-3xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-4xl md:text-4xl lg:text-5xl">
+                  <h1 className="max-w-3xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl md:text-5xl lg:text-6xl">
                     {activeSlide.title.split(" ").map((word, index) => (
                       <motion.span
                         key={`${word}-${index}`}
@@ -118,11 +118,11 @@ export function HeroSlider() {
                   </h1>
                 </div>
 
-                <motion.p variants={reduceMotion ? undefined : itemVariants} className="mt-2 max-w-xl text-sm leading-6 text-white/70 sm:text-base">
+                <motion.p variants={reduceMotion ? undefined : itemVariants} className="mt-3 max-w-xl text-base leading-7 text-white/70 sm:text-lg">
                   {activeSlide.description}
                 </motion.p>
 
-                <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-2 flex flex-wrap gap-x-3 text-sm font-semibold sm:text-base">
+                <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-3 flex flex-wrap gap-x-3 text-base font-semibold sm:text-lg">
                   {activeSlide.keywords.map((keyword, index) => (
                     <motion.span
                       key={keyword}
@@ -141,7 +141,7 @@ export function HeroSlider() {
           </div>
 
           <motion.div
-            className="relative hidden lg:block"
+            className="relative hidden lg:block lg:self-center"
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
