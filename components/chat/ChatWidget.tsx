@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Send, Sparkles, ChevronRight, Mail } from "lucide-react";
+import { X, Send, ChevronRight, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { services } from "@/lib/content/services";
 import { submitConsultationRequest, type ConsultationFormState } from "@/app/contact/actions";
@@ -403,8 +403,14 @@ export function ChatWidget() {
           >
             {/* Header */}
             <div className="flex items-center gap-3 bg-gradient-to-r from-cyan-700 to-purple-500 px-4 py-3 text-white">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                <Sparkles className="h-5 w-5" aria-hidden />
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm">
+                <Image
+                  src="/logo-mark.png"
+                  alt=""
+                  width={476}
+                  height={524}
+                  className="h-6 w-auto object-contain"
+                />
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold leading-tight">Claaps Assistant</p>
