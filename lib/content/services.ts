@@ -7,6 +7,8 @@ export type Service = {
   description: string[];
   included: string[];
   whoFor: string[];
+  image: string;
+  imageAlt: string;
 };
 
 export const services: Service[] = [
@@ -29,6 +31,8 @@ export const services: Service[] = [
       "Post-implementation validation and knowledge transfer",
     ],
     whoFor: ["CISO", "Audit Leaders", "Compliance Teams"],
+    image: "/images/services/oracle-grc.jpg",
+    imageAlt: "A team reviewing governance and controls together over laptops",
   },
   {
     slug: "oracle-risk-management-cloud",
@@ -49,6 +53,8 @@ export const services: Service[] = [
       "Integration with upstream Oracle ERP modules",
     ],
     whoFor: ["CISO", "Risk Leaders", "Audit Leaders"],
+    image: "/images/services/oracle-risk-management-cloud.jpg",
+    imageAlt: "A data center server room with networked equipment",
   },
   {
     slug: "regulatory-compliance-consulting",
@@ -69,6 +75,8 @@ export const services: Service[] = [
       "Remediation roadmap for identified gaps",
     ],
     whoFor: ["Compliance Teams", "Audit Leaders", "CIO"],
+    image: "/images/services/regulatory-compliance-consulting.jpg",
+    imageAlt: "A person signing a document with a pen",
   },
   {
     slug: "risk-advisory",
@@ -89,6 +97,8 @@ export const services: Service[] = [
       "Facilitated workshops with risk owners",
     ],
     whoFor: ["Risk Leaders", "CIO", "Audit Leaders"],
+    image: "/images/services/risk-advisory.jpg",
+    imageAlt: "A laptop showing analytics and risk reporting charts",
   },
   {
     slug: "managed-support",
@@ -109,6 +119,8 @@ export const services: Service[] = [
       "Defined response-time service levels (per signed agreement)",
     ],
     whoFor: ["CIO", "CISO", "Compliance Teams"],
+    image: "/images/services/managed-support.jpg",
+    imageAlt: "A support team collaborating in an office",
   },
   {
     slug: "rpa-uipath",
@@ -129,6 +141,8 @@ export const services: Service[] = [
       "Hypercare support and handover to internal bot owners",
     ],
     whoFor: ["CIO", "Compliance Teams", "Risk Leaders"],
+    image: "/images/services/rpa-uipath.jpg",
+    imageAlt: "A laptop displaying process and performance data",
   },
   {
     slug: "ai-agents",
@@ -149,6 +163,8 @@ export const services: Service[] = [
       "Monitoring, logging, and ongoing tuning",
     ],
     whoFor: ["CIO", "Risk Leaders", "Compliance Teams"],
+    image: "/images/services/ai-agents.jpg",
+    imageAlt: "A humanoid robot seated and interacting with a device",
   },
   {
     slug: "ai-chatbots",
@@ -169,6 +185,8 @@ export const services: Service[] = [
       "Testing, accuracy benchmarking, and feedback loop setup",
     ],
     whoFor: ["CIO", "Compliance Teams", "Audit Leaders"],
+    image: "/images/services/ai-chatbots.jpg",
+    imageAlt: "Two colleagues working together at a screen",
   },
 ];
 

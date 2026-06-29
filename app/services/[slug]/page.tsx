@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check } from "lucide-react";
 import { Container } from "@/components/global/Container";
@@ -58,6 +59,17 @@ export default async function ServiceDetailPage({
             ))}
           </div>
           <p className="mt-6 text-lg leading-7 text-slate-400">{service.summary}</p>
+          <div className="mt-10 overflow-hidden rounded-2xl ring-1 ring-graphite-700">
+            <Image
+              src={service.image}
+              alt={service.imageAlt}
+              width={1600}
+              height={900}
+              priority
+              sizes="(min-width: 768px) 48rem, 100vw"
+              className="aspect-[16/9] w-full object-cover"
+            />
+          </div>
         </Container>
       </section>
 
