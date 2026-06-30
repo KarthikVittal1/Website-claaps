@@ -23,7 +23,7 @@ const reasons: { icon: LucideIcon; headline: string; sub: string; image: string 
   {
     icon: ClipboardList,
     headline: "Full Lifecycle Delivery",
-    sub: "Implementation, migration, support and audit — one accountable team.",
+    sub: "Implementation, migration, support and audit one accountable team.",
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=600&auto=format&fit=crop",
   },
   {
@@ -41,7 +41,7 @@ const reasons: { icon: LucideIcon; headline: string; sub: string; image: string 
   {
     icon: Percent,
     headline: "65% Lower Cost",
-    sub: "Less spend on implementation and support — same quality, same schedule.",
+    sub: "Less spend on implementation and support same quality, same schedule.",
     image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?q=80&w=600&auto=format&fit=crop",
   },
   {

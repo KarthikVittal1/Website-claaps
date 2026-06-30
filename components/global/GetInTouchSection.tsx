@@ -43,7 +43,7 @@ export function GetInTouchSection() {
                 Get In Touch
               </h2>
               <p className="mt-4 max-w-md text-lg leading-7 text-slate-400">
-                Tell us about your Oracle GRC, risk, or compliance challenge —
+                Tell us about your Oracle GRC, risk, or compliance challenge
                 we&rsquo;ll respond with next steps, not a sales script.
               </p>
             </div>

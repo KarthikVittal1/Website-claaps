@@ -20,7 +20,7 @@ export const services: Service[] = [
     summary:
       "End-to-end design, implementation, and optimization of Oracle GRC so controls, risks, and policies live in one governed system instead of spreadsheets.",
     description: [
-      "Oracle GRC consolidates control testing, policy management, and risk registers into a single platform — but only if it's configured around how your organization actually governs itself, not a generic template.",
+      "Oracle GRC consolidates control testing, policy management, and risk registers into a single platform but only if it's configured around how your organization actually governs itself, not a generic template.",
       "Claaps designs the control framework, workflow, and reporting structure inside Oracle GRC to match your existing governance model, then implements and validates it before handover.",
     ],
     included: [
@@ -42,7 +42,7 @@ export const services: Service[] = [
     summary:
       "Implementation of Oracle Risk Management Cloud for continuous controls monitoring, access certification, and segregation-of-duties enforcement.",
     description: [
-      "Oracle Risk Management Cloud automates controls monitoring and access risk analysis across Oracle ERP and adjacent systems — reducing reliance on periodic manual review.",
+      "Oracle Risk Management Cloud automates controls monitoring and access risk analysis across Oracle ERP and adjacent systems reducing reliance on periodic manual review.",
       "Claaps configures segregation-of-duties rulesets, continuous control monitors, and certification cycles aligned to your risk taxonomy, then tunes false-positive rates so the system stays trusted and used.",
     ],
     included: [
@@ -65,7 +65,7 @@ export const services: Service[] = [
       "Independent advisory to interpret applicable regulatory requirements and translate them into control design and evidence requirements.",
     description: [
       "Regulatory obligations rarely arrive in a form that maps cleanly to a control framework. Claaps works with compliance and legal stakeholders to interpret requirements and translate them into testable controls.",
-      "This is advisory work, not a managed compliance guarantee — Claaps does not certify compliance on a client's behalf; the goal is to equip internal teams with a defensible control design and evidence trail.",
+      "This is advisory work, not a managed compliance guarantee Claaps does not certify compliance on a client's behalf; the goal is to equip internal teams with a defensible control design and evidence trail.",
     ],
     included: [
       "Regulatory requirement interpretation and gap analysis",
@@ -87,7 +87,7 @@ export const services: Service[] = [
       "Enterprise risk advisory covering risk taxonomy design, risk appetite framing, and risk reporting structure for executive and board audiences.",
     description: [
       "Many enterprise risk programs accumulate risks faster than they retire them. Claaps helps risk leaders rationalize the risk register, define a consistent taxonomy, and build reporting that executives actually use.",
-      "Engagements are scoped to specific decisions — a board reporting redesign, a risk appetite statement, a taxonomy overhaul — rather than open-ended advisory retainers.",
+      "Engagements are scoped to specific decisions a board reporting redesign, a risk appetite statement, a taxonomy overhaul rather than open-ended advisory retainers.",
     ],
     included: [
       "Risk taxonomy design and register rationalization",
@@ -108,7 +108,7 @@ export const services: Service[] = [
     summary:
       "Ongoing administration, rule tuning, and release management for Oracle GRC and Risk Management Cloud after go-live.",
     description: [
-      "GRC and risk platforms degrade in usefulness without ongoing tuning — new business units, new applications, and new regulations all require configuration changes.",
+      "GRC and risk platforms degrade in usefulness without ongoing tuning new business units, new applications, and new regulations all require configuration changes.",
       "Claaps provides ongoing administration so internal teams aren't left managing platform upkeep alongside their primary compliance and risk responsibilities.",
     ],
     included: [
@@ -130,7 +130,7 @@ export const services: Service[] = [
     summary:
       "Design and deployment of UiPath automation bots to eliminate manual, repetitive tasks across finance, compliance, and operations.",
     description: [
-      "Repetitive processes — reconciliations, access reviews, report generation — consume hours of skilled staff time that could be directed at higher-value work. UiPath automates these at scale.",
+      "Repetitive processes reconciliations, access reviews, report generation consume hours of skilled staff time that could be directed at higher-value work. UiPath automates these at scale.",
       "Claaps designs, builds, and deploys UiPath bots aligned to your process map, with built-in exception handling and audit trails that satisfy compliance requirements.",
     ],
     included: [
@@ -152,7 +152,7 @@ export const services: Service[] = [
     summary:
       "Autonomous AI agents that complete multi-step tasks, make contextual decisions, and integrate with your existing business systems.",
     description: [
-      "AI agents go beyond chatbots — they reason across tools, retrieve live data, and execute tasks end-to-end without human hand-holding at each step.",
+      "AI agents go beyond chatbots they reason across tools, retrieve live data, and execute tasks end-to-end without human hand-holding at each step.",
       "Claaps designs and deploys agents scoped to specific business workflows: controls monitoring, evidence collection, regulatory change detection, and operational reporting.",
     ],
     included: [
@@ -172,7 +172,7 @@ export const services: Service[] = [
     title: "AI Chatbots",
     eyebrow: "Artificial Intelligence",
     summary:
-      "Custom AI chatbots for internal helpdesk, compliance Q&A, and customer-facing support — trained on your policies and integrated with your systems.",
+      "Custom AI chatbots for internal helpdesk, compliance Q&A, and customer-facing support trained on your policies and integrated with your systems.",
     description: [
       "Generic AI assistants aren't trained on your policies, your controls, or your risk taxonomy. Claaps builds chatbots grounded in your actual documentation.",
       "Deployable across web, Teams, or Slack, with retrieval-augmented generation (RAG) ensuring answers are traceable to source documents rather than hallucinated.",

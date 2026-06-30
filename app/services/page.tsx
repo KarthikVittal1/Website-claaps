@@ -12,7 +12,7 @@ import { services } from "@/lib/content/services";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Oracle GRC, Oracle Risk Management Cloud, regulatory compliance consulting, risk advisory, and managed support — Claaps' five enterprise services.",
+    "Oracle GRC, Oracle Risk Management Cloud, regulatory compliance consulting, risk advisory, and managed support Claaps' five enterprise services.",
 };
 
 export default function ServicesPage() {
@@ -26,7 +26,7 @@ export default function ServicesPage() {
             as="h1"
             eyebrow="What we do"
             title="Services"
-            lead="Five services spanning the full governance, risk, and compliance lifecycle — from regulatory interpretation to ongoing platform administration."
+            lead="Five services spanning the full governance, risk, and compliance lifecycle from regulatory interpretation to ongoing platform administration."
             className="mt-6"
           />
         </Container>

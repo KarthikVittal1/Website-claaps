@@ -68,12 +68,12 @@ export function Header() {
             }}
           >
             <Image
-              src="/claaps-oracle-partner-badge.png"
-              alt="Claaps - Oracle Partner"
-              width={1440}
-              height={226}
+              src="/claaps-logo-v2.png"
+              alt="Claaps"
+              width={400}
+              height={120}
               priority
-              className="h-8 w-auto sm:h-9 transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transform-none"
+              className="h-9 w-auto sm:h-10 transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transform-none"
             />
           </Link>
 

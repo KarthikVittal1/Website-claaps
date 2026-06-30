@@ -10,7 +10,7 @@ import { getServiceBySlug } from "@/lib/content/services";
 export const metadata: Metadata = {
   title: "Solutions by Role",
   description:
-    "What Claaps does for CIOs, CISOs, audit leaders, compliance teams, and risk leaders — by role, not by internal service taxonomy.",
+    "What Claaps does for CIOs, CISOs, audit leaders, compliance teams, and risk leaders by role, not by internal service taxonomy.",
 };
 
 const engagementTypes: Record<string, string> = {
@@ -84,7 +84,7 @@ export default function SolutionsPage() {
 
       <CTASection
         title="Talk to us about your role-specific risk program"
-        lead="Tell us your role and the problem you're solving — we'll point you to the right service."
+        lead="Tell us your role and the problem you're solving we'll point you to the right service."
       />
     </div>
   );

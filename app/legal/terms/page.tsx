@@ -17,7 +17,7 @@ export default function TermsOfServicePage() {
         />
         <h1 className="mt-6 text-4xl font-semibold tracking-[-0.02em]">Terms of Service</h1>
         <div className="mt-8">
-          <PlaceholderBlock label="Terms of service text pending legal review — do not publish without counsel sign-off" />
+          <PlaceholderBlock label="Terms of service text pending legal review do not publish without counsel sign-off" />
         </div>
       </Container>
     </section>

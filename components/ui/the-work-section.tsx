@@ -38,49 +38,49 @@ const workItems: WorkItem[] = [
     category: "Implementation",
     title: "Oracle GRC",
     description:
-      "End-to-end design and configuration of Oracle Governance, Risk & Compliance — control frameworks, workflows, and reporting built around how your organization actually governs itself, not a generic template.",
+      "End-to-end design and configuration of Oracle Governance, Risk & Compliance control frameworks, workflows, and reporting built around how your organization actually governs itself, not a generic template.",
     icon: ShieldCheck,
   },
   {
     category: "Implementation",
     title: "Oracle Risk Management Cloud",
     description:
-      "We design and configure Oracle RMC for continuous controls monitoring, access certification, and segregation-of-duties enforcement — tuned to your risk model so the platform stays trusted and used.",
+      "We design and configure Oracle RMC for continuous controls monitoring, access certification, and segregation-of-duties enforcement tuned to your risk model so the platform stays trusted and used.",
     icon: BarChart3,
   },
   {
     category: "Managed Support",
     title: "Oracle GRC Support, 24/7",
     description:
-      "Ongoing administration, rule tuning, and incident response from the same specialists who designed your controls — so the platform keeps pace with your business after go-live.",
+      "Ongoing administration, rule tuning, and incident response from the same specialists who designed your controls so the platform keeps pace with your business after go-live.",
     icon: LifeBuoy,
   },
   {
     category: "Advisory",
     title: "Regulatory Compliance",
     description:
-      "We interpret evolving regulatory requirements and translate them into testable, audit-ready controls — complete with the citations your auditors and board expect.",
+      "We interpret evolving regulatory requirements and translate them into testable, audit-ready controls complete with the citations your auditors and board expect.",
     icon: FileCheck2,
   },
   {
     category: "AI & Analytics",
     title: "AI-Driven Risk Intelligence",
     description:
-      "Machine-learning models layered over your Oracle risk data surface emerging control failures and anomalous access patterns before they become audit findings — turning historical compliance data into forward-looking risk signals.",
+      "Machine-learning models layered over your Oracle risk data surface emerging control failures and anomalous access patterns before they become audit findings turning historical compliance data into forward-looking risk signals.",
     icon: BrainCircuit,
   },
   {
     category: "Automation",
     title: "Intelligent Controls Automation",
     description:
-      "We automate the repetitive mechanics of GRC — evidence collection, control testing, and exception triage — with AI-assisted workflows, freeing specialists to focus on judgment-intensive risk decisions.",
+      "We automate the repetitive mechanics of GRC evidence collection, control testing, and exception triage with AI-assisted workflows, freeing specialists to focus on judgment-intensive risk decisions.",
     icon: Workflow,
   },
   {
     category: "AI Advisory",
     title: "Generative AI Risk Copilots",
     description:
-      "Purpose-built copilots help control owners interpret regulatory language, draft control narratives, and query their risk posture in plain English — grounded in your own governance data, with full auditability.",
+      "Purpose-built copilots help control owners interpret regulatory language, draft control narratives, and query their risk posture in plain English grounded in your own governance data, with full auditability.",
     icon: Bot,
   },
 ];

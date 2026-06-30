@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const expectationSteps = [
   "We review your message and route it to the relevant specialist.",
   "You'll hear back from a member of the Claaps team to scope the conversation.",
-  "If it's a fit, we schedule a working session — not a generic sales pitch.",
+  "If it's a fit, we schedule a working session not a generic sales pitch.",
 ];
 
 export default function ContactPage() {

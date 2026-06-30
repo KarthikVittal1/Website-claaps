@@ -31,6 +31,6 @@ export async function submitConsultationRequest(
 
   return {
     status: "success",
-    message: "Thanks — your request has been received. A member of the Claaps team will follow up.",
+    message: "Thanks your request has been received. A member of the Claaps team will follow up.",
   };
 }

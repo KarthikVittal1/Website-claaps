@@ -17,7 +17,7 @@ export default function PrivacyPolicyPage() {
         />
         <h1 className="mt-6 text-4xl font-semibold tracking-[-0.02em]">Privacy Policy</h1>
         <div className="mt-8">
-          <PlaceholderBlock label="Privacy policy text pending legal review — do not publish without counsel sign-off" />
+          <PlaceholderBlock label="Privacy policy text pending legal review do not publish without counsel sign-off" />
         </div>
       </Container>
     </section>
