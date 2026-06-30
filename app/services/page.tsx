@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Check } from "lucide-react";
 import { Container } from "@/components/global/Container";
 import { SectionHeading } from "@/components/global/SectionHeading";
@@ -19,16 +20,39 @@ export default function ServicesPage() {
   return (
     <div className="relative overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(242,74,29,0.07),_transparent_50%),radial-gradient(circle_at_80%_70%,_rgba(78,86,184,0.10),_transparent_50%)]" />
-      <section className="border-b border-graphite-700 py-20 md:py-28">
-        <Container>
-          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Services" }]} />
-          <SectionHeading
-            as="h1"
-            eyebrow="What we do"
-            title="Services"
-            lead="Five services spanning the full governance, risk, and compliance lifecycle from regulatory interpretation to ongoing platform administration."
-            className="mt-6"
+      <section className="relative isolate flex min-h-[72vh] flex-col overflow-hidden border-b border-graphite-700">
+        {/* Full-bleed photo with a dark overlay so the centered white text stays legible */}
+        <Image
+          src="/images/services-hero.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div aria-hidden className="absolute inset-0 bg-black/55" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/65" />
+
+        <Container size="default" className="relative pt-20 md:pt-24">
+          <Breadcrumb
+            onDark
+            items={[{ label: "Home", href: "/" }, { label: "Services" }]}
           />
+        </Container>
+
+        <Container
+          size="default"
+          className="relative flex flex-1 flex-col items-center justify-center px-4 py-16 text-center md:py-24"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-400">
+            What we do
+          </p>
+          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.08] tracking-[-0.02em] text-white md:text-6xl lg:text-7xl">
+            Services
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-7 text-white/80">
+            Five services spanning the full governance, risk, and compliance lifecycle from regulatory interpretation to ongoing platform administration.
+          </p>
         </Container>
       </section>
 

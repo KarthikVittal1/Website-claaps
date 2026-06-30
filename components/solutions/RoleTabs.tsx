@@ -104,6 +104,40 @@ export function RoleTabs({ roles }: { roles: Role[] }) {
             })}
           </div>
 
+          {role.project && (
+            <div className="mt-10 rounded-2xl border border-graphite-700 p-6">
+              <p className="text-sm font-medium uppercase tracking-[0.06em] text-cyan-700">
+                A project we&rsquo;ve delivered
+              </p>
+              <h4 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
+                {role.project.title}
+              </h4>
+              <p className="mt-3 text-base leading-7 text-slate-400">
+                {role.project.description}
+              </p>
+              {role.project.highlights && role.project.highlights.length > 0 && (
+                <ul className="mt-4 flex flex-col gap-2">
+                  {role.project.highlights.map((highlight) => (
+                    <li key={highlight} className="flex gap-3 text-sm leading-6 text-slate-400">
+                      <span aria-hidden className="mt-1 text-electric-600">
+                        →
+                      </span>
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <a
+                href={role.project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-electric-500/40 px-4 py-2 text-sm font-medium text-electric-600 transition-colors duration-150 hover:bg-electric-500/10"
+              >
+                Visit {role.project.title} ↗
+              </a>
+            </div>
+          )}
+
           <div className="mt-8">
             <Link
               href="/contact"

@@ -3,17 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, ChevronRight, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { services } from "@/lib/content/services";
-import { submitConsultationRequest, type ConsultationFormState } from "@/app/contact/actions";
 
 // ---------------------------------------------------------------------------
 // Guided, button-driven assistant (mgmotor-style). No API and no key: every
 // reply is deterministic. Free text is mapped to a "topic" by keyword scoring;
-// tapping a chip jumps straight to a topic. Service cards and the lead-capture
-// flow are driven from real site data so the bot can never drift out of sync.
+// tapping a chip jumps straight to a topic. "Book a consultation" sends the
+// visitor to the full Request a Consultation page (/contact).
 // ---------------------------------------------------------------------------
 
 type Chip = { label: string; topic: string };
@@ -28,13 +28,11 @@ type ChatMessage = {
   links?: LinkItem[];
 };
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 const GREETING =
-  "Hi! I'm the Claaps assistant. 👋 I can walk you through our services, who we help, the company, or set up a consultation. What would you like to do?";
+  "Hey there, welcome to Claaps! 👋 I'm your assistant, and I'm glad you stopped by. I'd love to help - I can walk you through what we do, who we help, a little about us, or get a consultation booked for you. Where would you like to start?";
 
 const FALLBACK =
-  "I'm not sure I caught that - but I can help you with any of these. Pick one, or email info@claaps.com for anything specific.";
+  "Hmm, I didn't quite catch that one - sorry! 😅 I'm still learning, but I can definitely point you in the right direction. Pick whatever's easiest below, or email us at info@claaps.com and a real person will jump in.";
 
 const MENU_CHIPS: Chip[] = [
   { label: "Our services", topic: "services" },
@@ -129,7 +127,7 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
 
   switch (topic) {
     case "menu":
-      return { content: "What can I help you with?", chips: MENU_CHIPS };
+      return { content: "Of course! What would you like to look at?", chips: MENU_CHIPS };
 
     case "greeting":
       return {
@@ -139,7 +137,7 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
 
     case "services":
       return {
-        content: "Here's what we do - tap any service to open its page:",
+        content: "Great question! Here's what we do - tap any one and I'll take you straight to it:",
         cards: services.map((s) => ({ title: s.shortTitle, subtitle: s.summary, href: `/services/${s.slug}` })),
         chips: [
           { label: "Book a consultation", topic: "consult" },
@@ -195,36 +193,21 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
       };
 
     case "thanks":
-      return { content: "Anytime! Is there anything else I can help you with?", chips: MENU_CHIPS };
+      return { content: "Aw, you're very welcome! 😊 Is there anything else I can help you with?", chips: MENU_CHIPS };
 
     default:
       return { content: FALLBACK, chips: MENU_CHIPS };
   }
 }
 
-// Lead-capture mini state machine ------------------------------------------------
-type LeadStep = "name" | "email" | "company" | "message";
-type LeadData = { name?: string; email?: string; company?: string; message?: string };
-type Lead = { step: LeadStep; data: LeadData };
-
-const CANCEL_WORDS = ["cancel", "stop", "never mind", "nevermind", "back", "menu"];
-const cancelChip: Chip[] = [{ label: "Cancel", topic: "menu" }];
-
-const LEAD_PLACEHOLDER: Record<LeadStep, string> = {
-  name: "Type your name…",
-  email: "you@company.com",
-  company: "Your company…",
-  message: "What do you need help with?",
-};
-
 export function ChatWidget() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: GREETING, chips: MENU_CHIPS },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [lead, setLead] = useState<Lead | null>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -259,92 +242,13 @@ export function ChatWidget() {
     }, delay);
   }
 
-  function startLead() {
-    setLead({ step: "name", data: {} });
-    botSay({ content: "Love it - let's set up a consultation. First up, what's your name?", chips: cancelChip });
-  }
-
-  async function submitLead(data: LeadData) {
-    setLoading(true);
-    try {
-      const parts = (data.name ?? "").trim().split(/\s+/);
-      const firstName = parts[0] ?? "";
-      const lastName = parts.slice(1).join(" ") || "-";
-
-      const fd = new FormData();
-      fd.set("firstName", firstName);
-      fd.set("lastName", lastName);
-      fd.set("email", data.email ?? "");
-      fd.set("company", data.company ?? "");
-      fd.set("message", data.message ?? "");
-
-      const initial: ConsultationFormState = { status: "idle" };
-      const res = await submitConsultationRequest(initial, fd);
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            res.message ??
-            (res.status === "success"
-              ? "Thanks - your request has been received. A member of the Claaps team will follow up."
-              : "Something went wrong. Please email info@claaps.com."),
-          chips: MENU_CHIPS,
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: "Sorry - I couldn't submit that just now. Please email info@claaps.com and we'll jump right on it.",
-          chips: MENU_CHIPS,
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleLeadInput(text: string) {
-    if (!lead) return;
-
-    if (CANCEL_WORDS.includes(text.toLowerCase().trim())) {
-      setLead(null);
-      botSay({ content: "No problem - I've cancelled that. What else can I help with?", chips: MENU_CHIPS });
-      return;
-    }
-
-    const { step, data } = lead;
-
-    if (step === "name") {
-      const firstName = text.trim().split(/\s+/)[0];
-      setLead({ step: "email", data: { ...data, name: text.trim() } });
-      botSay({ content: `Thanks, ${firstName}! What's the best email to reach you?`, chips: cancelChip });
-      return;
-    }
-
-    if (step === "email") {
-      if (!EMAIL_PATTERN.test(text.trim())) {
-        botSay({ content: "Hmm, that doesn't look like a valid email. Mind trying again?", chips: cancelChip });
-        return;
-      }
-      setLead({ step: "company", data: { ...data, email: text.trim() } });
-      botSay({ content: "Got it. Which company are you with?", chips: cancelChip });
-      return;
-    }
-
-    if (step === "company") {
-      setLead({ step: "message", data: { ...data, company: text.trim() } });
-      botSay({ content: "Last one - briefly, what would you like help with?", chips: cancelChip });
-      return;
-    }
-
-    // step === "message"
-    const finalData = { ...data, message: text.trim() };
-    setLead(null);
-    void submitLead(finalData);
+  // "Book a consultation" hands off to the full Request a Consultation page.
+  function goToConsultation() {
+    botSay({ content: "Wonderful - I'll take you to our Request a Consultation page so the team can get the full picture. Talk soon! 🙌" });
+    window.setTimeout(() => {
+      setOpen(false);
+      router.push("/contact");
+    }, 600);
   }
 
   function respondTo(text: string) {
@@ -354,14 +258,9 @@ export function ChatWidget() {
     pushUser(trimmed);
     setInput("");
 
-    if (lead) {
-      handleLeadInput(trimmed);
-      return;
-    }
-
     const topic = matchTopic(trimmed);
     if (topic === "consult") {
-      startLead();
+      goToConsultation();
       return;
     }
     botSay(nodeFor(topic || "fallback"));
@@ -369,10 +268,9 @@ export function ChatWidget() {
 
   function goToTopic(topic: string, label: string) {
     if (loading) return;
-    if (lead) setLead(null);
     pushUser(label);
     if (topic === "consult") {
-      startLead();
+      goToConsultation();
       return;
     }
     botSay(nodeFor(topic));
@@ -385,7 +283,7 @@ export function ChatWidget() {
     }
   }
 
-  const placeholder = lead ? LEAD_PLACEHOLDER[lead.step] : "Ask about our services…";
+  const placeholder = "Ask about our services…";
 
   return (
     <>

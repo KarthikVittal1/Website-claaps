@@ -5,7 +5,7 @@ import type React from "react";
 import { useEffect, useRef } from "react";
 import {
   ShieldCheck,
-  BarChart3,
+  Workflow,
   FileCheck2,
   BrainCircuit,
   Compass,
@@ -56,17 +56,24 @@ export default function AboutUsSection() {
   const services: ShaderFeature[] = [
     {
       icon: <ShieldCheck className="h-6 w-6" />,
-      title: "Oracle GRC",
+      title: "Oracle Solutions",
       description:
-        "End-to-end design and configuration of Oracle Governance, Risk & Compliance Cloud built around how your organization actually governs itself, not a generic template.",
-      href: "/services/oracle-grc",
+        "End-to-end design and configuration of Oracle GRC and Risk Management Cloud: control frameworks, continuous monitoring, access certification, and segregation-of-duties, built around how your organization actually governs itself.",
+      href: "/services",
     },
     {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: "Risk Management Cloud",
+      icon: <Workflow className="h-6 w-6" />,
+      title: "UiPath",
       description:
-        "Continuous controls monitoring, access certification, and segregation-of-duties enforcement across Oracle ERP and adjacent systems.",
-      href: "/services/oracle-risk-management-cloud",
+        "Design and deployment of UiPath automation bots to eliminate manual, repetitive tasks across finance, compliance, and operations, with built-in exception handling and audit trails.",
+      href: "/services/rpa-uipath",
+    },
+    {
+      icon: <BrainCircuit className="h-6 w-6" />,
+      title: "AI Solutions",
+      description:
+        "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
+      href: "/services/ai-agents",
     },
     {
       icon: <FileCheck2 className="h-6 w-6" />,
@@ -74,13 +81,6 @@ export default function AboutUsSection() {
       description:
         "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need to satisfy.",
       href: "/services/regulatory-compliance-consulting",
-    },
-    {
-      icon: <BrainCircuit className="h-6 w-6" />,
-      title: "AI Solutions",
-      description:
-        "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
-      href: "/services",
     },
     {
       icon: <LifeBuoy className="h-6 w-6" />,

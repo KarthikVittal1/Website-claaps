@@ -1,9 +1,17 @@
+export type Project = {
+  title: string;
+  url: string;
+  description: string;
+  highlights?: string[];
+};
+
 export type Role = {
   slug: string;
   label: string;
   risks: string[];
   relatedServiceSlugs: string[];
   ctaLabel: string;
+  project?: Project;
 };
 
 export const roles: Role[] = [
@@ -72,6 +80,17 @@ export const roles: Role[] = [
     ],
     relatedServiceSlugs: ["rpa-uipath", "ai-agents", "ai-chatbots"],
     ctaLabel: "Explore our products",
+    project: {
+      title: "CricPredict",
+      url: "https://cricpredict.claaps.com/",
+      description:
+        "A live cricket match-prediction web app, designed, built, and deployed end-to-end by Claaps. It turns cricket data into fast, on-demand match predictions through a clean, responsive web interface.",
+      highlights: [
+        "Designed, built, and deployed end-to-end by the Claaps team",
+        "Turns cricket data into on-demand match predictions",
+        "Live and publicly accessible, running on Claaps infrastructure",
+      ],
+    },
   },
 ];
 

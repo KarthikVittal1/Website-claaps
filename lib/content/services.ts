@@ -185,8 +185,8 @@ export const services: Service[] = [
       "Testing, accuracy benchmarking, and feedback loop setup",
     ],
     whoFor: ["CIO", "Compliance Teams", "Audit Leaders"],
-    image: "/images/services/ai-chatbots.jpg",
-    imageAlt: "Two colleagues working together at a screen",
+    image: "/images/services/ai-chatbots-typing.jpg",
+    imageAlt: "A person typing on a laptop",
   },
 ];
 

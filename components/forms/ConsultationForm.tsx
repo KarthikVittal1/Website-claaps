@@ -35,24 +35,24 @@ export function ConsultationForm() {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="firstName" className={labelClass}>First Name</label>
-          <input id="firstName" name="firstName" type="text" placeholder="Jane" required className={inputClass} />
+          <input id="firstName" name="firstName" type="text" required className={inputClass} />
         </div>
         <div>
           <label htmlFor="lastName" className={labelClass}>Last Name</label>
-          <input id="lastName" name="lastName" type="text" placeholder="Smith" required className={inputClass} />
+          <input id="lastName" name="lastName" type="text" required className={inputClass} />
         </div>
       </div>
 
       {/* Email */}
       <div>
         <label htmlFor="email" className={labelClass}>Email</label>
-        <input id="email" name="email" type="email" placeholder="jane@company.com" required className={inputClass} />
+        <input id="email" name="email" type="email" required className={inputClass} />
       </div>
 
       {/* Company */}
       <div>
         <label htmlFor="company" className={labelClass}>Company</label>
-        <input id="company" name="company" type="text" placeholder="Acme Corp" required className={inputClass} />
+        <input id="company" name="company" type="text" required className={inputClass} />
       </div>
 
       {/* Message */}
