@@ -39,7 +39,8 @@ const contacts: Contact[] = [
     icon: <Mail className="h-6 w-6" strokeWidth={2} aria-hidden />,
     label: "Email Us",
     lines: ["info@claaps.com"],
-    href: "mailto:info@claaps.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=info@claaps.com",
+    external: true,
     action: "Send email",
   },
   {

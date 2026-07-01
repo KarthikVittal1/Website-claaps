@@ -171,7 +171,7 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
       return {
         content: "Reach the Claaps team any time - we have teams in the USA and India.",
         links: [
-          { label: "info@claaps.com", href: "mailto:info@claaps.com", icon: "mail" },
+          { label: "info@claaps.com", href: "https://mail.google.com/mail/?view=cm&fs=1&to=info@claaps.com", icon: "mail" },
           { label: "Open contact page", href: "/contact", icon: "page" },
         ],
         chips: [
@@ -391,7 +391,13 @@ export function ChatWidget() {
                               {inner}
                             </Link>
                           ) : (
-                            <a key={l.href} href={l.href} className={cls}>
+                            <a
+                              key={l.href}
+                              href={l.href}
+                              target={l.href.startsWith("http") ? "_blank" : undefined}
+                              rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                              className={cls}
+                            >
                               {inner}
                             </a>
                           );

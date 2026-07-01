@@ -17,7 +17,7 @@ const contactDetails = [
     icon: Mail,
     label: "Email Us",
     lines: ["info@claaps.com"],
-    href: "mailto:info@claaps.com",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=info@claaps.com",
   },
   {
     icon: Globe,
@@ -63,6 +63,8 @@ export function GetInTouchSection() {
                           <a
                             key={line}
                             href={item.href}
+                            target={item.href.startsWith("http") ? "_blank" : undefined}
+                            rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
                             className="block text-sm text-slate-400 hover:text-electric-600"
                           >
                             {line}
