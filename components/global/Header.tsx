@@ -80,6 +80,17 @@ export function Header() {
           {/* Desktop nav */}
           <nav aria-label="Primary" className="hidden lg:flex items-center gap-1">
 
+            {/* Home link */}
+            <Link
+              href="/"
+              className={cn(
+                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
+                pathname === "/" ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
+              )}
+            >
+              Home
+            </Link>
+
             {/* Services dropdown */}
             <DropdownMenu open={openMenu === "services"} onOpenChange={(o) => setOpenMenu(o ? "services" : null)}>
               <DropdownMenuTrigger asChild>
@@ -227,6 +238,9 @@ export function Header() {
         {mobileOpen ? (
           <div id="mobile-menu" className="border-t border-slate-100 px-4 pb-4 pt-3">
             <nav aria-label="Mobile" className="flex flex-col gap-1">
+              <div className="border-b border-slate-100 py-2">
+                <Link href="/" className="block py-2 text-base font-medium text-slate-800">Home</Link>
+              </div>
               <div className="border-b border-slate-100 py-2">
                 <Link href="/services" className="block py-2 text-base font-medium text-slate-800">Services</Link>
                 <div className="flex flex-col pl-3">

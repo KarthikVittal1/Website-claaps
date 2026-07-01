@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Container } from "@/components/global/Container";
 import { SectionHeading } from "@/components/global/SectionHeading";
 import { Breadcrumb } from "@/components/global/Breadcrumb";
@@ -24,17 +25,39 @@ const engagementTypes: Record<string, string> = {
 export default function SolutionsPage() {
   return (
     <div className="relative overflow-hidden">
-      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,_rgba(242,74,29,0.07),_transparent_50%),radial-gradient(circle_at_80%_70%,_rgba(78,86,184,0.10),_transparent_50%)]" />
-      <section className="border-b border-graphite-700 py-20 md:py-28">
-        <Container>
-          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Solutions" }]} />
-          <SectionHeading
-            as="h1"
-            eyebrow="Solutions by role"
-            title="Find the path that matches your responsibility"
-            lead="Enterprise risk and compliance problems map to roles, not to a vendor's internal service catalog. Select your role to see the risks, services, and next step that apply."
-            className="mt-6"
+      {/* ── Hero ── full-bleed image, centered text */}
+      <section className="relative isolate flex min-h-[78vh] flex-col overflow-hidden">
+        <Image
+          src="/images/solutions-hero.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        <div aria-hidden className="absolute inset-0 bg-black/55" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/65" />
+
+        <Container size="default" className="relative pt-20 md:pt-24">
+          <Breadcrumb
+            onDark
+            items={[{ label: "Home", href: "/" }, { label: "Solutions" }]}
           />
+        </Container>
+
+        <Container
+          size="default"
+          className="relative flex flex-1 flex-col items-center justify-center px-4 py-16 text-center md:py-24"
+        >
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-400">
+            Solutions by role
+          </p>
+          <h1 className="mt-4 max-w-4xl text-5xl font-semibold leading-[1.08] tracking-[-0.02em] text-white md:text-6xl lg:text-7xl">
+            Find the path that matches your responsibility
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-7 text-white/80">
+            Enterprise risk and compliance problems map to roles, not to a vendor&rsquo;s internal service catalog. Select your role to see the risks, services, and next step that apply.
+          </p>
         </Container>
       </section>
 

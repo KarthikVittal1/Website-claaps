@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import { cn } from "@/lib/cn";
 import type { Role } from "@/lib/content/solutions";
 import { getServiceBySlug } from "@/lib/content/services";
@@ -105,36 +107,52 @@ export function RoleTabs({ roles }: { roles: Role[] }) {
           </div>
 
           {role.project && (
-            <div className="mt-10 rounded-2xl border border-graphite-700 p-6">
-              <p className="text-sm font-medium uppercase tracking-[0.06em] text-cyan-700">
-                A project we&rsquo;ve delivered
-              </p>
-              <h4 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
-                {role.project.title}
-              </h4>
-              <p className="mt-3 text-base leading-7 text-slate-400">
-                {role.project.description}
-              </p>
-              {role.project.highlights && role.project.highlights.length > 0 && (
-                <ul className="mt-4 flex flex-col gap-2">
-                  {role.project.highlights.map((highlight) => (
-                    <li key={highlight} className="flex gap-3 text-sm leading-6 text-slate-400">
-                      <span aria-hidden className="mt-1 text-electric-600">
-                        →
-                      </span>
-                      {highlight}
-                    </li>
+            <div className="group relative mt-10 overflow-hidden rounded-3xl border border-white/10">
+              {/* Full-bleed background image */}
+              <Image
+                src="/images/cricpredict-hero.png"
+                alt="Cricket match prediction data science visualization"
+                fill
+                className="object-cover object-center"
+                sizes="100vw"
+              />
+              {/* Dark overlay so text stays readable */}
+              <div aria-hidden className="absolute inset-0 bg-black/35" />
+              {/* Left-side extra darkening for text legibility */}
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+
+              {/* Content */}
+              <div className="relative flex flex-col justify-center p-8 md:p-10">
+                {/* Title */}
+                <h4 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+                  {role.project.title}
+                </h4>
+
+                {/* Description */}
+                <p className="mt-4 max-w-sm text-sm leading-7 text-slate-300">
+                  {role.project.description}
+                </p>
+
+                {/* Tags */}
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Prediction Engine", "Live Data", "Claaps-Built"].map((tag) => (
+                    <span key={tag} className="rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-xs text-slate-300 backdrop-blur-sm">
+                      {tag}
+                    </span>
                   ))}
-                </ul>
-              )}
-              <a
-                href={role.project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-electric-500/40 px-4 py-2 text-sm font-medium text-electric-600 transition-colors duration-150 hover:bg-electric-500/10"
-              >
-                Visit {role.project.title} ↗
-              </a>
+                </div>
+
+                {/* CTA */}
+                <a
+                  href={role.project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-8 inline-flex w-fit items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-graphite-900 transition-all duration-200 hover:bg-white/90 hover:scale-[1.02]"
+                >
+                  Visit {role.project.title}
+                  <ExternalLink size={13} strokeWidth={2.5} />
+                </a>
+              </div>
             </div>
           )}
 
