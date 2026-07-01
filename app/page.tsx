@@ -1,14 +1,8 @@
-import { ArrowRight } from "lucide-react";
-import { Container } from "@/components/global/Container";
-import { SectionHeading } from "@/components/global/SectionHeading";
-import { Card } from "@/components/global/Card";
 import { HeroSlider } from "@/components/ui/hero-slider";
-import { TheWorkSection } from "@/components/ui/the-work-section";
 import AboutUsSection from "@/components/ui/about-us-section";
 import LogosSection from "@/components/ui/logos-section";
 import WhyClaapsSection from "@/components/ui/why-claaps-section";
 import { ProfessionalConnect } from "@/components/ui/get-in-touch";
-import { roles } from "@/lib/content/solutions";
 
 export default function Home() {
   return (
@@ -26,34 +20,6 @@ export default function Home() {
         />
 
         <LogosSection />
-
-        
-
-        <section className="relative border-b border-graphite-700 py-8 md:py-10">
-          <Container>
-            <SectionHeading
-              eyebrow="Solutions by role"
-              title="Find the path that matches your responsibility"
-              align="center"
-            />
-            <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-              {roles.map((role) => (
-                <Card key={role.slug} href={`/solutions#${role.slug}`} className="items-center text-center">
-                  <p className="text-lg font-medium text-offwhite-50">{role.label}</p>
-                  <span className="mt-auto flex items-center gap-1 pt-3 text-sm text-slate-400 transition-colors duration-150 group-hover:text-electric-600">
-                    View
-                    <ArrowRight
-                      aria-hidden
-                      size={14}
-                      strokeWidth={2}
-                      className="transition-transform duration-150 group-hover:translate-x-0.5"
-                    />
-                  </span>
-                </Card>
-              ))}
-            </div>
-          </Container>
-        </section>
       </div>
 
       <WhyClaapsSection />

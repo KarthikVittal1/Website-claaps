@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, ChevronRight, Mail } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -160,7 +159,7 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
       return {
         content:
           "We work with risk, compliance, and IT leaders across regulated industries - Energy & Utilities, Pharma & Life Sciences, Financial Services, Telecom, Semiconductors, Healthcare, Retail, Media & Entertainment, and Education.",
-        links: [{ label: "See who we help", href: "/solutions", icon: "page" }],
+        links: [{ label: "Explore our services", href: "/services", icon: "page" }],
         chips: [
           { label: "Our services", topic: "services" },
           { label: "Book a consultation", topic: "consult" },
@@ -201,7 +200,6 @@ function nodeFor(topic: string): Omit<ChatMessage, "role"> {
 }
 
 export function ChatWidget() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: "assistant", content: GREETING, chips: MENU_CHIPS },
@@ -242,13 +240,15 @@ export function ChatWidget() {
     }, delay);
   }
 
-  // "Book a consultation" hands off to the full Request a Consultation page.
+  // "Book a consultation" points to the full Request a Consultation page and
+  // keeps the menu handy so the visitor can explore other options too.
   function goToConsultation() {
-    botSay({ content: "Wonderful - I'll take you to our Request a Consultation page so the team can get the full picture. Talk soon! 🙌" });
-    window.setTimeout(() => {
-      setOpen(false);
-      router.push("/contact");
-    }, 600);
+    botSay({
+      content:
+        "Wonderful - here's our Request a Consultation page so the team can get the full picture. 🙌 Or pick another option below.",
+      links: [{ label: "Open Request a Consultation", href: "/contact", icon: "page" }],
+      chips: MENU_CHIPS,
+    });
   }
 
   function respondTo(text: string) {

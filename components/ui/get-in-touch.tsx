@@ -11,11 +11,11 @@ const linkedinIcon = (
 );
 
 const offices = [
-  { country: "USA", lines: ["24285 Katy Freeway, Suite #300-102", "Katy, TX 77494"] },
   {
     country: "India",
     lines: ["6th Floor, Cyber Towers, Q3, Patrika Nagar,", "HITEC City, Hyderabad, Telangana 500081"],
   },
+  { country: "USA", lines: ["24285 Katy Freeway, Suite #300-102", "Katy, TX 77494"] },
 ];
 
 type Contact = {

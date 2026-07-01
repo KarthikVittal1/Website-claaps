@@ -141,8 +141,8 @@ export const services: Service[] = [
       "Hypercare support and handover to internal bot owners",
     ],
     whoFor: ["CIO", "Compliance Teams", "Risk Leaders"],
-    image: "/images/services/rpa-uipath.jpg",
-    imageAlt: "A laptop displaying process and performance data",
+    image: "/images/services/rpa-uipath-automation.jpg",
+    imageAlt: "An engineer working on a laptop beside automation equipment",
   },
   {
     slug: "ai-agents",

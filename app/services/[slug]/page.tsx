@@ -3,7 +3,6 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Check } from "lucide-react";
 import { Container } from "@/components/global/Container";
-import { Breadcrumb } from "@/components/global/Breadcrumb";
 import { CTASection } from "@/components/global/CTASection";
 import { getServiceBySlug, services } from "@/lib/content/services";
 
@@ -49,18 +48,6 @@ export default async function ServiceDetailPage({
         {/* Dark overlay so white text is always legible */}
         <div aria-hidden className="absolute inset-0 bg-black/55" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/65" />
-
-        {/* Breadcrumb — top left */}
-        <Container size="default" className="relative pt-20 md:pt-24">
-          <Breadcrumb
-            onDark
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Services", href: "/services" },
-              { label: service.shortTitle },
-            ]}
-          />
-        </Container>
 
         {/* Centered hero copy */}
         <Container

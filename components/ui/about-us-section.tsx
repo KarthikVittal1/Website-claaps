@@ -59,7 +59,7 @@ export default function AboutUsSection() {
       title: "Oracle Solutions",
       description:
         "End-to-end design and configuration of Oracle GRC and Risk Management Cloud: control frameworks, continuous monitoring, access certification, and segregation-of-duties, built around how your organization actually governs itself.",
-      href: "/services",
+      href: "/services?focus=oracle",
     },
     {
       icon: <Workflow className="h-6 w-6" />,
@@ -73,7 +73,7 @@ export default function AboutUsSection() {
       title: "AI Solutions",
       description:
         "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
-      href: "/services/ai-agents",
+      href: "/services?focus=ai",
     },
     {
       icon: <FileCheck2 className="h-6 w-6" />,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Container } from "@/components/global/Container";
 import { Button } from "@/components/global/Button";
-import { roles } from "@/lib/content/solutions";
 import { cn } from "@/lib/cn";
 import {
   DropdownMenu,
@@ -35,6 +34,20 @@ export function Header() {
 
   const isItemActive = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`);
+
+  // Close any open nav dropdown when the page is scrolled.
+  useEffect(() => {
+    if (!openMenu) return;
+    const close = () => setOpenMenu(null);
+    window.addEventListener("scroll", close, { passive: true, capture: true });
+    window.addEventListener("wheel", close, { passive: true });
+    window.addEventListener("touchmove", close, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", close, { capture: true } as EventListenerOptions);
+      window.removeEventListener("wheel", close);
+      window.removeEventListener("touchmove", close);
+    };
+  }, [openMenu]);
 
   const renderLamp = () => (
     <motion.div
@@ -92,12 +105,12 @@ export function Header() {
             </Link>
 
             {/* Services dropdown */}
-            <DropdownMenu open={openMenu === "services"} onOpenChange={(o) => setOpenMenu(o ? "services" : null)}>
+            <DropdownMenu modal={false} open={openMenu === "services"} onOpenChange={(o) => setOpenMenu(o ? "services" : null)}>
               <DropdownMenuTrigger asChild>
                 <button
                   suppressHydrationWarning
                   className={cn(
-                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
+                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 outline-none focus:outline-none focus-visible:outline-none",
                     isItemActive("/services") ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
                   )}
                 >
@@ -160,48 +173,16 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Solutions dropdown */}
-            <DropdownMenu open={openMenu === "solutions"} onOpenChange={(o) => setOpenMenu(o ? "solutions" : null)}>
-              <DropdownMenuTrigger asChild>
-                <button
-                  suppressHydrationWarning
-                  className={cn(
-                    "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
-                    isItemActive("/solutions") ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
-                  )}
-                >
-                  Solutions
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden className="opacity-50"><path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="min-w-[13rem]" align="start">
-                {/* Main page — categories */}
-                <DropdownMenuPage id="main">
-                  <DropdownMenuPageTrigger targetId="by-role">By Role</DropdownMenuPageTrigger>
-                  <DropdownMenuPageTrigger targetId="products">Products</DropdownMenuPageTrigger>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/solutions" className="text-electric-600 font-semibold">View all solutions →</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuPage>
-
-                {/* By Role sub-page */}
-                <DropdownMenuPage id="by-role">
-                  {roles.filter((r) => r.slug !== "products").map((role) => (
-                    <DropdownMenuItem key={role.slug} asChild>
-                      <Link href={`/solutions#${role.slug}`}>{role.label}</Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuPage>
-
-                {/* Products sub-page */}
-                <DropdownMenuPage id="products">
-                  <DropdownMenuItem asChild>
-                    <Link href="/solutions#products">Products</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuPage>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Products link */}
+            <Link
+              href="/products"
+              className={cn(
+                "relative rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150",
+                isItemActive("/products") ? "text-electric-600" : "text-slate-700 hover:text-electric-600"
+              )}
+            >
+              Products
+            </Link>
 
             {/* About link */}
             <Link
@@ -260,19 +241,7 @@ export function Header() {
                 </div>
               </div>
               <div className="border-b border-slate-100 py-2">
-                <Link href="/solutions" className="block py-2 text-base font-medium text-slate-800">Solutions</Link>
-                <div className="flex flex-col pl-3">
-                  <div className="mt-1">
-                    <p className="pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">By Role</p>
-                    {roles.filter((r) => r.slug !== "products").map((role) => (
-                      <Link key={role.slug} href={`/solutions#${role.slug}`} className="block py-1.5 text-sm text-slate-600 hover:text-electric-600">{role.label}</Link>
-                    ))}
-                  </div>
-                  <div className="mt-1">
-                    <p className="pb-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">Products</p>
-                    <Link href="/solutions#products" className="block py-1.5 text-sm text-slate-600 hover:text-electric-600">Products</Link>
-                  </div>
-                </div>
+                <Link href="/products" className="block py-2 text-base font-medium text-slate-800">Products</Link>
               </div>
               <div className="border-b border-slate-100 py-2">
                 <Link href="/#about-section" className="block py-2 text-base font-medium text-slate-800">About</Link>

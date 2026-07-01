@@ -152,8 +152,8 @@ export function HeroSlider() {
               className="hero-showcase"
             >
               <Image
-                src="/images/hero-office-2.png"
-                alt="Claaps Technology Services team at work"
+                src="/images/hero-boardroom.jpg"
+                alt="Claaps Technology Services team collaborating in the office"
                 fill
                 sizes="(min-width: 1024px) 640px, 1px"
                 className="object-cover"

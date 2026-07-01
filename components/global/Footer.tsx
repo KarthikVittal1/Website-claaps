@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/global/Container";
 import { services } from "@/lib/content/services";
-import { roles } from "@/lib/content/solutions";
 import { FooterBackgroundGradient } from "@/components/ui/hover-footer";
 
 export function Footer() {
@@ -25,15 +24,13 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-white">Solutions</p>
+            <p className="text-sm font-semibold text-white">Products</p>
             <ul className="mt-4 flex flex-col gap-3 text-sm text-white/60">
-              {roles.map((r) => (
-                <li key={r.slug}>
-                  <Link href={`/solutions#${r.slug}`} className="hover:text-cyan-400">
-                    {r.label}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/products" className="hover:text-cyan-400">
+                  CricPredict
+                </Link>
+              </li>
             </ul>
           </div>
 
