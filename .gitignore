@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# consultation request data
+/data/
+
 # claude code local state
 .claude/
 
