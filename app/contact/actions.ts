@@ -1,8 +1,7 @@
 "use server";
 
-import fs from "node:fs/promises";
 import ExcelJS from "exceljs";
-import { EXCEL_DIR, EXCEL_PATH, SHEET_NAME, COLUMNS } from "@/lib/consultationStore";
+import { SHEET_NAME, COLUMNS, readWorkbookBuffer, writeWorkbookBuffer } from "@/lib/consultationStore";
 
 export type ConsultationFormState = {
   status: "idle" | "success" | "error";
@@ -18,16 +17,14 @@ async function appendConsultationRequest(row: {
   company: string;
   message: string;
 }) {
-  await fs.mkdir(EXCEL_DIR, { recursive: true });
-
+  const existing = await readWorkbookBuffer();
   const workbook = new ExcelJS.Workbook();
   let sheet;
 
-  try {
-    await workbook.xlsx.readFile(EXCEL_PATH);
+  if (existing) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await workbook.xlsx.load(existing as any);
     sheet = workbook.getWorksheet(SHEET_NAME);
-  } catch {
-    sheet = undefined;
   }
 
   if (!sheet) {
@@ -41,7 +38,8 @@ async function appendConsultationRequest(row: {
     ...row,
   });
 
-  await workbook.xlsx.writeFile(EXCEL_PATH);
+  const buffer = await workbook.xlsx.writeBuffer();
+  await writeWorkbookBuffer(Buffer.from(buffer));
 }
 
 export async function submitConsultationRequest(

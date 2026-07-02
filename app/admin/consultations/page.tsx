@@ -1,18 +1,18 @@
 import ExcelJS from "exceljs";
 import { Download, LogOut } from "lucide-react";
-import { EXCEL_PATH, SHEET_NAME } from "@/lib/consultationStore";
+import { SHEET_NAME, readWorkbookBuffer } from "@/lib/consultationStore";
 import { adminLogout } from "@/app/admin/login/actions";
 import { ConsultationsTable } from "@/components/admin/ConsultationsTable";
 
 export const dynamic = "force-dynamic";
 
 async function loadRows() {
+  const existing = await readWorkbookBuffer();
+  if (!existing) return [];
+
   const workbook = new ExcelJS.Workbook();
-  try {
-    await workbook.xlsx.readFile(EXCEL_PATH);
-  } catch {
-    return [];
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await workbook.xlsx.load(existing as any);
 
   const sheet = workbook.getWorksheet(SHEET_NAME);
   if (!sheet) return [];

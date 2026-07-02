@@ -1,12 +1,9 @@
 import { NextResponse } from "next/server";
-import fs from "node:fs/promises";
-import { EXCEL_PATH } from "@/lib/consultationStore";
+import { readWorkbookBuffer } from "@/lib/consultationStore";
 
 export async function GET() {
-  let file: Buffer;
-  try {
-    file = await fs.readFile(EXCEL_PATH);
-  } catch {
+  const file = await readWorkbookBuffer();
+  if (!file) {
     return NextResponse.json({ error: "No consultation requests found yet." }, { status: 404 });
   }
 

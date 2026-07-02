@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.33.0",
     "@paper-design/shaders-react": "^0.0.76",
     "@radix-ui/react-dropdown-menu": "^2.1.18",
     "@react-three/drei": "^10.7.7",
