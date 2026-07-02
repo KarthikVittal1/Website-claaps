@@ -1,9 +1,10 @@
 import ExcelJS from "exceljs";
-
-export const dynamic = "force-dynamic";
 import { Download, LogOut } from "lucide-react";
 import { EXCEL_PATH, SHEET_NAME } from "@/lib/consultationStore";
 import { adminLogout } from "@/app/admin/login/actions";
+import { ConsultationsTable } from "@/components/admin/ConsultationsTable";
+
+export const dynamic = "force-dynamic";
 
 async function loadRows() {
   const workbook = new ExcelJS.Workbook();
@@ -26,7 +27,6 @@ async function loadRows() {
 
 export default async function AdminConsultationsPage() {
   const rows = await loadRows();
-  const headers = ["Submitted At", "First Name", "Last Name", "Email", "Company", "Message"];
 
   return (
     <main className="min-h-screen bg-navy-950 px-6 py-10 text-offwhite-50">
@@ -54,34 +54,11 @@ export default async function AdminConsultationsPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-graphite-700">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-navy-900 text-xs uppercase tracking-wide text-slate-400">
-              <tr>
-                {headers.map((h) => (
-                  <th key={h} className="whitespace-nowrap px-4 py-3 font-semibold">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.length === 0 ? (
-                <tr>
-                  <td colSpan={headers.length} className="px-4 py-8 text-center text-slate-400">
-                    No submissions yet.
-                  </td>
-                </tr>
-              ) : (
-                rows.map((row, i) => (
-                  <tr key={i} className="border-t border-graphite-700">
-                    {row.map((cell, j) => (
-                      <td key={j} className="max-w-xs truncate px-4 py-3 align-top">{cell}</td>
-                    ))}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <p className="mb-3 text-xs text-slate-400">
+          Tip: double-click a Message cell to view the full text in a popup.
+        </p>
+
+        <ConsultationsTable rows={rows} />
       </div>
     </main>
   );
