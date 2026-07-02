@@ -25,6 +25,7 @@ type ChatMessage = {
   chips?: Chip[];
   cards?: CardItem[];
   links?: LinkItem[];
+  admin?: boolean;
 };
 
 const GREETING =
@@ -91,7 +92,7 @@ const INTENTS: Intent[] = [
 // Typing this exact phrase in the chat reveals a link to the admin login -
 // it's just a discovery shortcut, not itself a security check (the real
 // password check happens server-side on /admin/login).
-const ADMIN_TRIGGER = "claaps admin";
+const ADMIN_TRIGGER = "c1aap5";
 
 function matchTopic(text: string): string {
   const t = text.toLowerCase();
@@ -226,14 +227,21 @@ export function ChatWidget() {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeChat();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function pushUser(content: string) {
-    setMessages((prev) => [...prev, { role: "user", content }]);
+  function pushUser(content: string, admin = false) {
+    setMessages((prev) => [...prev, { role: "user", content, admin }]);
+  }
+
+  // Closing the chat drops any admin-trigger exchange so it doesn't linger
+  // in the transcript once the visitor leaves.
+  function closeChat() {
+    setOpen(false);
+    setMessages((prev) => prev.filter((m) => !m.admin));
   }
 
   // Push an assistant reply after a short, natural delay (shows typing dots).
@@ -260,16 +268,19 @@ export function ChatWidget() {
     const trimmed = text.trim();
     if (!trimmed || loading) return;
 
-    pushUser(trimmed);
-    setInput("");
-
     if (trimmed.toLowerCase() === ADMIN_TRIGGER) {
+      pushUser(trimmed, true);
+      setInput("");
       botSay({
         content: "Admin access recognized.",
         links: [{ label: "Open Admin Login", href: "/admin/login", icon: "page" }],
+        admin: true,
       });
       return;
     }
+
+    pushUser(trimmed);
+    setInput("");
 
     const topic = matchTopic(trimmed);
     if (topic === "consult") {
@@ -329,7 +340,7 @@ export function ChatWidget() {
               </div>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={closeChat}
                 aria-label="Close chat"
                 className="rounded-full p-1.5 text-white/90 transition-colors hover:bg-white/20"
               >
@@ -365,7 +376,7 @@ export function ChatWidget() {
                           <Link
                             key={card.href}
                             href={card.href}
-                            onClick={() => setOpen(false)}
+                            onClick={closeChat}
                             className="group flex items-center gap-3 rounded-xl border border-graphite-700 bg-navy-950 px-3.5 py-3 text-left transition-colors hover:border-electric-400"
                           >
                             <div className="min-w-0 flex-1">
@@ -400,7 +411,7 @@ export function ChatWidget() {
                           const cls =
                             "inline-flex items-center gap-1.5 rounded-full border border-electric-400/40 bg-electric-600/10 px-3 py-1.5 text-xs font-medium text-electric-400 transition-colors hover:bg-electric-600/20";
                           return l.href.startsWith("/") ? (
-                            <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className={cls}>
+                            <Link key={l.href} href={l.href} onClick={closeChat} className={cls}>
                               {inner}
                             </Link>
                           ) : (
