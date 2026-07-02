@@ -88,6 +88,11 @@ const INTENTS: Intent[] = [
   { topic: "thanks", keywords: ["thank", "thanks", "thx", "appreciate"] },
 ];
 
+// Typing this exact phrase in the chat reveals a link to the admin login -
+// it's just a discovery shortcut, not itself a security check (the real
+// password check happens server-side on /admin/login).
+const ADMIN_TRIGGER = "claaps admin";
+
 function matchTopic(text: string): string {
   const t = text.toLowerCase();
   let best = "";
@@ -257,6 +262,14 @@ export function ChatWidget() {
 
     pushUser(trimmed);
     setInput("");
+
+    if (trimmed.toLowerCase() === ADMIN_TRIGGER) {
+      botSay({
+        content: "Admin access recognized.",
+        links: [{ label: "Open Admin Login", href: "/admin/login", icon: "page" }],
+      });
+      return;
+    }
 
     const topic = matchTopic(trimmed);
     if (topic === "consult") {
