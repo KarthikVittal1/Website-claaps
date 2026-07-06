@@ -59,7 +59,6 @@ const SERVICE_ALIASES: Record<string, string[]> = {
   "managed-support": ["managed support", "support", "maintenance", "administration", "go-live", "go live"],
   "rpa-uipath": ["rpa", "uipath", "robotic process", "robotic process automation", "bots", "automation"],
   "ai-agents": ["ai agent", "ai agents", "autonomous agent", "agentic"],
-  "ai-chatbots": ["ai chatbot", "ai chatbots", "chatbot", "chatbots", "rag", "helpdesk", "virtual assistant"],
 };
 
 type Intent = { topic: string; keywords: string[] };

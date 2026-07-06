@@ -26,9 +26,9 @@ const FOCUS_GROUPS: Record<string, { slugs: string[]; label: string; lead: strin
     hero: DEFAULT_HERO,
   },
   ai: {
-    slugs: ["ai-agents", "ai-chatbots"],
+    slugs: ["ai-agents"],
     label: "AI Solutions",
-    lead: "AI Agents and AI Chatbots - intelligent automation and assistants grounded in your business data.",
+    lead: "AI Agents - intelligent automation grounded in your business data.",
     hero: "/images/services-hero-ai.jpg",
   },
 };

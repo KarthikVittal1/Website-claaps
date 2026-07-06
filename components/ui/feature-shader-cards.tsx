@@ -1,6 +1,7 @@
 "use client"
 
 import { type ReactNode, useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 import { useReducedMotion } from "framer-motion"
@@ -11,6 +12,9 @@ export interface ShaderFeature {
   description: string
   icon: ReactNode
   href: string
+  /** Optional human/photo background, layered semi-transparently over the brand gradient. */
+  image?: string
+  imageAlt?: string
 }
 
 interface FeatureShaderCardsProps {
@@ -81,9 +85,14 @@ export default function FeatureShaderCards({ features }: FeatureShaderCardsProps
             <div
               aria-hidden
               className="absolute inset-0 transition-transform duration-700 group-hover:scale-105 motion-reduce:transform-none"
-              style={{ background: staticGradient(config.colors) }}
+              style={{
+                background: feature.image
+                  ? "linear-gradient(150deg, #0b1220 0%, #111827 55%, #0b1220 100%)"
+                  : staticGradient(config.colors),
+              }}
             >
-              {shadersActive && (
+              {/* Shader is brand-coloured, so only run it on cards without a photo. */}
+              {shadersActive && !feature.image && (
                 <Warp
                   style={{ width: "100%", height: "100%" }}
                   proportion={config.proportion}
@@ -99,18 +108,31 @@ export default function FeatureShaderCards({ features }: FeatureShaderCardsProps
                   colors={config.colors}
                 />
               )}
+
+              {/* Human photo in natural colour over a neutral dark base — no brand tint. */}
+              {feature.image && (
+                <Image
+                  src={feature.image}
+                  alt={feature.imageAlt ?? ""}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover opacity-70 transition-opacity duration-500 group-hover:opacity-80"
+                />
+              )}
             </div>
 
-            <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(5,8,15,0.93)_12%,rgba(5,8,15,0.76)_58%,rgba(5,8,15,0.5)_100%)] transition-colors duration-500 group-hover:bg-[linear-gradient(145deg,rgba(5,8,15,0.88)_12%,rgba(5,8,15,0.66)_58%,rgba(5,8,15,0.4)_100%)]" />
+            {/* Scrim: darker toward the bottom-left where the text sits, so copy stays crisp over any photo. */}
+            <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(5,8,15,0.9)_12%,rgba(5,8,15,0.82)_55%,rgba(5,8,15,0.7)_100%)] transition-colors duration-500 group-hover:bg-[linear-gradient(145deg,rgba(5,8,15,0.86)_12%,rgba(5,8,15,0.74)_55%,rgba(5,8,15,0.62)_100%)]" />
+            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/55 to-transparent opacity-70" />
 
             <div className="relative z-10 flex h-full min-h-80 flex-col p-7 sm:p-8">
               <div className="mb-7 flex size-13 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-md transition-all duration-500 group-hover:scale-105 group-hover:bg-white/15">
                 {feature.icon}
               </div>
-              <h3 className="text-2xl font-semibold tracking-[-0.02em] text-white">{feature.title}</h3>
-              <p className="mt-4 flex-1 text-sm font-medium leading-6 text-white/72">{feature.description}</p>
-              <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-white/85 transition-colors group-hover:text-white">
+              <h3 className="text-2xl font-semibold tracking-[-0.02em] text-white [text-shadow:_0_2px_16px_rgba(0,0,0,0.65)]">{feature.title}</h3>
+              <p className="mt-4 flex-1 text-sm font-medium leading-6 text-white/85 [text-shadow:_0_1px_10px_rgba(0,0,0,0.55)]">{feature.description}</p>
+              <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors [text-shadow:_0_1px_10px_rgba(0,0,0,0.55)]">
                 Explore service
                 <ArrowUpRight aria-hidden className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </span>

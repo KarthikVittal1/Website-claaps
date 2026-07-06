@@ -166,28 +166,6 @@ export const services: Service[] = [
     image: "/images/services/ai-agents.jpg",
     imageAlt: "A humanoid robot seated and interacting with a device",
   },
-  {
-    slug: "ai-chatbots",
-    shortTitle: "AI Chatbots",
-    title: "AI Chatbots",
-    eyebrow: "Artificial Intelligence",
-    summary:
-      "Custom AI chatbots for internal helpdesk, compliance Q&A, and customer-facing support trained on your policies and integrated with your systems.",
-    description: [
-      "Generic AI assistants aren't trained on your policies, your controls, or your risk taxonomy. Claaps builds chatbots grounded in your actual documentation.",
-      "Deployable across web, Teams, or Slack, with retrieval-augmented generation (RAG) ensuring answers are traceable to source documents rather than hallucinated.",
-    ],
-    included: [
-      "Use-case definition and channel selection",
-      "Knowledge base preparation and document ingestion",
-      "RAG pipeline design and LLM selection",
-      "Integration with Teams, Slack, or web embed",
-      "Testing, accuracy benchmarking, and feedback loop setup",
-    ],
-    whoFor: ["CIO", "Compliance Teams", "Audit Leaders"],
-    image: "/images/services/ai-chatbots-typing.jpg",
-    imageAlt: "A person typing on a laptop",
-  },
 ];
 
 export function getServiceBySlug(slug: string): Service | undefined {

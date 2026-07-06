@@ -60,6 +60,8 @@ export default function AboutUsSection() {
       description:
         "End-to-end design and configuration of Oracle GRC and Risk Management Cloud: control frameworks, continuous monitoring, access certification, and segregation-of-duties, built around how your organization actually governs itself.",
       href: "/services?focus=oracle",
+      image: "/images/services/oracle-grc.jpg",
+      imageAlt: "A team reviewing governance and controls together over laptops",
     },
     {
       icon: <Workflow className="h-6 w-6" />,
@@ -67,6 +69,8 @@ export default function AboutUsSection() {
       description:
         "Design and deployment of UiPath automation bots to eliminate manual, repetitive tasks across finance, compliance, and operations, with built-in exception handling and audit trails.",
       href: "/services/rpa-uipath",
+      image: "/images/services/rpa-uipath-automation.jpg",
+      imageAlt: "An engineer working on a laptop beside automation equipment",
     },
     {
       icon: <BrainCircuit className="h-6 w-6" />,
@@ -74,6 +78,8 @@ export default function AboutUsSection() {
       description:
         "Leverage AI to automate processes, analyze data, and drive smarter decisions. We design and implement scalable AI solutions tailored to your business goals.",
       href: "/services?focus=ai",
+      image: "/images/services/ai-agents.jpg",
+      imageAlt: "A humanoid robot seated and interacting with a device",
     },
     {
       icon: <FileCheck2 className="h-6 w-6" />,
@@ -81,6 +87,8 @@ export default function AboutUsSection() {
       description:
         "Independent advisory to interpret regulatory requirements and translate them into testable controls with the citations they need to satisfy.",
       href: "/services/regulatory-compliance-consulting",
+      image: "/images/services/regulatory-compliance-consulting.jpg",
+      imageAlt: "A person signing a document with a pen",
     },
     {
       icon: <LifeBuoy className="h-6 w-6" />,
@@ -88,6 +96,8 @@ export default function AboutUsSection() {
       description:
         "Ongoing administration and rule tuning after go-live, from the same team that designed the controls in the first place.",
       href: "/services/managed-support",
+      image: "/images/services/managed-support.jpg",
+      imageAlt: "A support team collaborating in an office",
     },
     {
       icon: <Compass className="h-6 w-6" />,
@@ -95,6 +105,8 @@ export default function AboutUsSection() {
       description:
         "Risk taxonomy design, risk appetite framing, and board-level reporting for risk leaders rationalizing a fast-growing register.",
       href: "/services/risk-advisory",
+      image: "/images/services/risk-advisory.jpg",
+      imageAlt: "A laptop showing analytics and risk reporting charts",
     },
   ];
 

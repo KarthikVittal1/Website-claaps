@@ -23,7 +23,7 @@ export const roles: Role[] = [
       "Off-the-shelf products don't reflect how your organization actually governs risk",
       "Implementation complexity delays time-to-value on software investments",
     ],
-    relatedServiceSlugs: ["ai-agents", "ai-chatbots"],
+    relatedServiceSlugs: ["ai-agents"],
     ctaLabel: "Explore our products",
     project: {
       title: "CricPredict",

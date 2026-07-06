@@ -153,9 +153,6 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link href="/services/ai-agents">AI Agents</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/services/ai-chatbots">AI Chatbots</Link>
-                  </DropdownMenuItem>
                 </DropdownMenuPage>
 
                 {/* Advisory sub-page */}
@@ -228,7 +225,7 @@ export function Header() {
                   {[
                     { heading: "Oracle Cloud", items: [{ label: "Risk Management Cloud", href: "/services/oracle-risk-management-cloud" }, { label: "GRC", href: "/services/oracle-grc" }] },
                     { heading: "RPA", items: [{ label: "UiPath", href: "/services/rpa-uipath" }] },
-                    { heading: "AI", items: [{ label: "AI Agents", href: "/services/ai-agents" }, { label: "AI Chatbots", href: "/services/ai-chatbots" }] },
+                    { heading: "AI", items: [{ label: "AI Agents", href: "/services/ai-agents" }] },
                     { heading: "Advisory", items: [{ label: "Regulatory Compliance", href: "/services/regulatory-compliance-consulting" }, { label: "Risk Advisory", href: "/services/risk-advisory" }, { label: "Managed Support", href: "/services/managed-support" }] },
                   ].map((section) => (
                     <div key={section.heading} className="mt-1">
