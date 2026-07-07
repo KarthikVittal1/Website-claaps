@@ -1,7 +1,7 @@
 "use server";
 
 import ExcelJS from "exceljs";
-import { SHEET_NAME, COLUMNS, readWorkbookBuffer, writeWorkbookBuffer } from "@/lib/consultationStore";
+import { SHEET_NAME, COLUMNS, readWorkbookBuffer, writeWorkbookBuffer, withWorkbookLock } from "@/lib/consultationStore";
 
 export type ConsultationFormState = {
   status: "idle" | "success" | "error";
@@ -17,29 +17,31 @@ async function appendConsultationRequest(row: {
   company: string;
   message: string;
 }) {
-  const existing = await readWorkbookBuffer();
-  const workbook = new ExcelJS.Workbook();
-  let sheet;
+  await withWorkbookLock(async () => {
+    const existing = await readWorkbookBuffer();
+    const workbook = new ExcelJS.Workbook();
+    let sheet;
 
-  if (existing) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await workbook.xlsx.load(existing as any);
-    sheet = workbook.getWorksheet(SHEET_NAME);
-  }
+    if (existing) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await workbook.xlsx.load(existing as any);
+      sheet = workbook.getWorksheet(SHEET_NAME);
+    }
 
-  if (!sheet) {
-    sheet = workbook.addWorksheet(SHEET_NAME);
-    sheet.columns = COLUMNS;
-    sheet.getRow(1).font = { bold: true };
-  }
+    if (!sheet) {
+      sheet = workbook.addWorksheet(SHEET_NAME);
+      sheet.columns = COLUMNS;
+      sheet.getRow(1).font = { bold: true };
+    }
 
-  sheet.addRow({
-    submittedAt: new Date().toISOString(),
-    ...row,
+    sheet.addRow({
+      submittedAt: new Date().toISOString(),
+      ...row,
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    await writeWorkbookBuffer(Buffer.from(buffer));
   });
-
-  const buffer = await workbook.xlsx.writeBuffer();
-  await writeWorkbookBuffer(Buffer.from(buffer));
 }
 
 export async function submitConsultationRequest(

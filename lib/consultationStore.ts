@@ -1,6 +1,7 @@
 import path from "node:path";
 import fs from "node:fs/promises";
 import { BlobServiceClient } from "@azure/storage-blob";
+import { randomUUID } from "node:crypto";
 
 export const SHEET_NAME = "Requests";
 export const FILE_NAME = "consultation-requests.xlsx";
@@ -62,3 +63,57 @@ export async function writeWorkbookBuffer(buffer: Buffer): Promise<void> {
   await fs.mkdir(path.dirname(LOCAL_PATH), { recursive: true });
   await fs.writeFile(LOCAL_PATH, buffer);
 }
+
+const LOCK_FILE_NAME = "consultation-requests.lock";
+
+// Serializes concurrent read-modify-write cycles so simultaneous submissions
+// don't clobber each other's rows (blob storage has no append primitive).
+export async function withWorkbookLock<T>(
+  fn: () => Promise<T>
+): Promise<T> {
+  const container = getContainerClient();
+
+  if (container) {
+    const lockBlob = container.getBlockBlobClient(LOCK_FILE_NAME);
+    await container.createIfNotExists();
+    if (!(await lockBlob.exists())) {
+      await lockBlob.uploadData(Buffer.alloc(0));
+    }
+
+    const leaseId = randomUUID();
+    const leaseClient = lockBlob.getBlobLeaseClient(leaseId);
+
+    let acquired = false;
+    const deadline = Date.now() + 15_000;
+    while (!acquired) {
+      try {
+        await leaseClient.acquireLease(15);
+        acquired = true;
+      } catch (error) {
+        if (Date.now() > deadline) throw error;
+        await new Promise((resolve) => setTimeout(resolve, 250 + Math.random() * 250));
+      }
+    }
+
+    try {
+      return await fn();
+    } finally {
+      await leaseClient.releaseLease();
+    }
+  }
+
+  return localMutex.run(fn);
+}
+
+// Single-process mutex used only for the local-file fallback (dev).
+class Mutex {
+  private tail: Promise<unknown> = Promise.resolve();
+
+  run<T>(fn: () => Promise<T>): Promise<T> {
+    const result = this.tail.then(fn, fn);
+    this.tail = result.catch(() => undefined);
+    return result;
+  }
+}
+
+const localMutex = new Mutex();
