@@ -4,8 +4,8 @@ import type { FileHandle } from "node:fs/promises";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { randomUUID } from "node:crypto";
 
+export const FILE_NAME = "consultation-requests.json";
 export const SHEET_NAME = "Requests";
-export const FILE_NAME = "consultation-requests.xlsx";
 
 export const COLUMNS = [
   { header: "Submitted At", key: "submittedAt", width: 22 },
@@ -15,6 +15,15 @@ export const COLUMNS = [
   { header: "Company", key: "company", width: 24 },
   { header: "Message", key: "message", width: 60 },
 ];
+
+export interface ConsultationRecord {
+  submittedAt: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  company: string;
+  message: string;
+}
 
 const CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER ?? "consultation-data";
 
@@ -34,8 +43,7 @@ function getContainerClient() {
   return serviceClient.getContainerClient(CONTAINER_NAME);
 }
 
-// Reads the current workbook bytes, or null if none exist yet.
-export async function readWorkbookBuffer(): Promise<Buffer | null> {
+async function readRawBuffer(): Promise<Buffer | null> {
   const container = getContainerClient();
 
   if (container) {
@@ -45,53 +53,67 @@ export async function readWorkbookBuffer(): Promise<Buffer | null> {
   }
 
   try {
-    const buffer = await fs.readFile(LOCAL_PATH);
-    console.log(`[consultationStore] read ${buffer.length} bytes from ${LOCAL_PATH}`);
-    return buffer;
-  } catch (error) {
-    console.error(`[consultationStore] read failed for ${LOCAL_PATH}:`, error);
+    return await fs.readFile(LOCAL_PATH);
+  } catch {
     return null;
   }
 }
 
-// Persists the workbook bytes, overwriting whatever was there before.
-export async function writeWorkbookBuffer(buffer: Buffer): Promise<void> {
+async function writeRawBuffer(buffer: Buffer): Promise<void> {
   const container = getContainerClient();
 
   if (container) {
     await container.createIfNotExists();
     const blob = container.getBlockBlobClient(FILE_NAME);
     await blob.uploadData(buffer, {
-      blobHTTPHeaders: {
-        blobContentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      },
+      blobHTTPHeaders: { blobContentType: "application/json" },
     });
     return;
   }
 
   // Write to a temp file and rename it into place, which is atomic on the
   // same filesystem — a deploy/restart killing the process mid-write can
-  // never leave a half-written, corrupted workbook at LOCAL_PATH.
+  // never leave a half-written, corrupted file at LOCAL_PATH.
   await fs.mkdir(path.dirname(LOCAL_PATH), { recursive: true });
   const tmpPath = `${LOCAL_PATH}.tmp-${randomUUID()}`;
   await fs.writeFile(tmpPath, buffer);
   await fs.rename(tmpPath, LOCAL_PATH);
+}
 
-  const statAfter = await fs.stat(LOCAL_PATH);
-  const rereadAfter = await fs.readFile(LOCAL_PATH);
-  console.log(
-    `[consultationStore] wrote ${buffer.length} bytes to ${LOCAL_PATH}; ` +
-      `stat.size=${statAfter.size}; immediate re-read=${rereadAfter.length} bytes`
-  );
+// Reads all stored consultation records, or [] if none exist yet / the file
+// is unreadable (e.g. corrupted by a crash before this fix existed).
+export async function readRecords(): Promise<ConsultationRecord[]> {
+  const buffer = await readRawBuffer();
+  if (!buffer) return [];
+
+  try {
+    const parsed = JSON.parse(buffer.toString("utf-8"));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("[consultationStore] stored records are unreadable, treating as empty:", error);
+    return [];
+  }
+}
+
+// Appends one record under the cross-process lock and persists the full set.
+// JSON is used as the source of truth instead of repeatedly loading and
+// re-saving an .xlsx file: a prior version of this store did that with
+// ExcelJS and it silently dropped newly-added rows on the load-modify-save
+// round trip. The Excel file is now only ever *generated fresh* on demand
+// (see /admin/consultations/export), which sidesteps that bug entirely.
+export async function appendRecord(record: ConsultationRecord): Promise<void> {
+  await withStoreLock(async () => {
+    const records = await readRecords();
+    records.push(record);
+    await writeRawBuffer(Buffer.from(JSON.stringify(records)));
+  });
 }
 
 const LOCK_FILE_NAME = "consultation-requests.lock";
 
 // Serializes concurrent read-modify-write cycles so simultaneous submissions
 // don't clobber each other's rows (blob storage has no append primitive).
-export async function withWorkbookLock<T>(
-  fn: () => Promise<T>
-): Promise<T> {
+export async function withStoreLock<T>(fn: () => Promise<T>): Promise<T> {
   const container = getContainerClient();
 
   if (container) {

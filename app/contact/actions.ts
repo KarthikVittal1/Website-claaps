@@ -1,7 +1,6 @@
 "use server";
 
-import ExcelJS from "exceljs";
-import { SHEET_NAME, COLUMNS, readWorkbookBuffer, writeWorkbookBuffer, withWorkbookLock } from "@/lib/consultationStore";
+import { appendRecord } from "@/lib/consultationStore";
 
 export type ConsultationFormState = {
   status: "idle" | "success" | "error";
@@ -9,58 +8,6 @@ export type ConsultationFormState = {
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-async function appendConsultationRequest(row: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  company: string;
-  message: string;
-}) {
-  await withWorkbookLock(async () => {
-    const existing = await readWorkbookBuffer();
-    console.log(`[contact/actions] existing buffer: ${existing ? existing.length + " bytes" : "null"}`);
-    let workbook = new ExcelJS.Workbook();
-    let sheet;
-
-    if (existing) {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await workbook.xlsx.load(existing as any);
-        sheet = workbook.getWorksheet(SHEET_NAME);
-        console.log(
-          `[contact/actions] loaded workbook, sheets: ${workbook.worksheets
-            .map((ws) => `"${ws.name}"(rowCount=${ws.rowCount})`)
-            .join(", ")}; found target sheet: ${!!sheet}`
-        );
-      } catch (error) {
-        // A corrupted existing file must not block new submissions forever —
-        // start over with a fresh workbook instance (a failed load can leave
-        // the original in an unknown state) rather than throwing on every
-        // future save.
-        console.error("Existing consultation workbook is unreadable, starting fresh:", error);
-        workbook = new ExcelJS.Workbook();
-        sheet = undefined;
-      }
-    }
-
-    if (!sheet) {
-      sheet = workbook.addWorksheet(SHEET_NAME);
-      sheet.columns = COLUMNS;
-      sheet.getRow(1).font = { bold: true };
-    }
-
-    sheet.addRow({
-      submittedAt: new Date().toISOString(),
-      ...row,
-    });
-
-    console.log(`[contact/actions] rowCount after addRow: ${sheet.rowCount}`);
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    await writeWorkbookBuffer(Buffer.from(buffer));
-  });
-}
 
 export async function submitConsultationRequest(
   _prevState: ConsultationFormState,
@@ -81,9 +28,16 @@ export async function submitConsultationRequest(
   }
 
   try {
-    await appendConsultationRequest({ firstName, lastName, email, company, message });
+    await appendRecord({
+      submittedAt: new Date().toISOString(),
+      firstName,
+      lastName,
+      email,
+      company,
+      message,
+    });
   } catch (error) {
-    console.error("Failed to save consultation request to Excel:", error);
+    console.error("Failed to save consultation request:", error);
     return {
       status: "error",
       message: "Something went wrong while saving your request. Please try again.",
