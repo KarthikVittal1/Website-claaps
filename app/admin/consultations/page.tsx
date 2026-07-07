@@ -15,6 +15,12 @@ async function loadRows(): Promise<{ rows: string[][]; loadError: boolean }> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await workbook.xlsx.load(existing as any);
 
+    console.log(
+      `[admin/consultations] worksheets: ${workbook.worksheets
+        .map((ws) => `"${ws.name}"(rowCount=${ws.rowCount})`)
+        .join(", ")}`
+    );
+
     const sheet = workbook.getWorksheet(SHEET_NAME);
     if (!sheet) return { rows: [], loadError: false };
 
@@ -23,6 +29,7 @@ async function loadRows(): Promise<{ rows: string[][]; loadError: boolean }> {
       if (rowNumber === 1) return; // header
       rows.push(row.values instanceof Array ? row.values.slice(1).map((v) => String(v ?? "")) : []);
     });
+    console.log(`[admin/consultations] parsed ${rows.length} data row(s) from "${sheet.name}"`);
     return { rows, loadError: false };
   } catch (error) {
     console.error("Failed to parse consultation workbook:", error);
