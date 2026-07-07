@@ -19,12 +19,13 @@ export const COLUMNS = [
 const CONTAINER_NAME = process.env.AZURE_STORAGE_CONTAINER ?? "consultation-data";
 
 // Local fallback path, used only when no blob storage connection string is
-// configured. On Azure App Service, HOME points at the persistent /home
-// (Azure Files) mount, which survives deploys and restarts — unlike
-// process.cwd() (site/wwwroot), which the deploy pipeline wipes and
-// replaces on every release. Falls back to cwd for local dev where HOME
-// isn't set to an App Service path.
-const LOCAL_PATH = path.join(process.env.HOME ?? process.cwd(), "data", FILE_NAME);
+// configured. On Azure App Service (Linux) the persistent, deploy-surviving
+// mount is always /home, regardless of what the HOME env var says (observed
+// to be /root in this container, which is NOT persisted and gets wiped on
+// every restart). WEBSITE_INSTANCE_ID is always set on App Service, so use
+// it to detect that environment specifically rather than trusting HOME.
+const isAzureAppService = Boolean(process.env.WEBSITE_INSTANCE_ID);
+const LOCAL_PATH = path.join(isAzureAppService ? "/home" : process.cwd(), "data", FILE_NAME);
 
 function getContainerClient() {
   const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
