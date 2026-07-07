@@ -65,7 +65,7 @@ export function Header() {
     <header className="sticky top-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">
       <div className={cn(
         "pointer-events-auto w-full max-w-7xl rounded-2xl transition-all duration-300",
-        "bg-white/95 backdrop-blur-md shadow-lg ring-1 ring-black/8"
+        "bg-white/95 shadow-lg ring-1 ring-black/8"
       )}>
         <div className="flex h-14 items-center justify-between px-3 sm:px-4">
 

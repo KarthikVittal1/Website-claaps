@@ -126,8 +126,8 @@ export function HeroSlider() {
                   {activeSlide.keywords.map((keyword, index) => (
                     <motion.span
                       key={keyword}
-                      initial={reduceMotion ? false : { opacity: 0, y: 10, filter: "blur(5px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: reduceMotion ? 0 : 0.38 + index * 0.1, duration: 0.42 }}
                       className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]`}
                     >

@@ -63,7 +63,7 @@ export default function ProductsPage() {
             <div className="group relative overflow-hidden rounded-3xl border border-white/10">
               {/* Full-bleed background image */}
               <Image
-                src="/images/cricpredict-hero.png"
+                src="/images/cricpredict-hero.jpg"
                 alt="Cricket match prediction data science visualization"
                 fill
                 className="object-cover object-center"

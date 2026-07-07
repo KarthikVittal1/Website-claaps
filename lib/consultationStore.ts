@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "node:fs/promises";
+import type { FileHandle } from "node:fs/promises";
 import { BlobServiceClient } from "@azure/storage-blob";
 import { randomUUID } from "node:crypto";
 
@@ -106,18 +107,47 @@ export async function withWorkbookLock<T>(
     }
   }
 
-  return localMutex.run(fn);
+  return withLocalFileLock(fn);
 }
 
-// Single-process mutex used only for the local-file fallback (dev).
-class Mutex {
-  private tail: Promise<unknown> = Promise.resolve();
+// File-based lock for the local-disk fallback, so concurrent submissions are
+// serialized even across separate Node processes/instances sharing the same
+// disk (e.g. multiple App Service workers) — an in-memory mutex only protects
+// against races within a single process and would still lose writes here.
+async function withLocalFileLock<T>(fn: () => Promise<T>): Promise<T> {
+  const lockPath = path.join(path.dirname(LOCAL_PATH), LOCK_FILE_NAME);
+  await fs.mkdir(path.dirname(lockPath), { recursive: true });
 
-  run<T>(fn: () => Promise<T>): Promise<T> {
-    const result = this.tail.then(fn, fn);
-    this.tail = result.catch(() => undefined);
-    return result;
+  const STALE_LOCK_MS = 30_000;
+  const deadline = Date.now() + 15_000;
+  let handle: FileHandle | null = null;
+  while (!handle) {
+    try {
+      handle = await fs.open(lockPath, "wx");
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+
+      // Clear a lock left behind by a crashed process instead of jamming
+      // submissions forever.
+      try {
+        const stat = await fs.stat(lockPath);
+        if (Date.now() - stat.mtimeMs > STALE_LOCK_MS) {
+          await fs.rm(lockPath, { force: true });
+          continue;
+        }
+      } catch {
+        continue;
+      }
+
+      if (Date.now() > deadline) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 150 + Math.random() * 150));
+    }
+  }
+
+  try {
+    return await fn();
+  } finally {
+    await handle.close();
+    await fs.rm(lockPath, { force: true });
   }
 }
-
-const localMutex = new Mutex();
