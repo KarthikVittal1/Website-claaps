@@ -19,13 +19,23 @@ async function appendConsultationRequest(row: {
 }) {
   await withWorkbookLock(async () => {
     const existing = await readWorkbookBuffer();
-    const workbook = new ExcelJS.Workbook();
+    let workbook = new ExcelJS.Workbook();
     let sheet;
 
     if (existing) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await workbook.xlsx.load(existing as any);
-      sheet = workbook.getWorksheet(SHEET_NAME);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await workbook.xlsx.load(existing as any);
+        sheet = workbook.getWorksheet(SHEET_NAME);
+      } catch (error) {
+        // A corrupted existing file must not block new submissions forever —
+        // start over with a fresh workbook instance (a failed load can leave
+        // the original in an unknown state) rather than throwing on every
+        // future save.
+        console.error("Existing consultation workbook is unreadable, starting fresh:", error);
+        workbook = new ExcelJS.Workbook();
+        sheet = undefined;
+      }
     }
 
     if (!sheet) {

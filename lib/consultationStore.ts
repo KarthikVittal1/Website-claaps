@@ -65,8 +65,13 @@ export async function writeWorkbookBuffer(buffer: Buffer): Promise<void> {
     return;
   }
 
+  // Write to a temp file and rename it into place, which is atomic on the
+  // same filesystem — a deploy/restart killing the process mid-write can
+  // never leave a half-written, corrupted workbook at LOCAL_PATH.
   await fs.mkdir(path.dirname(LOCAL_PATH), { recursive: true });
-  await fs.writeFile(LOCAL_PATH, buffer);
+  const tmpPath = `${LOCAL_PATH}.tmp-${randomUUID()}`;
+  await fs.writeFile(tmpPath, buffer);
+  await fs.rename(tmpPath, LOCAL_PATH);
 }
 
 const LOCK_FILE_NAME = "consultation-requests.lock";
