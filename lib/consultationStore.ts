@@ -76,7 +76,13 @@ export async function writeWorkbookBuffer(buffer: Buffer): Promise<void> {
   const tmpPath = `${LOCAL_PATH}.tmp-${randomUUID()}`;
   await fs.writeFile(tmpPath, buffer);
   await fs.rename(tmpPath, LOCAL_PATH);
-  console.log(`[consultationStore] wrote ${buffer.length} bytes to ${LOCAL_PATH}`);
+
+  const statAfter = await fs.stat(LOCAL_PATH);
+  const rereadAfter = await fs.readFile(LOCAL_PATH);
+  console.log(
+    `[consultationStore] wrote ${buffer.length} bytes to ${LOCAL_PATH}; ` +
+      `stat.size=${statAfter.size}; immediate re-read=${rereadAfter.length} bytes`
+  );
 }
 
 const LOCK_FILE_NAME = "consultation-requests.lock";
