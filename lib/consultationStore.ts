@@ -44,8 +44,11 @@ export async function readWorkbookBuffer(): Promise<Buffer | null> {
   }
 
   try {
-    return await fs.readFile(LOCAL_PATH);
-  } catch {
+    const buffer = await fs.readFile(LOCAL_PATH);
+    console.log(`[consultationStore] read ${buffer.length} bytes from ${LOCAL_PATH}`);
+    return buffer;
+  } catch (error) {
+    console.error(`[consultationStore] read failed for ${LOCAL_PATH}:`, error);
     return null;
   }
 }
@@ -72,6 +75,7 @@ export async function writeWorkbookBuffer(buffer: Buffer): Promise<void> {
   const tmpPath = `${LOCAL_PATH}.tmp-${randomUUID()}`;
   await fs.writeFile(tmpPath, buffer);
   await fs.rename(tmpPath, LOCAL_PATH);
+  console.log(`[consultationStore] wrote ${buffer.length} bytes to ${LOCAL_PATH}`);
 }
 
 const LOCK_FILE_NAME = "consultation-requests.lock";
