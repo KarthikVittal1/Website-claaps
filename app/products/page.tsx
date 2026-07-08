@@ -102,6 +102,49 @@ export default function ProductsPage() {
             </div>
           )}
 
+          {/* ── ClaapsRecruit AI ── built by Claaps; no external link yet ── */}
+          <div className="group relative mt-8 overflow-hidden rounded-3xl border border-white/10">
+            {/* Self-contained SVG background art (rendered as a plain <img> since it is an SVG) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/claapsrecruit-ai-hero.svg"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            {/* Dark overlay so text stays readable */}
+            <div aria-hidden className="absolute inset-0 bg-black/45" />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
+
+            {/* Content: text on the left, app preview on the right */}
+            <div className="relative grid gap-8 p-8 md:grid-cols-2 md:items-center md:p-10">
+              <div>
+                <h2 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
+                  ClaapsRecruit AI
+                </h2>
+                <p className="mt-4 max-w-md text-sm leading-7 text-slate-300">
+                  An AI-powered applicant tracking system. Upload resumes, describe the role, and let AI
+                  rank every candidate with match scores, skill gaps, and recruiter-ready insights in
+                  seconds not hours.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Resume Screening", "AI Ranking", "Claaps-Built"].map((tag) => (
+                    <span key={tag} className="rounded-lg border border-white/20 bg-white/10 px-2.5 py-1 text-xs text-slate-300 backdrop-blur-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* App preview mockup */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/claapsrecruit-ai-app.svg"
+                alt="ClaapsRecruit AI application preview"
+                className="w-full rounded-xl border border-white/15 shadow-2xl ring-1 ring-black/10 transition-transform duration-300 group-hover:-translate-y-1"
+              />
+            </div>
+          </div>
+
           {products && products.relatedServiceSlugs.length > 0 && (
             <>
               <h3 className="mt-12 text-sm font-medium uppercase tracking-[0.06em] text-cyan-700">

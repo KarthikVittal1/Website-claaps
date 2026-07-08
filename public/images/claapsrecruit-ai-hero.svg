@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" role="img" aria-label="ClaapsRecruit AI abstract hero art">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#161f52"/>
+      <stop offset="0.55" stop-color="#2743c9"/>
+      <stop offset="1" stop-color="#5b3bd6"/>
+    </linearGradient>
+    <linearGradient id="shape" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6d8bff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b5bdb" stop-opacity="0.25"/>
+    </linearGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#ffffff" fill-opacity="0.07"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="520" fill="url(#bg)"/>
+  <rect width="1200" height="520" fill="url(#dots)"/>
+
+  <!-- Large rounded squares echoing the ClaapsRecruit landing shapes -->
+  <rect x="900" y="-120" width="360" height="360" rx="70" transform="rotate(18 1080 60)" fill="url(#shape)"/>
+  <rect x="-120" y="330" width="320" height="320" rx="64" transform="rotate(18 40 490)" fill="url(#shape)"/>
+
+  <!-- Diagonal light streaks -->
+  <rect x="980" y="120" width="420" height="26" rx="13" transform="rotate(-38 1190 133)" fill="#ffffff" fill-opacity="0.16"/>
+  <rect x="60" y="230" width="260" height="20" rx="10" transform="rotate(-38 190 240)" fill="#ffffff" fill-opacity="0.12"/>
+
+  <!-- Small accent dots -->
+  <circle cx="230" cy="150" r="6" fill="#8ea2ff" fill-opacity="0.7"/>
+  <circle cx="300" cy="360" r="5" fill="#c4b5fd" fill-opacity="0.7"/>
+  <circle cx="760" cy="420" r="5" fill="#8ea2ff" fill-opacity="0.6"/>
+</svg>

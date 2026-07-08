@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-label="ClaapsRecruit AI application preview" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <linearGradient id="page" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f9ff"/>
+      <stop offset="1" stop-color="#e9eeff"/>
+    </linearGradient>
+    <linearGradient id="blob" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b5bdb"/>
+      <stop offset="1" stop-color="#4f2fd6"/>
+    </linearGradient>
+    <linearGradient id="btn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3b5bdb"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="1.5" cy="1.5" r="1.2" fill="#3b5bdb" fill-opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <!-- Browser frame -->
+  <rect x="0" y="0" width="1200" height="820" rx="18" fill="#ffffff"/>
+  <rect x="0" y="0" width="1200" height="52" rx="18" fill="#eef1f8"/>
+  <rect x="0" y="34" width="1200" height="18" fill="#eef1f8"/>
+  <circle cx="34" cy="26" r="7" fill="#ff5f57"/>
+  <circle cx="60" cy="26" r="7" fill="#febc2e"/>
+  <circle cx="86" cy="26" r="7" fill="#28c840"/>
+  <rect x="430" y="14" width="340" height="24" rx="12" fill="#ffffff"/>
+  <text x="600" y="31" text-anchor="middle" font-size="13" fill="#8a93a6">claapsrecruit.ai</text>
+
+  <!-- Page canvas -->
+  <rect x="0" y="52" width="1200" height="768" fill="url(#page)"/>
+  <rect x="0" y="52" width="1200" height="768" fill="url(#grid)"/>
+
+  <!-- Corner blobs echoing the landing shapes -->
+  <rect x="1010" y="60" width="300" height="300" rx="60" transform="rotate(20 1160 210)" fill="url(#blob)" fill-opacity="0.9"/>
+  <rect x="-90" y="560" width="260" height="260" rx="54" transform="rotate(20 40 690)" fill="url(#blob)" fill-opacity="0.85"/>
+  <rect x="1080" y="250" width="360" height="20" rx="10" transform="rotate(-40 1260 260)" fill="#ffffff" fill-opacity="0.35"/>
+
+  <!-- Top nav -->
+  <circle cx="70" cy="98" r="13" fill="url(#btn)"/>
+  <text x="92" y="104" font-size="22" font-weight="bold" fill="#2743c9">ClaapsRecruit AI</text>
+  <text x="470" y="104" font-size="15" fill="#4b5563">Features</text>
+  <text x="560" y="104" font-size="15" fill="#4b5563">How it works</text>
+  <text x="680" y="104" font-size="15" fill="#4b5563">Roles</text>
+  <text x="920" y="104" font-size="15" fill="#3b5bdb">Register</text>
+  <rect x="1000" y="82" width="110" height="34" rx="17" fill="url(#btn)"/>
+  <text x="1055" y="104" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">Sign in</text>
+
+  <!-- Badge -->
+  <rect x="410" y="180" width="380" height="40" rx="20" fill="#ffffff" stroke="#c7d2fe"/>
+  <text x="600" y="205" text-anchor="middle" font-size="15" font-weight="bold" fill="#4338ca">✦ AI-Powered Applicant Tracking System</text>
+
+  <!-- Headline -->
+  <text x="600" y="300" text-anchor="middle" font-size="60" font-weight="bold" fill="#1e40ff">ClaapsRecruit AI</text>
+  <text x="600" y="372" text-anchor="middle" font-size="60" font-weight="bold" fill="#0b1220">Hire the right people</text>
+  <text x="600" y="444" text-anchor="middle" font-size="60" font-weight="bold" fill="#1e40ff">10× faster</text>
+
+  <!-- Subtext -->
+  <text x="600" y="510" text-anchor="middle" font-size="18" fill="#6b7280">Upload resumes, describe the role, and let AI rank every</text>
+  <text x="600" y="538" text-anchor="middle" font-size="18" fill="#6b7280">candidate with match scores, skill gaps and recruiter-ready</text>
+  <text x="600" y="566" text-anchor="middle" font-size="18" fill="#6b7280">insights in seconds, not hours.</text>
+
+  <!-- Buttons -->
+  <rect x="404" y="606" width="210" height="56" rx="14" fill="url(#btn)"/>
+  <text x="509" y="641" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Start Screening →</text>
+  <rect x="628" y="606" width="210" height="56" rx="14" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="733" y="641" text-anchor="middle" font-size="17" font-weight="bold" fill="#1f2937">Create Company</text>
+
+  <!-- Feature checks -->
+  <g font-size="15" fill="#4b5563">
+    <circle cx="418" cy="716" r="8" fill="none" stroke="#3b5bdb" stroke-width="2"/>
+    <text x="434" y="721">No spreadsheets needed</text>
+    <circle cx="648" cy="716" r="8" fill="none" stroke="#3b5bdb" stroke-width="2"/>
+    <text x="664" y="721">Instant AI ranking</text>
+    <circle cx="838" cy="716" r="8" fill="none" stroke="#3b5bdb" stroke-width="2"/>
+    <text x="854" y="721">Role-based access</text>
+  </g>
+</svg>
