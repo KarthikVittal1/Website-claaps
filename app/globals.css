@@ -260,6 +260,36 @@ body {
   border-radius: 2px;
 }
 
+.bento-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    240px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(78, 86, 184, 0.08),
+    transparent 70%
+  );
+}
+
+.bento-item:hover::before {
+  opacity: 1;
+}
+
+.bento-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-item::before {
+    display: none;
+  }
+}
+
 .font-mono-data {
   font-family: var(--font-mono-ibm), ui-monospace, monospace;
 }
