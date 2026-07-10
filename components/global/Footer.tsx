@@ -9,7 +9,7 @@ export function Footer() {
       <FooterBackgroundGradient />
 
       <Container className="relative z-10">
-        <div className="grid grid-cols-2 gap-10 py-16 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 py-16 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <p className="text-sm font-semibold text-white">Services</p>
             <ul className="mt-4 flex flex-col gap-3 text-sm text-white/60">

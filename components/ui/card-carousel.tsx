@@ -52,6 +52,7 @@ export const CardCarousel = React.memo(function CardCarousel({
     background-position: center;
     background-size: cover;
     width: 480px;
+    max-width: 80vw;
   }
 
   .hero-card-swiper .swiper-slide img {
