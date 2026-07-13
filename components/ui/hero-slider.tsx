@@ -7,7 +7,6 @@ import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/global/Button"
 import { Container } from "@/components/global/Container"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
-import { MagneticText } from "@/components/ui/morphing-cursor"
 
 const slides = [
   {
@@ -84,11 +83,11 @@ export function HeroSlider() {
         />
       </div>
 
-      <Container className="relative flex min-h-[calc(100vh-10rem)] w-full flex-col justify-start pt-14 pb-28 sm:pt-16 lg:pt-20">
-        <div className="grid items-center gap-x-8 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(24rem,0.92fr)] xl:gap-x-10">
+      <Container className="relative flex min-h-[calc(100vh-10rem)] w-full flex-col justify-center pt-14 pb-28 sm:pt-16 lg:pt-20">
+        <div className="grid items-center gap-x-8 gap-y-10 xl:gap-x-10">
           {/* Content */}
-          <div className="flex flex-col lg:pl-10 xl:pl-16 2xl:pl-20">
-            <div className="relative min-h-[24rem] sm:min-h-[20rem] lg:min-h-[18rem]">
+          <div className="flex w-full flex-col text-center">
+            <div className="relative min-h-[26rem] w-full sm:min-h-[24rem] lg:min-h-[22rem]">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeIndex}
@@ -96,7 +95,7 @@ export function HeroSlider() {
                   initial={reduceMotion ? false : "hidden"}
                   animate="visible"
                   exit={reduceMotion ? undefined : "exit"}
-                  className="absolute inset-x-0 top-0"
+                  className="absolute inset-x-0 top-0 text-center"
                 >
                   <motion.div variants={reduceMotion ? undefined : itemVariants}>
                     <span className="inline-flex rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:text-xs">
@@ -106,7 +105,7 @@ export function HeroSlider() {
 
                   <div className="relative mt-3">
                     <div aria-hidden className={`absolute -inset-6 -z-10 rounded-full ${activeSlide.glow} blur-3xl transition-colors duration-700`} />
-                    <h1 className="max-w-xl text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-white sm:text-5xl md:text-5xl lg:text-5xl">
+                    <h1 className="mx-auto max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-5xl lg:text-6xl">
                       {activeSlide.title.split(" ").map((word, index) => (
                         <motion.span
                           key={`${word}-${index}`}
@@ -119,11 +118,11 @@ export function HeroSlider() {
                     </h1>
                   </div>
 
-                  <motion.p variants={reduceMotion ? undefined : itemVariants} className="mt-3 max-w-lg text-base leading-7 text-white/70 sm:text-lg">
+                  <motion.p variants={reduceMotion ? undefined : itemVariants} className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">
                     {activeSlide.description}
                   </motion.p>
 
-                  <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-3 flex flex-wrap gap-x-3 text-base font-semibold sm:text-lg">
+                  <motion.div variants={reduceMotion ? undefined : itemVariants} className="mt-4 flex flex-wrap justify-center gap-x-4 text-lg font-semibold sm:text-xl">
                     {activeSlide.keywords.map((keyword, index) => (
                       <motion.span
                         key={keyword}
@@ -140,15 +139,6 @@ export function HeroSlider() {
                 </motion.div>
               </AnimatePresence>
             </div>
-          </div>
-
-          {/* Right side — interactive brand mark */}
-          <div className="flex items-center justify-center lg:justify-start">
-            <MagneticText
-              text="CLAAPS"
-              hoverText="TOGETHER, WE BUILD THE FUTURE"
-              className="h-48 w-full max-w-[28rem] sm:h-56 lg:h-72 lg:max-w-[36rem]"
-            />
           </div>
         </div>
 
