@@ -6,7 +6,6 @@ import { ChevronDown } from "lucide-react"
 
 import { Button } from "@/components/global/Button"
 import { Container } from "@/components/global/Container"
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 
 const slides = [
   {
@@ -14,32 +13,32 @@ const slides = [
     title: "Optimize Enterprise Performance",
     description: "Streamline operations, unify business processes, and maximize ROI with Oracle EBS and Fusion Applications.",
     keywords: ["Optimize.", "Integrate.", "Scale."],
-    gradient: "from-amber-300 via-orange-400 to-red-400",
-    glow: "bg-orange-500/25",
+    gradient: "from-amber-600 via-orange-600 to-red-600",
+    glow: "bg-orange-500/10",
   },
   {
     label: "Enterprise Security",
     title: "Secure Every Digital Asset",
     description: "Protect critical systems with proactive governance, risk management, compliance monitoring, and cloud security.",
     keywords: ["Secure.", "Comply.", "Strengthen."],
-    gradient: "from-violet-300 via-purple-400 to-fuchsia-300",
-    glow: "bg-violet-500/25",
+    gradient: "from-indigo-600 via-purple-600 to-electric-600",
+    glow: "bg-purple-500/10",
   },
   {
     label: "Intelligent Automation",
     title: "Automate What Slows You Down",
     description: "Eliminate repetitive tasks, improve accuracy, and accelerate productivity through intelligent workflow automation with UiPath.",
     keywords: ["Automate.", "Orchestrate.", "Elevate."],
-    gradient: "from-emerald-300 via-green-400 to-lime-300",
-    glow: "bg-emerald-500/25",
+    gradient: "from-emerald-600 via-teal-600 to-green-700",
+    glow: "bg-emerald-500/10",
   },
   {
     label: "AI-Powered Innovation",
     title: "Turn Data Into Smart Decisions",
     description: "Transform complex data into actionable insights with predictive analytics, machine learning, and intelligent automation.",
     keywords: ["Predict.", "Analyze.", "Accelerate."],
-    gradient: "from-sky-300 via-blue-400 to-cyan-300",
-    glow: "bg-blue-500/25",
+    gradient: "from-blue-600 via-indigo-600 to-cyan-700",
+    glow: "bg-blue-500/10",
   },
 ] as const
 
@@ -69,17 +68,10 @@ export function HeroSlider() {
 
   return (
     <section className="sticky top-0 isolate z-0 flex min-h-screen items-start pt-20">
-      <div className="absolute inset-x-0 -top-24 bottom-0">
-        <BackgroundGradientAnimation
-          containerClassName="absolute inset-0"
-          gradientBackgroundStart="rgb(17, 19, 23)"
-          gradientBackgroundEnd="rgb(8, 9, 13)"
-          firstColor="78, 86, 184"
-          secondColor="107, 79, 191"
-          thirdColor="194, 61, 23"
-          fourthColor="107, 114, 199"
-          fifthColor="242, 74, 29"
-          pointerColor="107, 79, 191"
+      <div className="absolute inset-x-0 -top-24 bottom-0 bg-white overflow-hidden pointer-events-none">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[radial-gradient(circle_at_25%_35%,_rgba(242,74,29,0.12),_transparent_55%),radial-gradient(circle_at_75%_55%,_rgba(78,86,184,0.15),_transparent_55%)]"
         />
       </div>
 
@@ -98,14 +90,14 @@ export function HeroSlider() {
                   className="absolute inset-x-0 top-0 text-center"
                 >
                   <motion.div variants={reduceMotion ? undefined : itemVariants}>
-                    <span className="inline-flex rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/85 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md sm:text-xs">
+                    <span className="inline-flex rounded-full border border-slate-200 bg-slate-100/80 px-3.5 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-slate-800 shadow-xs sm:text-xs">
                       {activeSlide.label}
                     </span>
                   </motion.div>
 
                   <div className="relative mt-3">
                     <div aria-hidden className={`absolute -inset-6 -z-10 rounded-full ${activeSlide.glow} blur-3xl transition-colors duration-700`} />
-                    <h1 className="mx-auto max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.035em] text-white sm:text-5xl md:text-5xl lg:text-6xl">
+                    <h1 className="mx-auto max-w-3xl text-4xl font-semibold leading-[1.05] tracking-[-0.035em] text-slate-900 sm:text-5xl md:text-5xl lg:text-6xl">
                       {activeSlide.title.split(" ").map((word, index) => (
                         <motion.span
                           key={`${word}-${index}`}
@@ -118,7 +110,7 @@ export function HeroSlider() {
                     </h1>
                   </div>
 
-                  <motion.p variants={reduceMotion ? undefined : itemVariants} className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl">
+                  <motion.p variants={reduceMotion ? undefined : itemVariants} className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
                     {activeSlide.description}
                   </motion.p>
 
@@ -129,7 +121,7 @@ export function HeroSlider() {
                         initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: reduceMotion ? 0 : 0.38 + index * 0.1, duration: 0.42 }}
-                        className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(255,255,255,0.18)]`}
+                        className={`bg-gradient-to-r ${activeSlide.gradient} bg-clip-text text-transparent`}
                       >
                         {keyword}
                       </motion.span>
@@ -150,13 +142,13 @@ export function HeroSlider() {
 
         {/* Scroll indicator pinned to viewport bottom */}
         <div className="absolute inset-x-0 bottom-6 flex flex-col items-center gap-1">
-          <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/30">Scroll</span>
+          <span className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-400">Scroll</span>
           <motion.button
             aria-label="Scroll to About section"
             onClick={() => document.getElementById("about-section")?.scrollIntoView({ behavior: "smooth" })}
             animate={reduceMotion ? {} : { y: [0, 5, 0] }}
             transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-            className="text-white/30 hover:text-white/60 transition-colors duration-200 cursor-pointer"
+            className="text-slate-400 hover:text-slate-600 transition-colors duration-200 cursor-pointer"
           >
             <ChevronDown size={18} strokeWidth={1.5} />
           </motion.button>
