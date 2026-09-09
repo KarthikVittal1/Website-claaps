@@ -57,7 +57,8 @@ export const ProfessionalConnect = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setIsLoaded(true);
+    const handle = requestAnimationFrame(() => setIsLoaded(true));
+    return () => cancelAnimationFrame(handle);
   }, []);
 
   const entrance = isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0";

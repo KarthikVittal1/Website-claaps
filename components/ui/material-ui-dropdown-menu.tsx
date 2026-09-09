@@ -304,7 +304,7 @@ const DropdownMenuItem = React.forwardRef<
       <DropdownMenuPrimitive.Item ref={ref} asChild className={baseClassName} {...events} {...props} onSelect={handleSelect}>
         {React.cloneElement(children as React.ReactElement<React.HTMLAttributes<HTMLElement>>, {
           children: (
-            <div ref={(node) => { (surfaceRef as React.MutableRefObject<HTMLDivElement | null>).current = node; }} className={cn("relative flex flex-1 items-center px-3", inset && "pl-10")}>
+            <div ref={surfaceRef} className={cn("relative flex flex-1 items-center px-3", inset && "pl-10")}>
               <RippleLayer rippleRef={rippleRef} pressed={pressed} variant="item" />
               <span className="relative z-10 flex w-full items-center gap-2.5 pointer-events-none">
                 {(children.props as React.PropsWithChildren).children}
@@ -318,7 +318,7 @@ const DropdownMenuItem = React.forwardRef<
 
   return (
     <DropdownMenuPrimitive.Item ref={ref} className={baseClassName} {...events} {...props} onSelect={handleSelect}>
-      <div ref={(node) => { (surfaceRef as React.MutableRefObject<HTMLDivElement | null>).current = node; }} className={cn("relative flex flex-1 items-center px-3", inset && "pl-10")}>
+      <div ref={surfaceRef} className={cn("relative flex flex-1 items-center px-3", inset && "pl-10")}>
         <RippleLayer rippleRef={rippleRef} pressed={pressed} variant="item" />
         <span className="relative z-10 flex w-full items-center gap-2.5 pointer-events-none">{children}</span>
       </div>
@@ -354,7 +354,7 @@ DropdownMenuLabel.displayName = "DropdownMenuLabel";
 const DropdownMenuCheckboxItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.CheckboxItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem> & { delayDuration?: number; enterAnimation?: boolean }
->(({ className, children, checked, delayDuration = 150, enterAnimation = true, ...props }, ref) => {
+>(({ className, children, checked, enterAnimation = true, ...props }, ref) => {
   const { surfaceRef, rippleRef, pressed, events } = useInternalRipple({ disabled: props.disabled, variant: "item" });
   return (
     <DropdownMenuPrimitive.CheckboxItem
@@ -364,7 +364,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
       {...events}
       {...props}
     >
-      <div ref={(node) => { (surfaceRef as React.MutableRefObject<HTMLDivElement | null>).current = node; }} className="relative flex flex-1 items-center px-3">
+      <div ref={surfaceRef} className="relative flex flex-1 items-center px-3">
         <RippleLayer rippleRef={rippleRef} pressed={pressed} variant="item" />
         <span className="relative z-10 flex w-full items-center gap-2.5 pointer-events-none">
           <span className="flex h-4 w-4 items-center justify-center"><DropdownMenuPrimitive.ItemIndicator><Check className="h-3.5 w-3.5" /></DropdownMenuPrimitive.ItemIndicator></span>
@@ -381,7 +381,7 @@ const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 const DropdownMenuRadioItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.RadioItem>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem> & { delayDuration?: number; enterAnimation?: boolean }
->(({ className, children, delayDuration = 150, enterAnimation = true, ...props }, ref) => {
+>(({ className, children, enterAnimation = true, ...props }, ref) => {
   const { surfaceRef, rippleRef, pressed, events } = useInternalRipple({ disabled: props.disabled, variant: "item" });
   return (
     <DropdownMenuPrimitive.RadioItem
@@ -390,7 +390,7 @@ const DropdownMenuRadioItem = React.forwardRef<
       {...events}
       {...props}
     >
-      <div ref={(node) => { (surfaceRef as React.MutableRefObject<HTMLDivElement | null>).current = node; }} className="relative flex flex-1 items-center px-3">
+      <div ref={surfaceRef} className="relative flex flex-1 items-center px-3">
         <RippleLayer rippleRef={rippleRef} pressed={pressed} variant="item" />
         <span className="relative z-10 flex w-full items-center gap-2.5 pointer-events-none">
           <span className="flex h-4 w-4 items-center justify-center"><DropdownMenuPrimitive.ItemIndicator><Circle className="h-2 w-2 fill-current" /></DropdownMenuPrimitive.ItemIndicator></span>

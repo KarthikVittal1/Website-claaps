@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { Container } from "@/components/global/Container";
 import { Button } from "@/components/global/Button";
 import { cn } from "@/lib/cn";
 import {
@@ -14,7 +12,6 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuPage,
   DropdownMenuPageTrigger,
@@ -24,7 +21,6 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const pathname = usePathname();
-  const router = useRouter();
 
   const [prevPathname, setPrevPathname] = useState(pathname);
   if (pathname !== prevPathname) {
@@ -48,18 +44,6 @@ export function Header() {
       window.removeEventListener("touchmove", close);
     };
   }, [openMenu]);
-
-  const renderLamp = () => (
-    <motion.div
-      layoutId="nav-lamp"
-      className="absolute inset-0 -z-10 rounded-full bg-electric-500/5"
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-    >
-      <div className="absolute -top-2 left-1/2 h-1 w-8 -translate-x-1/2 rounded-t-full bg-electric-500">
-        <div className="absolute -top-2 -left-2 h-6 w-12 rounded-full blur-md bg-electric-500/20" />
-      </div>
-    </motion.div>
-  );
 
   return (
     <header className="sticky top-0 z-50 flex justify-center px-4 pt-4 pb-2 pointer-events-none">

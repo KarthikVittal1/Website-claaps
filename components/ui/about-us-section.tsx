@@ -16,11 +16,9 @@ import {
 } from "lucide-react";
 import {
   motion,
-  useScroll,
-  useTransform,
   useInView,
   useSpring,
-  type Variants,
+  useTransform,
 } from "framer-motion";
 import { BackgroundGradientGlow } from "@/components/ui/background-gradient-glow";
 import FeatureShaderCards, {
@@ -28,30 +26,7 @@ import FeatureShaderCards, {
 } from "@/components/ui/feature-shader-cards";
 
 export default function AboutUsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
-  const isStatsInView = useInView(statsRef, { once: false, amount: 0.3 });
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 20]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -20]);
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
 
   const services: ShaderFeature[] = [
     {
@@ -119,18 +94,15 @@ export default function AboutUsSection() {
   return (
     <section
       id="about-section"
-      ref={sectionRef}
       className="relative z-10 w-full scroll-mt-20 overflow-hidden rounded-t-[2.5rem] px-4 py-24 text-offwhite-50 shadow-[0_-40px_80px_-20px_rgba(0,0,0,0.55)] md:rounded-t-[3.5rem] md:py-32"
     >
       <BackgroundGradientGlow />
 
-      <motion.div
+      <div
         className="absolute top-20 left-10 w-64 h-64 rounded-full bg-cyan-700/5 blur-3xl"
-        style={{ y: y1, rotate: rotate1 }}
       />
-      <motion.div
+      <div
         className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-electric-400/5 blur-3xl"
-        style={{ y: y2, rotate: rotate2 }}
       />
 
       <div className="container mx-auto max-w-7xl relative z-10">
@@ -164,7 +136,6 @@ export default function AboutUsSection() {
               value={stat.value}
               label={stat.label}
               suffix={stat.suffix}
-              delay={index * 0.1}
             />
           ))}
         </div>
@@ -178,10 +149,9 @@ interface StatCounterProps {
   value: number;
   label: string;
   suffix: string;
-  delay: number;
 }
 
-function StatCounter({ icon, value, label, suffix, delay }: StatCounterProps) {
+function StatCounter({ icon, value, label, suffix }: StatCounterProps) {
   const countRef = useRef(null);
   const isInView = useInView(countRef, { once: true });
 

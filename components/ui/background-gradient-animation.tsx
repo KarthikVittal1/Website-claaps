@@ -75,7 +75,8 @@ export const BackgroundGradientAnimation = ({
     document.body.style.setProperty("--pointer-color", pointerColor);
     document.body.style.setProperty("--size", size);
     document.body.style.setProperty("--blending-value", blendingValue);
-  }, []);
+    // eslint-disable-next-deps
+  }, [firstColor, secondColor, thirdColor, fourthColor, fifthColor, pointerColor, size, blendingValue, gradientBackgroundStart, gradientBackgroundEnd]);
 
   // One rAF loop lerps the blob toward the cursor, reading/writing only refs and
   // the DOM — zero React re-renders per frame. It stays parked while the hero is
@@ -83,18 +84,17 @@ export const BackgroundGradientAnimation = ({
   useEffect(() => {
     if (paused) return;
     let raf = 0;
-    const tick = () => {
-      const el = interactiveRef.current;
-      if (el) {
+    const move = () => {
+      if (interactiveRef.current) {
         cur.current.x += (tg.current.x - cur.current.x) / 20;
         cur.current.y += (tg.current.y - cur.current.y) / 20;
-        el.style.transform = `translate(${Math.round(cur.current.x)}px, ${Math.round(
-          cur.current.y
-        )}px)`;
+        interactiveRef.current.style.transform = `translate(${Math.round(
+          cur.current.x
+        )}px, ${Math.round(cur.current.y)}px)`;
       }
-      raf = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(move);
     };
-    raf = requestAnimationFrame(tick);
+    raf = requestAnimationFrame(move);
     return () => cancelAnimationFrame(raf);
   }, [paused]);
 
@@ -108,7 +108,10 @@ export const BackgroundGradientAnimation = ({
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
-    setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
+    const handle = requestAnimationFrame(() => {
+      setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
+    });
+    return () => cancelAnimationFrame(handle);
   }, []);
 
   return (
